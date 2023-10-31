@@ -1,0 +1,240 @@
+Задачи на урок:
+
+разбор дз
+цикл while
+цикл do-while
+решение задач
+Цикл while
+
+Цикл while сразу проверяет истинность некоторого условия, и если условие истинно, то код цикла выполняется:
+
+int j = 6;
+
+while (j > 0){
+
+System.out.println(j);
+j--;
+}
+
+Цикл do
+
+Цикл do сначала выполняет код цикла, а потом проверяет условие в инструкции while. И пока это условие истинно, цикл повторяется.
+
+Важно отметить, что цикл do гарантирует хотя бы однократное выполнение действий, даже если условие в инструкции while не будет истинно.
+
+Задача1
+
+С помощью цикла while написать метод, выводящий на экран куб числа от 1 до заданного числа n
+
+Пример:для числа n=3
+
+1 в кубе 1
+
+2 в кубе 8
+
+3 в кубе 27
+
+Задача2
+
+Используя цикл while написать метод, выводящий на экран сумму цифр от 1 до 5
+
+sum =15
+"sum of digits from 1 to 5 is" + sum
+
+code/homework13/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+      //  calculate();
+        vowelOrConsonant();
+
+    }
+
+    /*
+    Напишите метод калькулятор, который в зависимости от ввода пользователя выполняет сложение, вычитание,
+    умножение или деление. Пользователь вводит оба числа, затем знак операции (+, -, * или /).
+    В зависимости от введенного знака программа выполняет выбранное действие и
+    выводит полученный результат на экран. При написании метода используйте Switch.
+     */
+    static void calculate(){
+        double number1,number2;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter first number: ");
+        number1 = scanner.nextDouble();
+
+        System.out.println("Enter second number: ");
+        number2 = scanner.nextDouble();
+
+        System.out.println("Enter an operator (+,-,*,/): ");
+        char operator = scanner.next().charAt(0);
+
+
+        switch (operator){
+
+            case '+':
+                System.out.println(number1 +" "+operator+" "+number2+"= "+(number1+number2));
+                break;
+
+            case '-':
+                System.out.println(number1 +" "+operator+" "+number2+"= "+(number1-number2));
+                break;
+
+            case '*':
+                System.out.println(number1 +" "+operator+" "+number2+"= "+(number1*number2));
+                break;
+
+            case '/':
+                System.out.println(number1 +" "+operator+" "+number2+"= "+(number1/number2));
+                break;
+
+            default:
+                System.out.println("You have entered a wrong operator");
+        }
+    }
+
+    /*
+    Написать метод, который проверяет является ли введенный пользователем символ
+    гласной или согласной
+    буквой латинского алфавита. В решении используйте switch и оператор if-else
+     */
+    static void vowelOrConsonant(){
+        Scanner scanner = new Scanner(System.in);
+        boolean isVowel = false;
+
+        System.out.println("Enter a character ");
+        char ch = scanner.next().charAt(0);
+        //a,e,i,o,u
+        switch (ch){
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+            case 'A':
+            case 'E':
+            case 'I':
+            case 'O':
+            case 'U': isVowel = true;
+        }
+
+        if(isVowel){
+            System.out.println(ch + " is a vowel");
+        }
+        else {
+            if( (ch >='a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+                System.out.println(ch + " is a consonant");
+
+            else
+                System.out.println(" the symbol is not a letter");
+
+        }
+
+    }
+
+
+}
+code/while_cycle/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Цикл While
+        /*
+        while(condition){
+          statements
+        }
+
+        Вывести на экран числа от 1 до 10 используя цикл while
+         */
+        int i = 1;
+
+        while( i <= 10){
+            System.out.println(i);
+           // i = i + 1;
+            i++;
+        }
+        System.out.println("end of while loop");
+
+
+        int y = 1;
+        while (y <= 5){
+            System.out.println("Hello");
+            y++;
+        }
+
+        // напечатать маленькие буквы английского алфавита используя цикл while
+
+        char ch = 'a';
+        while(ch <= 'z'){
+
+            System.out.print(ch+" ");
+            ch++;
+        }
+        System.out.println();
+
+        int j = 10;
+        while (j>=1){
+            System.out.println(j);
+            j--;
+        }
+
+        String nataly = "HelloJava";
+        System.out.println(nataly.charAt(0));
+        System.out.println(nataly.charAt(1));
+        System.out.println(nataly.charAt(2));
+        System.out.println(nataly.charAt(3));
+        System.out.println(nataly.charAt(4));
+
+        System.out.println("Print hello letters with while loop");
+
+        int index = 0 ;
+        int length = nataly.length();
+
+        while (index<length){
+            System.out.println(nataly.charAt(index));
+            index++;
+        }
+
+        // do-while цикл
+
+      /*
+    do
+    {
+    statement(s)
+    }while(condition)
+
+
+*/
+        int q =1;
+
+        do {
+            System.out.println(q);
+            q--;
+        } while (q < 1);
+
+
+        Scanner sca = new Scanner(System.in);
+        char input;
+
+        do {
+
+            System.out.println("Enter a letter/ enter q to quit ");
+            input = sca.next().charAt(0);
+            System.out.println("you have entered " + input);
+
+        }while (input != 'q');
+
+        // Используя цикл while  написать метод, выводящий на экран сумму цифр от 1 до 5
+        // 1+2+3+4+5=15
+        // sum =15
+        // "sum of digits from 1 to 5 is" + sum
+
+
+    }
+
+
+}

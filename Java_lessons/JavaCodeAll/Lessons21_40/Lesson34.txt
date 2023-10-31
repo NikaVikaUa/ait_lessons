@@ -1,0 +1,424 @@
+Задачи на урок:
+Разбор и обсуждение домашнего задания
+Исключения в Джава
+Виды исключений
+try-catch-finally
+Исключения
+Огромная часть работы программиста — это работа с ошибками. Причем чаще всего — со своими собственными.
+
+Так уж сложилось, что не бывает людей, которые не допускают ошибок. И программ таких тоже не бывает.
+
+Конечно, главное при работе над ошибкой — понять ее причину. А причин таких в программе может быть целая куча.
+
+В один прекрасный момент перед создателями Java встал вопрос: что делать с этими самыми потенциальными ошибками в программах? Избежать их полностью — нереально. Программисты могут понаписать такого, что невозможно даже представить :)
+
+Значит, надо заложить в язык механизм работы с ошибками. Иными словами, если уж в программе произошла какая-то ошибка, нужен сценарий для дальнейшей работы. Что именно программа должна делать при возникновении ошибки?
+
+Сегодня мы познакомимся с этим механизмом. И называется он “Исключения” (Exceptions).
+
+Разновидности исключений
+IOException
+ArithmeticException
+ArrayIndexOutOfBoundsException
+NumberFormatException
+
+Вид сообщений об ошибке
+Exception in thread "main" java.lang.ArithmeticException: / by zero at Task.main(Task.java:15)
+
+В сообщений об ошибки Java указывает:
+
+название ошибки (обычно понятное — ArithmeticException, например),
+дополнительную информацию (/ by zero),
+класс и метод (Task.main)
+файл и номер строки с ошибкой (Task.java:15)
+
+Перехват и обработка исключений
+Для работы с исключениями в Java существуют специальные блоки кода: try, catch и finally.
+
+Код, в котором программист ожидает возникновения исключений, помещается в блок try. Это не значит, что исключение в этом месте обязательно произойдет. Это значит, что оно может там произойти, и программист в курсе этого.
+
+Тип ошибки, который ты ожидаешь получить, помещается в блок catch (“перехват”). Сюда же помещается весь код, который нужно выполнить, если исключение произойдет.
+
+try {
+System.out.println("Делим число на ноль");
+System.out.println(366/0);//в этой строчке кода будет выброшено исключение
+} catch (ArithmeticException e) {
+System.out.println("Ошибка! Нельзя делить на ноль!");
+}
+
+Поведение исключений
+Как только в какой-то строчке кода в блоке try возникнет исключение, код после нее уже не будет выполнен. Выполнение программы сразу “перепрыгнет” в блок catch.
+
+try {
+System.out.println("Делим число на ноль");
+System.out.println(366/0);//в этой строчке кода будет выброшено исключение
+System.out.println("Этот");
+System.out.println("код");
+System.out.println("не");
+System.out.println("будет");
+System.out.println("выполнен!");
+} catch (ArithmeticException e) {
+System.out.println("Программа перепрыгнула в блок catch!");
+System.out.println("Ошибка! Нельзя делить на ноль!");
+}
+Вывод:
+
+Делим число на ноль
+Программа перепрыгнула в блок catch!
+Ошибка! Нельзя делить на ноль!
+Несколько блоков catch
+Блоков catch может быть несколько.
+
+Если код в блоке try может выбросить не один, а несколько видов исключений, для каждого из них можно написать свой блок catch.
+
+int[] numbers = {1, 2, 3, 4};
+try {
+for (int i = 0; i <= numbers.length; ++i) {
+System.out.println(5.0 / (3 - numbers[i]));
+}
+} catch (ArithmeticException e) {
+System.out.println("Ошибка! Деление на 0!");
+} catch (ArrayIndexOutOfBoundsException e) {
+System.out.println("Ошибка! Программа вышла за границы массива!");
+}
+
+**Проверяемые (checked) и непроверяемые (unchecked) исключения **
+У всех исключений есть общий класс-предок Throwable.
+
+От него происходят две большие группы — исключения (Exception) и ошибки (Error).
+
+Разновидности ошибок и исключений
+
+Error — это критическая ошибка во время исполнения программы, связанная с работой виртуальной машины Java. В большинстве случаев Error не нужно обрабатывать, поскольку она свидетельствует о каких-то серьезных недоработках в коде.
+
+Наиболее известные ошибки: StackOverflowError — возникает, например, когда метод бесконечно вызывает сам себя, и OutOfMemoryError — возникает, когда недостаточно памяти для создания новых объектов.
+
+Как видишь, в этих ситуациях чаще всего обрабатывать особо нечего — код просто неправильно написан и его нужно переделывать.
+
+Exceptions — это, собственно, исключения: исключительная, незапланированная ситуация, которая произошла при работе программы.
+
+Это не такие серьезные ошибки, как Error, но они требуют нашего внимания.
+
+В Java все исключения делятся на два типа – контролируемые/проверяемые (checked) и неконтролируемые/непроверяемые (unchecked): те, которые перехватывать обязательно, и те, которые перехватывать не обязательно. По умолчанию – все исключения обязательно нужно перехватывать.
+
+В своем коде ты сам можешь выкидывать исключения. Ты даже можешь написать свои собственные исключения. Но это мы разберем позже. Сейчас же давай научимся работать с исключениями, которые выбрасывает Java-машина.
+
+О проверяемых исключениях мы обязаны предупредить в коде, для этого используется служебное слово throws:
+
+public static void main() throws IOException
+Чтобы программа скомпилировалась, метод, который вызывает method1 в примере ниже, должен сделать две вещи: или перехватить эти исключения или пробросить их дальше (тому, кто его вызвал), указав их в своём заголовке.
+
+Ты уже сталкивался с несколькими непроверяемыми исключениями: ArithmeticException возникает при делении на ноль ArrayIndexOutOfBoundsException возникает при попытке обратиться к ячейке за пределами массива.
+
+Теоретически, конечно, создатели Java могли бы ввести обязательную обработку таких исключений, но во что бы тогда превратился код? При любой операции деления чисел пришлось бы писать try-catch для проверки — не на ноль ли ты случайно делишь? При любом обращении к массиву надо было бы писать try-catch чтобы проверить, не вышел ли ты за эти пределы.
+
+Любой написанный код был бы совершенно нечитаемым. Логично, что от этой идеи отказались.
+
+Поэтому непроверяемые исключения не нужно обрабатывать в блоках try-catch или пробрасывать наверх, хотя технически это возможно, как и с Error.
+
+Оператор finally
+В завершение мы поговорим о блоке finally. Это последняя часть триумвирата обработки исключений try-catch-finally.
+
+Его особенность в том, что он выполняется при любом сценарии работы программы.
+
+Если код в блоке try выполнится целиком и не выбросит исключения, в конце сработает блок finally.
+
+Если код внутри try прервется, и программа перепрыгнет в блок catch, после того, как отработает код внутри catch, все равно будет выбран блок finally.
+
+Зачем он нужен?
+
+Его главное назначение — выполнить обязательную часть кода; ту часть, которая должна быть выполнена независимо от обстоятельств.
+
+Например, в нем часто освобождают какие-то используемые программой ресурсы.
+
+Поймать исключение (с выводом на экран его типа),которое возникает при выполнении следующего кода
+int a = 40/0
+
+Поймать исключение (с выводом на экран его типа),которое возникает при выполнении следующего кода
+String s =null;
+String m = s.toLowerCase()
+
+Поймать исключение (с выводом на экран его типа),которое возникает при выполнении следующего кода
+int[] m = new int[2]
+m[8]=5
+
+code/main34/src/Main.java
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+
+public class Main {
+
+    public static void main(String[] args) {
+        /*
+        Получить и вывести на экран:
+-текущую дату
+-текущий год, месяц и день
+Создать дату , например день рождения и вывести на экран
+Создать две даты и проверить на равенство
+Получить и вывести на экран текущее время
+текущее время + 3 часа
+Создать дату на неделю позже сегодняшней
+Создать дату, которая была на год раньше сегодняшней используя метод minus
+Создать дату на год позже сегодняшней используя plus метод
+Создать даты tomorrow и yesterday и проверить находятся ли они до или после сегодняшней
+         */
+        LocalDate today = LocalDate.now();
+        System.out.println("Today's date: "+today);
+
+        int year = today.getYear();
+        int month = today.getMonthValue();
+        int day = today.getDayOfMonth();
+
+        System.out.println("year: "+year);
+        System.out.println("month: "+month);
+        System.out.println("day: "+day);
+
+
+        LocalDate date = LocalDate.of(1977,11,7);
+        System.out.println("Custom date: "+date);
+
+
+        LocalDate date1 = LocalDate.now();
+        LocalDate date2 = LocalDate.of(2021,2,23);
+
+        if(date1.equals(date2))
+            System.out.println("Equal dates");
+        else
+            System.out.println("Dates are not equal");
+
+        /*
+        Получить и вывести на экран текущее время
+текущее время + 3 часа
+Создать дату на неделю позже сегодняшней
+Создать дату, которая была на год раньше сегодняшней используя метод minus
+Создать дату на год позже сегодняшней используя plus метод
+Создать даты tomorrow и yesterday и проверить находятся ли они до или после сегодняшней
+         */
+
+        LocalTime time = LocalTime.now();
+        System.out.println("Current time is "+time);
+
+        LocalTime newTime = time.plusHours(3);
+        System.out.println("Current time plus 3 hours is "+newTime);
+
+        LocalDate today1 = LocalDate.now();
+        LocalDate nextWeek = today1.plusWeeks(1);
+        LocalDate nextWeek1 = today1.plus(1, ChronoUnit.WEEKS);
+        System.out.println("Date after one week is "+nextWeek1);
+
+        LocalDate previousYear = today1.minusYears(1);
+        LocalDate previuosYear1 = today1.minus(1,ChronoUnit.YEARS);
+        System.out.println("Date before one year from now: "+previuosYear1);
+
+        LocalDate nextYear = today1.plus(1,ChronoUnit.YEARS);
+        System.out.println("Date after one year from now: "+nextYear);
+
+        LocalDate yesterday = today1.minus(1,ChronoUnit.DAYS);
+        if(yesterday.isBefore(today1))
+            System.out.println("Date before: "+yesterday);
+
+        LocalDate tomorrow = today1.plus(1,ChronoUnit.DAYS);
+        if( tomorrow.isAfter(today1))
+            System.out.println("Date after:"+tomorrow);
+
+
+    }
+}
+code/main34/src/OurLocalDateTime.java
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Set;
+
+public class OurLocalDateTime {
+
+    // LocalDateTime - представляет дату и время без информации о временных зонах
+    public static void main(String[] args) {
+        LocalDateTime current = LocalDateTime.now();
+        System.out.println(current);
+
+        LocalDateTime localDateTime = LocalDateTime.of(2023,07,06,18,02);
+        System.out.println(localDateTime);
+
+        System.out.println(localDateTime.getMonth());
+        System.out.println(localDateTime.getMonthValue());
+        System.out.println(localDateTime.getDayOfWeek());
+        System.out.println(localDateTime.getDayOfYear());
+
+        current.plusDays(4);
+        current.minusHours(5);
+
+        //current.isEqual()
+       // current.isAfter()
+       // current.isBefore()
+
+        // зональное время ZonedDateTime - предоставляет информацию о дате и времени с учетом временной зоны
+
+        ZoneId zoneId = ZoneId.of("Europe/Berlin");
+        System.out.println("Berlin zone id is "+zoneId);
+
+
+      Set<String>allZoneIds = ZoneId.getAvailableZoneIds();
+
+        System.out.println(ZoneId.getAvailableZoneIds());
+        System.out.println(allZoneIds);
+
+       //  Найдем местное время в Нью-Йоркеб Берлине и Лондоне
+
+        ZoneId america = ZoneId.of("America/New_York");
+        ZoneId europe = ZoneId.of("Europe/London");
+
+        LocalDateTime localDateAndTime = LocalDateTime.now();
+
+        ZonedDateTime dateTimeNewYork = ZonedDateTime.of(localDateAndTime,america);
+        ZonedDateTime dateTimeLondon = ZonedDateTime.of(localDateAndTime,europe);
+
+        System.out.println("Current in NewYork: "+dateTimeNewYork);
+        System.out.println("Current in London:"+dateTimeLondon);
+
+
+    }
+}
+code/our_exceptions/src/FinallyExample.java
+public class FinallyExample {
+    public static void main(String[] args) {
+        myMethod();
+    }
+
+
+    public static int myMethod(){
+        try{
+            return 1;
+        }
+        finally {
+            System.out.println("Finally runs even after return statement" );
+
+        }
+    }
+}
+code/our_exceptions/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+    // Exception handling in Java
+    // Обработка исключений в Джаве
+
+    // Исключение - это нежелательное событие, прерывающее нормальный ход программы.
+    /* в результате чего выполнение программы останавливается и мы получаем системное
+    сообщение об ошибке.
+    Возникшую ошибку можно обработать таким образом, что программа не будет аварийно завершена  и
+    пользователь получит понятное сообщение о том, что случилось.
+
+
+     */
+
+    public static void main(String[] args) {
+
+
+        int num1, num2;
+        Scanner scanner = new Scanner(System.in);
+        //    System.out.println("Enter the first number:");
+        //    num1 = scanner.nextInt();
+
+        //    System.out.println("Enter second number:");
+        //    num2 = scanner.nextInt();
+
+    /*    try {
+            int division = num1 / num2;
+            System.out.println(num1 + "/" + num2 + " = " + division);
+        } catch (ArithmeticException e){
+            System.out.println("Division by zero is illegal");
+        }*/
+
+
+        String str = null;
+        //NullPointerException -
+        //   System.out.println(str.length());
+
+        // NumberFormatException - неверный формат данных
+        String str1 = "Hello";
+        //   int num = Integer.parseInt(str1);
+
+        int arr[] = new int[3];
+        //ArrayIndexOutOfBoundsException - индекс вне границ массива
+        //   arr[45] =250;
+
+        // Ошибки и исключения.
+        /*
+        Ошибка - что-то пошло не так за рамками программы. Ошибку нельзя обработать, она является следствием или
+        указывает на системный сбой или другую серьезную проблему.
+        Exceptions - это то, что происходит при выполнении программы  вследствие неверных данных
+         введенных пользователем, ошибок в коде или например отстутствия файла для считывания данных. Программист
+         может обрабатывать такие ошибки.
+         В свою очередь, исключения бывают проверяемые ( checked)  и непроверяемые во время компиляляции (unchecked)
+
+         Основные понятия при работе с исключениями:
+
+         try - код, который может вызвать ошибку помещается внутрь блока try. В случае ошибки try  передает управление
+               программой блоку catch. Блок catch  следует за блоком try
+
+         catch -  в этом блоке пишется код обрабатывающий исключение. Он выполняется если исключение происходит в
+                    соответствующем try блоке.
+
+        finally - блок кода, который выполняется всегда, независимо от того происходит ли ошибка или нет
+
+        throw -  используется для того, чтобы бросить exception
+
+        throws - мспользуется в сигнатуре метода и указывает на то, что метод может бросить исключение.
+
+
+        try-catch
+
+        try{
+        // код, который может вызвать ошибку
+        } catch(Exception e){
+            код, который будет выполняться если происходит ошибка
+            }
+
+
+         */
+        num1 = 5;
+        num2 = 0;
+        try {
+
+            String str2 = "Hello";
+            int num3 = Integer.parseInt(str2);
+
+            int division = num1 / num2;
+    //        System.out.println(num1 + "/" + num2 + " = " + division);
+
+
+        } catch (ArithmeticException e) {
+    //        System.out.println("Division by zero is illegal");
+
+        } catch (Exception e) {
+     //       System.out.println("Exception occured");
+
+
+            //ловит все ошибки, общий обработчик
+
+        }
+
+        // блок finally
+
+        try {
+           int division = num1 / 2;
+            System.out.println(num1 + "/" + num2 + " = " + division);
+
+        } catch (ArithmeticException e) {
+            System.out.println("Division by zero is illegal");
+
+        }
+
+        finally {
+            System.out.println("This is finally block");
+        }
+
+        System.out.println("Out of try-catch-finally");
+
+
+
+    }
+
+}

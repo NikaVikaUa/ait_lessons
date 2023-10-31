@@ -1,0 +1,253 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Интерфейс Predicate
+Интерфейсы Comparable и Comparator
+Практика, решение задач
+Интерфейс Comparable
+
+Для того, чтобы объекты можно было сравнить и сортировать, они должны применять интерфейс Comparable. При применении интерфейса он типизируется текущим классом.
+Интерфейс Comparable содержит один единственный метод int compareTo(E item), который сравнивает текущий объект с объектом, переданным в качестве параметра. Если этот метод возвращает отрицательное число, то текущий объект будет располагаться перед тем, который передается через параметр. Если метод вернет положительное число, то, наоборот, после второго объекта. Если метод возвратит ноль, значит, оба объекта равны.
+
+Интерфейс Comparator
+Перед нами может возникнуть проблема если разработчик не реализовал в своем классе, который мы хотим использовать, интерфейс Comparable, либо реализовал, но нас не устраивает его функциональность, и мы хотим ее переопределить. На этот случай есть еще более гибкий способ, предполагающий применение интерфейса Comparator.
+
+Интерфейс Comparator содержит ряд методов, ключевым из которых является метод compare().
+Метод compare также возвращает числовое значение - если оно отрицательное, то объект a предшествует объекту b, иначе - наоборот. А если метод возвращает ноль, то объекты равны. Для применения интерфейса нам вначале надо создать класс компаратора, который реализует этот интерфейс.
+
+Задача1
+Создать класс Car с полями model, price, year(год выпуска)
+В методе main создать массив обьектов класса Car, отсортировать его по цене и вывести на экран
+
+code/comparable_interface/src/Main.java
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+
+        // Интерфейс Comparable. Используется для сравнения однотипных обьектов и позволяет сортировать
+        // обьекты в соответствии с определенным порядком. Если  срвнение и сортировка  например числовых массивов
+        // понятна ( задан естественный порядок сортировки) , то в случае с обьектами надо определять порядок
+        // самостоятельно. Для этого и служит  интерфейс Comparable , имеющий метод compareTo()
+        /*
+        int compareTo( Object o1)  - этот метод сравнивает обьект, на котором он вызывается со вторым обьектом
+        ( в скобках).  Он возвращает целое число, которое означает:
+        - если число больше нуля, то обьект, на котором вызывается метод, больше второго обьекта о1
+        - если равно нулю, то обьекты равны
+        - если меньше нуля то обьект меньше чем о1
+
+        Сравнение происходит по отдельным полям. Нужно принять решение какое поле или поля класса будут
+         использоваться в определении порядка сортировки обьектов.  Порядок сортировки , заданнвй в этом
+           методе, является так  называемым естественным порядком сортировки обьектов класса.
+         */
+        int[] array = {11,2,67,23,0,6};
+        Arrays.sort(array);
+        System.out.println(Arrays.toString(array));
+
+        String[] strings = {"John","Barbara","Alex"};
+        Arrays.sort(strings);
+        System.out.println(Arrays.toString(strings));
+
+        Player player1 = new Player(30,"John",20);
+        Player player2 = new Player(10,"Steve",18);
+        Player player3 = new Player(20,"Alex",26);
+
+      //  System.out.println(player2.compareTo(player1));
+
+        Player[] footballTeam = {player1,player2,player3};
+
+        System.out.println("Football team before sorting");
+        System.out.println(Arrays.toString(footballTeam));
+
+        System.out.println("Football team after sorting");
+        Arrays.sort(footballTeam);
+        System.out.println(Arrays.toString(footballTeam));
+    }
+}
+code/comparable_interface/src/Player.java
+public class Player implements Comparable<Player>{
+
+    private int ranking;
+    private String name;
+    private int age;
+
+    public Player( int ranking, String name, int age){
+        this.ranking = ranking;
+        this.name = name;
+        this.age = age;
+    }
+
+    public int getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+
+  /*  public int compareTo(Player p){
+        if( getRanking() - p.getRanking() > 0){
+            return 1;
+        }else if ( getRanking() - p.getRanking() < 0){
+            return  -1;
+        }else return 0;
+    }*/
+
+    // более короткая форма записи
+    public int compareTo(Player p){
+        return getRanking() -p.getRanking();
+    }
+
+ //   public int compareTo(Player p){
+ //       return Integer.compare(getRanking(),p.getRanking());
+ //   }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "ranking=" + ranking +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+code/lambdas/src/Checkable.java
+public interface Checkable {
+    boolean check(String str); // принимает строку и что-то проверяет
+}
+code/lambdas/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+        /*
+        Задача 1
+Используя интерфейс Printable (см. код урока) , написать лямбда выражение,реализующее метод print()
+таким образом, что принимаемая в качестве параметра строка
+выводится на экран
+
+void print(String s);
+         */
+   //     (arg list) -> body
+        Printable p1 = str -> System.out.println(str);
+    //    p1.print("Hello");
+
+
+        /*
+        Задача 2*
+Используя один из интерфейсов Checkable,Printable, StringConcat (см. код урока)
+написать лямбда выражение, реализующее соответствующий метод таким образом,
+что если длина строки на входе равна 3, то метод возвращает true, иначе false
+
+boolean check(String str);
+         */
+        Checkable checkable =str -> str.length() == 3;
+        System.out.println(checkable.check("abc"));
+        System.out.println(checkable.check("abcd"));
+
+        checkable = str -> str.length()%2 == 0;
+        System.out.println(checkable.check("abc"));
+        System.out.println(checkable.check("abcd"));
+
+
+        // соединить  a и b = ab
+        // String concat( int a,int b)
+        StringConcat stringConcat = (a,b) -> Integer.toString(a)+b; // с помощью Integer.toString значение а
+                                                                     // превращается в строку ( 2 в "2"
+        System.out.println(stringConcat.concat(1,2));
+
+
+        // напечатаь Hello World
+        // String produce()
+        Producable producable = () -> "Hello World";
+
+        System.out.println(producable.produce());
+
+        // реализовать метод , принимающий строку и возвращающий ее в верхнем регистре
+        // String  modify(String input)
+
+        Transformable transformable = s -> s.toUpperCase();
+        System.out.println(transformable.modify("abcd"));
+    }
+ //   boolean check(String str){
+ //       return str.length()==3;
+ //   }
+}
+code/lambdas/src/Printable.java
+@FunctionalInterface
+public interface Printable {
+    void print(String s);
+    //void print1(String s);
+}
+code/lambdas/Producable.java
+code/lambdas/src/StringConcat.java
+public interface StringConcat {
+    String concat( int a,int b); // принимает два целых числа и возвращает строку
+}
+code/lambdas/src/Transformable.java
+public interface Transformable {
+
+  String  modify(String input); //  принимает строку и возвращает ее в измененном виде
+}
+code/predicate_functional/src/Main.java
+import java.util.function.Predicate;
+
+public class Main {
+    public static void main(String[] args) {
+
+
+        // интерфейс Predicate - один из стандартных функциональных интерфейсов Java. Этот интерфейс уже написан и
+        // нам самим писать его не нужно, можно сразу пользоваться и реализовывать его метод test
+        // Он имеет абстрактный метод test, возвращающий boolean.
+
+        Predicate<String> predicate = s -> s.length() == 3;// реализация метода test для  строки
+        System.out.println(predicate.test("abc"));
+        System.out.println(predicate.test("abcd"));
+
+        Predicate<Integer> age = i -> i >=17; // реализация для целого числа
+        System.out.println(age.test(10));
+        System.out.println(age.test(25));
+
+        //  дефолтные методы интерфейса Predicate
+
+        // and()
+        Predicate<Integer>old = i -> i<80;
+
+        System.out.println(age.and(old).test(20));  // чтобы результат был true обе предикаты должны вернуть true
+        System.out.println(age.and(old).test(5));
+        System.out.println(age.and(old).test(105));
+
+        // or() -  возвращает true  если одна из предикат true
+
+        Predicate<String> containsHello = s -> s.contains("hello");
+        Predicate<String> containsJava = s -> s.contains("java");
+        System.out.println("Hello Java predicates");
+        System.out.println(containsHello.or(containsJava).test("hello world"));
+        System.out.println(containsHello.or(containsJava).test("java world"));
+        System.out.println(containsHello.or(containsJava).test("hello java"));
+        System.out.println(containsHello.or(containsJava).test("my name"));
+
+
+        // negate() -  возвращает true  если условие не выполняется
+        Predicate<Integer> adult = i -> i>17;
+        System.out.println(adult.negate().test(2)); //  меняет результат на противоположный
+
+        // & | !
+
+    }
+}

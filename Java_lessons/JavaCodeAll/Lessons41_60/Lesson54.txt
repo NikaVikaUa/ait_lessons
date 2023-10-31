@@ -1,0 +1,334 @@
+Задачи на урок:
+Разбор дз
+Ссылки на метод
+Класс Optional
+Ссылки на методы
+
+Если лямбда-выражения связываются с функциональным интерфейсом, то методы также могут быть связаны с функциональным интерфейсом. Связь метода с функциональным интерфейсом осуществляется с помощью ссылки на метод.
+
+Если лямбда-выражение может быть передано в некоторый метод как параметр, то ссылка на метод также может быть передана в качестве параметра. С помощью этой ссылки можно обращаться к методу не вызывая его.
+
+В Java различают 4 вида ссылок на методы:
+
+ссылки на статические методы;
+ссылки на методы экземпляра;
+ссылки на конструкторы;
+ссылки на обобщенные (шаблонные) методы.
+
+Задача * не обязательная
+Написать метод, принимающий строку, содержащую слова разделенные пробелом и два функциональных интерфейса - function and predicate. Метод должен предоставлять возможность реализации следующих действий:
+
+при длине слова= 3, изменить все буквы этого слова на строчные и вернуть измененную строку
+при длине слова= 4, изменить все буквы слова на заглавные и вернуть измененную строку
+при длине слова= 5, изменить все буквы слова на звездочки и вернуть измененную строку
+(т.е. написать лямбду для каждого случая)
+code/lambdass/src/Checkable.java
+public interface Checkable {
+    boolean check (String str);
+}
+code/lambdass/src/Concatable.java
+public interface Concatable {
+
+    String concat( int num1, int num2);
+}
+code/lambdass/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+
+
+
+    // Написать лямбды, используя наши интерфейсы:
+
+
+
+    /*
+    1. сложить  два числа и получить строку. num1+num2 = num1num2
+    2. если длина строки четная  вернуть true  иначе false
+    3. вернуть строку в нижнем регистре
+    4. если длина строки пять символов вернуть 5 звездочек. Иначе вернуть без изменений
+    строку
+    5. вывести строку на печать в виде *строка*
+    6. напечатать " Hello Java "
+     */
+        // 1. сложить  два числа и получить строку. num1+num2 = num1num2
+        System.out.println("-------1-----------");
+        Concatable concatable = (num1,num2)->Integer.toString(num1)+num2;
+        System.out.println(concatable.concat(1,2));
+
+        //2. если длина строки четная  вернуть true  иначе false
+        System.out.println("--------------2--------------");
+        Checkable checkable = str -> str.length() % 2 == 0;
+        System.out.println(checkable.check("abc"));
+        System.out.println(checkable.check("abcd"));
+        checkable = str -> str.length() == 5;
+
+        //3. вернуть строку в нижнем регистре
+        System.out.println("--------3------------");
+        Transformable transformable = str -> str.toLowerCase();
+        System.out.println(transformable.transform("ABcFd"));
+        transformable = str -> str.toUpperCase();
+        System.out.println(transformable.transform("ABcFd"));
+
+
+        System.out.println("--------4------------");
+        //4. если длина строки пять символов вернуть 5 звездочек.
+        // Иначе вернуть без изменений   строку
+        Transformable transformable1 = str -> str.length() == 5 ? "*****" : str;
+        System.out.println(transformable1.transform("ab"));
+        System.out.println(transformable1.transform("abcde"));
+
+        //5. вывести строку на печать в виде *строка*
+        System.out.println("-----------5---------------");
+        Printable printable = str -> System.out.println("*" + str + "*");
+        printable.print("hello");
+
+        //6. возвращает " Hello Java "
+        System.out.println("----------6------------");
+        Producable producable = () -> "Hello Java";
+        System.out.println(producable.produce());
+
+
+
+
+
+
+
+
+    }
+
+}
+code/lambdass/src/Main1.java
+import java.util.function.*;
+
+public class Main1 {
+    public static void main(String[] args) {
+         /*
+    1. сложить  два числа и получить строку. num1+num2 = num1num2
+    2. если длина строки четная  вернуть true  иначе false
+    3. вернуть строку в нижнем регистре
+    4. если длина строки пять символов вернуть 5 звездочек. Иначе вернуть без изменений
+    строку
+    5. вывести строку на печать в виде *строка*
+    6. напечатать " Hello Java "
+     */
+        // 1. сложить  два числа и получить строку. num1+num2 = num1num2
+        BiFunction<Integer, Integer, String> biFunction = (a, b) -> Integer.toString(a) + b;
+        String res = biFunction.apply(10, 15);
+        System.out.println(biFunction.apply(10, 15));
+
+        // 2. если длина строки четная  вернуть true  иначе false
+        Predicate<String> stringPredicate = str -> str.length() % 2 == 0;
+        System.out.println(stringPredicate.test("abc"));
+        System.out.println(stringPredicate.test("abcd"));
+
+        //  3. вернуть строку в нижнем регистре
+        Function<String, String> unaryOperator = String::toLowerCase;
+        System.out.println(unaryOperator.apply("TREZU"));
+
+        // 4. если длина строки пять символов вернуть 5 звездочек. Иначе вернуть без изменений
+        //    строку
+
+        UnaryOperator<String> unaryOperator1 = str -> str.length() == 5 ? "*****" : str;
+        System.out.println(unaryOperator1.apply("abcde"));
+        System.out.println(unaryOperator1.apply("abc"));
+
+        //5. вывести строку на печать в виде *строка*
+
+        Consumer<String> consumer = str -> System.out.println("*"+str+"*");
+        consumer.accept("hello");
+
+        //6. напечатать " Hello Java "
+
+        Supplier<String> supplier = () -> "Hello World";
+        System.out.println(supplier.get());
+
+    }
+}
+
+code/lambdass/src/Printable.java
+public interface Printable {
+    void print ( String str);
+}
+code/lambdass/src/Producable.java
+public interface Producable {
+
+    String produce();
+}
+code/lambdass/src/Transformable.java
+public interface Transformable {
+    String transform(String str);
+}
+code/method_reference/src/IntPredicate.java
+// функциональный интерфейс для целочисленных предикат, метод
+//которого принимает целое число
+public interface IntPredicate {
+    boolean test( int n);
+}
+code/method_reference/src/IntPredicateTwoParams.java
+public interface IntPredicateTwoParams {
+    boolean test(OurIntNumber ourIntNumber,int n);
+}
+code/method_reference/src/Main.java
+public class Main {
+
+    int a;
+    static  int b;
+    // Ссылки на метод ( method reference)
+    /*
+    Cсылка на метод - предоставляет  способ сослаться на метод не выполняя его сразу
+    Понятие ссылки на метод связано с понятием лямбда- выражения, т.к. она также требует
+    наличия совместимого функционального интерфейса и в результате  также создает обьект такого
+    интерфейса
+    Есть несколько типов ссылок на метод:
+    1. ссылки на статические методы. Method references to static methods
+    ClassName :: methodName -( имя класса :: имя метода)
+
+     */
+
+    //  метод принимает функциональный интерфейс в качестве первого параметра, т.е. в него
+   // можно передатьммылку на  обьект этого интерфейса, включая ссылку созданную как метод
+   // референс
+    public static boolean testMethod(IntPredicate p, int v){
+        return p.test(v);
+    }
+
+    public static void main(String[] args) {
+
+
+       boolean result;
+
+       //  в метод testMethod  передается ссылка на метод  isEven
+      result = testMethod(OurIntPredicates ::isEven,16);
+      if(result)
+          System.out.println("16 is even");
+
+        //  в метод testMethod  передается ссылка на метод  isPositive
+      testMethod(OurIntPredicates :: isPositive,1);
+        if(result)
+            System.out.println("1 is positive");
+
+
+        //2. Method reference to Instance Methods
+        /*
+        objectRef :: methodName
+         */
+
+        OurIntNumber ourIntNumber = new  OurIntNumber(10);
+        OurIntNumber ourIntNumber1 = new OurIntNumber(12);
+
+        // создается ссылка на метод isFactor
+        IntPredicate intPredicate = ourIntNumber::isFactor;
+
+        result = intPredicate.test(2);
+        if(result)
+            System.out.println("2 is factor of "+ourIntNumber.getX());
+
+        intPredicate = ourIntNumber1 ::isFactor;
+        result = intPredicate.test(3);
+        if(result)
+            System.out.println("3 is factor of "+ourIntNumber1.getX());
+
+        // 3. ClassName :: instanceMethodName - когда обычный метод может быть использован
+        // с любым обьектом данного класса
+
+        OurIntNumber ourIntNumber2 = new OurIntNumber(12);
+        IntPredicateTwoParams intPrTwoParams = OurIntNumber::isFactor;
+        result = intPrTwoParams.test(ourIntNumber2,3);
+        System.out.println(result);
+
+
+        // ссылки на конструктор ( Constructor references)
+        // classname :: new
+        //  Такая ссылка может быть использована с  любым функциональным интерфейсом у которого есть
+        //  метод, совместимый с конструктором
+
+        //  ссылка на конструктор
+        OurFunc ourClassConstructor = OurClass ::new;
+
+        // создаем обьект класса OurClass  с помощью ссылки на конструктор
+       OurClass newObject =  ourClassConstructor.func("Test");
+
+        System.out.println(newObject.getStr());
+
+        OurFunc2 ourClassConstructor2 = OurClass::new;
+        ourClassConstructor2.func();
+
+
+
+    }
+}
+code/method_reference/src/OurClass.java
+public class OurClass {
+    private String str;
+
+    public OurClass( String str){
+        this.str = str;
+    }
+
+    public OurClass(){
+
+    }
+
+    public String getStr() {
+        return str;
+    }
+}
+code/method_reference/src/OurFunk.java
+code/method_reference/src/OurFunk2.java
+code/method_reference/src/OurIntNumber.java
+public class OurIntNumber {
+
+    private int x;
+
+    OurIntNumber( int x){
+        this.x = x;
+    }
+
+    int getX() {
+        return x;
+    }
+
+    boolean isFactor( int n){
+        return (x % n) == 0;
+    }
+}
+code/method_reference/src/OurPredicates.java
+code/our_optional/src/Main.java
+import java.util.Optional;
+
+public class Main {
+
+    //  класс Optional
+    /*
+
+     */
+    public static void main(String[] args) {
+
+
+        Optional<String> empty = Optional.empty(); // создание пустого обьекта Optional
+        String name = "John";
+       // name = null;
+
+        Optional<String> opt = Optional.of(name);// создание Optional   с перменной name
+
+
+        name = null;
+
+        Optional<String> optNullable = Optional.ofNullable(name); // может принять null  и возвращает
+                                                                        // пустой Optional
+
+        System.out.println("Optional of null is "+optNullable);
+
+        //  проверка наличия значения в Optional  осуществляется с помощью методов isPresent() и isEmpty()
+
+        Optional<String> optional = Optional.of("Hello");
+        System.out.println(optional.isPresent());
+        System.out.println(optional.isEmpty());
+
+        optional = Optional.ofNullable(null);
+        System.out.println(optional.isPresent());
+        System.out.println(optional.isEmpty());
+
+
+    }
+}

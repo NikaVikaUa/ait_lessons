@@ -1,0 +1,306 @@
+Задачи на урок:
+Разбор и обсуждение домашнего задания
+Ключевое слово static, повторение
+Ключевое слово var
+Задача на повторение двумерных массивов
+Написать метод, принимающий двумерный массив целых чисел и возвращающий количество четных чисел в нем.
+public static int numberOfEven2Dim (int[][]numbers)
+
+code/garden/src/Flower.java
+public class Flower extends Plant{
+
+    public Flower( String displayName, int height, int age){
+        super(displayName,height,age);
+    }
+
+    private final static int FLOWER_GROW_PER_SEASON = 2;
+
+    public void doSummer(){
+        System.out.println(getDisplayName()+" is not growing in Summer, but flourishing  "+getHeight());
+    }
+
+    public void doAutumn(){
+        setHeight(0); //  срезаем цветок
+        System.out.println(getDisplayName()+" is cut to zero in Autumn "+getHeight());
+    }
+
+    public int getGrowPerSeason(){
+        return FLOWER_GROW_PER_SEASON;
+    }
+}
+code/garden/src/Main.java
+public class Main {
+
+    // Садовод-любитель.
+    /*
+    Будем выращивать деревья и цветы. Каждый из этих видов  имеет следующие
+    характеристики: displayName, height, age. Каждый из них  вырастает за сезон на разную высоту, одинаковую
+     при этом для всех деревьев и всех цветов.
+     Каждый сезон состоит из четырех времен года, в течение которых цветы и деревья ведут себя не всегда одинаково:
+     Сезон для цветов начинается весной и они растут, зимой они не растут, летом они не растут а цветут, осенью их срезают.
+     Для деревьев сезон начинается весной и они растут, зимой они не растут, летом растут, осенью не растут.
+     В классе Main(Garden)  нужно создать метод growPlants, в котором должен быть отражен процесс роста нескольких
+     растений в течение нескольких лет. Что происходит с растеним зимой, летом, весной и осенью, их размер в
+     каждый сезон и какого они размера и возраста в конце.
+
+     /*
+     1. Будем решать задачу используя свойства наследования в джаве.
+       Создадим родительский абстрактный класс Plant и наследующие его классы Flower  и  Tree
+       В родительском классе будут три поля, общие для всех классов  displayName, height, age
+       и методы, описывающие поведение растений в каждое время года. Причем когда поведение одинаковое ( весна и зима)
+       методы будут общие для обоих дочерних классов и содержатся только в родительском классе. А когда поведение
+       будет разное ( лето, осень), то методы будут в родительском классе абстрактные и реализованы должны быть в
+       дочерних классах.
+       В дочерних классах кроме методов, реализующих поведение летом и осенью, должно также быть указано насколько
+       обьекты данного класса вырастают за сезон. Скорее всего в виде константы
+       private final static int TREE_GROWW_PER_SEASON = 5
+       Поэтому в родительском классе нужно сделать еще один абстрактный метод getGrowPerSeason,  а в дочерних
+       классах реализовать его  в виде геттеров.
+       Обнулить высоту  цветка можно через сеттер setHeight(0)
+       В классе Garden:  нужно создать один цветок и одно дерево, поместить их в массив plants.
+       В  методе growPlants нужно в цикле for  пройти по элементам массива plants поочередно вызывая методы наших
+       деревьев и цветов в правильной последовательности,т.е.
+       plant.doSpring()
+             doSummer()
+             doAutumn()
+             doWinter()
+     */
+    public static void main(String[] args) {
+        Plant tree = new Tree("Pine tree",100,1);
+        Plant flower = new Flower("Tulip",0,1);
+
+        Plant[] plants = {tree,flower};
+
+        int yearsToGrow = 2; //  будем растить 2 года
+
+        growPLants( plants, yearsToGrow);
+    }
+
+    public static void growPLants(Plant[] plants, int numberOfYears){
+        System.out.println("Growing plants for "+numberOfYears+" years");
+
+        for(int i = 0;i<numberOfYears;i++) { // сколько лет оно растет
+            for (Plant plant : plants) { // что происходит с каждым растением за все сезоны ( за год)
+                plant.doSpring();
+                plant.doSummer();
+                plant.doAutumn();
+                plant.doWinter();
+            }
+        }
+
+        for (Plant plant:plants){
+            System.out.println(plant.getDisplayName()+" has height: "+plant.getHeight()+" and is "+plant.getAge()
+            +" years old");
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+code/garden/src/Plant.java
+public abstract class Plant implements Comparable<Plant> {
+
+    private String displayName;
+    private int height;
+    private int age;
+
+
+    public Plant(String displayName, int height, int age) {
+        this.displayName = displayName;
+        this.height = height;
+        this.age = age;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void addYearToAge(){
+        this.age++;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public abstract int getGrowPerSeason();// рост за сезон
+
+    public void doSpring(){
+        addYearToAge(); // новый год начинается весной для растений
+        setHeight(getHeight()+getGrowPerSeason());// старая высота + рост за сезон
+        System.out.println(getDisplayName()+" has grown in Spring  "+getHeight());
+    }
+
+    public abstract void doSummer();
+
+    public abstract void doAutumn();
+
+    public void doWinter(){
+        System.out.println(getDisplayName()+" is not growing in Winter  "+getHeight());
+    }
+
+    public int compareTo( Plant plant){
+        return getDisplayName().compareTo(plant.getDisplayName());
+    }
+}
+code/garden/src/Tree.java
+public class Tree extends Plant{
+
+    private final static int TREE_GROWW_PER_SEASON = 5; // рост дерева за сезон
+
+    public Tree( String displayName, int height, int age){
+        super(displayName,height,age);
+    }
+
+    public void doSummer(){
+        setHeight(getHeight() + getGrowPerSeason()); //  высота = старая высота + рост за сезон
+        System.out.println(getDisplayName()+" has grown in Summer  "+getHeight());
+    }
+
+    public void doAutumn(){
+        System.out.println(getDisplayName()+" is not growing in Autumn  "+getHeight());
+    }
+
+    public int getGrowPerSeason(){
+        return TREE_GROWW_PER_SEASON;
+    }
+}
+code/main36/src/OurVar.java
+public class OurVar {
+
+    public static void main(String[] args) {
+      //  int a = 1;
+
+        // ключевое слово var  позволяет не задавать тип в явном виде при условии инициали
+      //  зации переменной
+        var a=1; // переменная типа var  должна быть обязательно инициализирована при создании
+      //  a=2;
+        int var = 25; //  в данном случае это просто название переменной
+        var k =var;
+        System.out.println(k);
+        var c =3.0;
+        var b = "str";
+
+
+    }
+
+}
+code/static_in_deep/src/Car.java
+public class Car {
+    private String name;
+    private int year;
+
+    public static int counter;
+
+    public Car(String name, int year) {
+        this.name = name;
+        this.year = year;
+        counter++;// подсчитаем количество сделанных машин. Т.е. каждый раз при создании нового обьекта машина, счетчик
+                  // будет увеличиваться
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public static int getCounter() {
+        return counter;
+    }
+    public static void setCounter( int numberOfCars){
+        counter = numberOfCars;
+    }
+}
+code/static_in_deep/src/Main.java
+public class Main {
+
+    /*
+    В джава ключевое слово статик означает, что переменная принадлежит классу а не обьекту класса.
+
+    name
+    id
+    static int counter = 2;
+
+    Object1 ( name John, id =22)      Object2 ( name Bill, id = 45
+
+    static Fields  - когда мы обьявляем статическое поле, создается только одна копия этого поля и она используется
+    всеми обьектами класса
+     */
+    public static void main(String[] args) {
+        Car bmw = new Car("BMW", 2022);
+        Car car2 = new Car("Audi", 2021);
+        Car car3 = new Car("Audi", 2021);
+        System.out.println("The number of cars created is " + Car.getCounter());
+
+
+        //  Когда нужно использовать статические поля:
+        // - когда значение переменной не зависит от обьекта
+        // - когда значение переменной должно быть использовано всеми обьектами
+
+
+        // Статические методы
+        /*
+        Статические методы также не зависят от обьекта, а принадлежат классу. Поэтому
+        вызвать статический метод можно также как и переменную не создавая обьект, а через имя класса.
+        Обычно статические методы используются для выполнения действия не зависяшеего от создания обьекта
+
+
+         следующие комбинации статических и не статических методов и переменных возможны:
+        1. обычные методы имеют доступ ("видят") как другие обычные методы таки переменные
+        2. обычные методы также имеют прямой доступ к  статическим переменным и статическим методам
+        3. статические методы имеют доступ к статическим переменным и статическим методам
+        4. статические методы не имеют прямого доступа к обычным переменным и методам. Для этого им нужен обьект
+            класса.
+
+            //  стаитический блок
+
+         */
+        Car.setCounter(25);
+        System.out.println(Car.counter);
+
+        // Несколько моментов:
+        /*
+        1. Статические методы нельзя переопределить (не могут быть overridden)
+        2. Абстрактные методы не могут быть статическими
+        3. Статические методы не могут использовать слова this  и super
+         */
+
+
+    }
+}
+code/static_in_deep/src/StaticBlocDemo.java
+public class StaticBlocDemo {
+    public static String[] fruits = new String[3];
+
+  // для инициализации переменных
+
+
+    static  {
+        fruits[0] = "Apple";
+        fruits[1] = "Orange";
+        fruits[2] = "Lemon";
+    }
+}

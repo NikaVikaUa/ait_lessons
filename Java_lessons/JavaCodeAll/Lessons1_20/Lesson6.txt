@@ -1,0 +1,168 @@
+Задачи на урок:
+
+Разбор домашнего задания
+Ссылочные типы
+Класс String
+Классы
+
+Программа на Java состоит из классов. Класс может быть определен как шаблон, который описывает поведение объекта. Каждый класс хранится в отдельном файле. Имя файла совпадает с именем класса, расширение файла – java.
+
+Объекты
+
+На основе классов создаются объекты также как на основе шаблона создаются детали. Объекты имеют состояние и поведение. Например: собака может иметь состояние – цвет, имя, а также и поведение – кивать, бежать, лаять. Объект является экземпляром класса.
+
+Ссылочные типы
+
+Переменные-ссылки – это переменные всех типов, кроме примитивных. Такие переменные содержат в себе только адрес объекта (ссылку на объект).
+
+Пустая ссылка обозначается служебным словом null.
+
+При присваивании примитивного объекта, его значение копируется (дублируется). При присваивании же ссылочной переменной, копируется только адрес объекта, сам же объект при этом не копируется.
+
+Литералы
+
+Литералы — это явно заданные значения в коде программы — константы определенного типа, которые находятся в коде в момент запуска.
+
+Литералы бывают разных типов, которые определяются их назначением и способом написания (например, суффиксы L и F у числовых литералов).
+
+Строковый литерал - набор символов, заключённый в двойные кавычки (").
+
+Класс String
+
+Строка представляет собой последовательность символов. Для работы со строками в Java определен класс String, который предоставляет ряд методов для манипуляции строками. Физически объект String представляет собой ссылку на область в памяти, в которой размещены символы.
+
+Для создания новой строки мы можем использовать один из конструкторов класса String, либо напрямую присвоить строку в двойных кавычках.
+
+Задача 1
+Дана строка. Написать метод, возвращающий целое число, равное двойной длине строки.
+В методе main вывести полученный результат на экран.
+Пример: строка "Hello" -> результат 10
+
+code/homework06/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println(countArea(2.5));
+
+        System.out.println(convertToCelsius(451));
+
+        printDigitsOfNumber(365);
+
+
+
+    }
+
+    public static double countArea( double radius){
+        double area = Math.PI *radius*radius;
+
+        return area;
+    }
+
+//С = 5*(F-32)/9
+    public static double convertToCelsius (double farenheit){
+        double celsius = 5*(farenheit - 32.0)/9.0;
+
+        return celsius;
+    }
+
+    // Дано трехзначное число (365)
+    // Вывести на экран цифры этого числа
+    // Результат:  first digit is 3, second digit is 6, third digit is 5
+    // 365 = 3*100 +6*10 + 5*1
+    //ones =n%10 = 5
+    //tens = 365/10 =36%10=6
+    //hundreds = 365/100 = 3
+    public static void printDigitsOfNumber(int number){
+        int ones,tens,hundreds;
+        ones = number%10;
+        tens = number/10%10;
+        hundreds = number/100;
+
+        System.out.println("first digit is "+ hundreds+" , second digit is "+ tens+" , third digit is "+ones);
+
+    }
+
+
+
+
+
+
+
+
+
+}
+code/our_strings/src/Car.java
+public class Car {
+    String make;
+    int year;
+    String colour;
+
+    public void drive(){
+        System.out.println("I am driving");
+    }
+
+    public void stop(){
+        System.out.println("I am stopping");
+    }
+
+
+}
+code/our_strings/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+        Car mercedes = new Car();
+        mercedes.colour ="Red";
+        mercedes.make = "S600";
+        mercedes.year = 2020;
+        mercedes.drive();
+
+
+      int a = 19;
+
+
+   //   str = "Java";
+
+        String cat = "Mary";
+        System.out.println("cat= "+cat);
+        String cat1 = new String("Mary");
+        System.out.println("cat1= "+cat1);
+        // ==
+        //System.out.println(2==1);
+        System.out.println("cat = cat1? "+(cat == cat1));
+        String cat2 = "Mary";
+        System.out.println("cat = cat2 ? "+(cat == cat2));
+
+        // length()
+         //0 1 2 3
+        // M a r y  length=4
+        System.out.println("What is cat's length?");
+        System.out.println(cat.length());
+        System.out.println("Ma ry".length());
+
+        String h = "Hello";
+        String w = "World";
+        System.out.println(h.concat(" ").concat(w));
+
+
+        String j = "Piton";
+        // charAt(int index)
+        //0 1 2 3
+        //J a v a
+
+        char ch1 = j.charAt(0);//J
+        char ch2 = j.charAt(1);//a
+        char ch3 = j.charAt(2);//v
+        char ch4 = j.charAt(3);//a
+
+        System.out.println(ch1);
+        System.out.println(ch2);
+        System.out.println(ch3);
+        System.out.println(ch4);
+        "Java".charAt(0);
+
+
+
+
+    }
+}

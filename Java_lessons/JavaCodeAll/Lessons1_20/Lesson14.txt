@@ -1,0 +1,214 @@
+Задачи на урок:
+Разбор дз
+Цикл while, игра Угадай число
+Цикл For и его синтаксис, параметры
+Решение задач
+Цикл for
+
+Цикл for имеет следующее формальное определение:
+
+for ([инициализация счетчика]; [условие]; [изменение счетчика]) {
+
+// действия
+
+}
+
+Рассмотрим стандартный цикл for:
+
+for (int i = 1; i < 9; i++){
+
+System.out.printf("Квадрат числа %d равен %d \n", i, i * i);
+
+}
+
+Первая часть объявления цикла - int i = 1 создает и инициализирует счетчик i. Счетчик необязательно должен представлять тип int. Это может быть и любой другой числовой тип, например, float. Перед выполнением цикла значение счетчика будет равно 1. В данном случае это то же самое, что и объявление переменной.
+
+Вторая часть - условие, при котором будет выполняться цикл. В данном случае цикл будет выполняться, пока i не достигнет 9.
+
+И третья часть - приращение счетчика на единицу. Опять же нам необязательно увеличивать на единицу. Можно уменьшать: i--.
+
+В итоге блок цикла сработает 8 раз, пока значение i не станет равным 9. И каждый раз это значение будет увеличиваться на 1.
+
+Нам необязательно указывать все условия при объявлении цикла. Например, мы можем написать так:
+
+int i = 1;
+
+for (; ;){
+
+System.out.printf("Квадрат числа %d равен %d \n", i, i * i);
+
+}
+
+Определение цикла осталось тем же, только теперь блоки в определении у нас пустые: for (; ;). Теперь нет инициализированной переменной-счетчика, нет условия, поэтому цикл будет работать вечно - бесконечный цикл.
+
+Либо можно опустить ряд блоков:
+
+int i = 1;
+
+for (; i<9;){
+
+System.out.printf("Квадрат числа %d равен %d \n", i, i * i);
+
+i++;
+
+}
+
+Этот пример эквивалентен первому примеру: у нас также есть счетчик, только создан он вне цикла. У нас есть условие выполнения цикла. И есть приращение счетчика уже в самом блоке for.
+
+Цикл for может определять сразу несколько переменных и управлять ими:
+
+int n = 10;
+
+for(int i=0, j = n - 1; i < j; i++, j--){
+
+System.out.println(i * j);
+}
+
+Задача1
+Используя цикл while написать метод, выводящий на экран результат умножения данного числа n на каждое целое число от 0 до n
+
+Задача2 *
+Используя цикл do while написать метод, принимающий с клавиатуры целое число и выводящий на экран сумму четных и сумму нечетных чисел, введенных пользователем. Пример : пользователь ввел 1,3,2,6 . Сумма четных чисел будет 8, сумма нечетных 4
+
+code/game/src/GameGuessNumber.java
+import java.util.Scanner;
+
+public class GameGuessNumber {
+    static Scanner scanner = new Scanner(System.in);
+    static int secret = 9;
+
+    public static void main(String[] args) {
+                start();
+    }
+
+    // Написать игру угадай число, в которой за ограниченное число попыток ввода числа с
+    // клавиатуры нужно угадать загаданное секретное число от 0 до 9
+    // 1. Класс GuessGameNumber должен содержать две переменные  scanner  для ввода  чисел с клавиатуры и secret,
+    // в которой записано секретное число.
+    // 2. Класс должен содержать следующие методы :
+    /*
+        - readNumberOfAttempts  - считывает количество предоставляемых попыток
+        - readNumber -считывает вводимое число
+        - guessNumber -  содержит логику игры
+        - start - через вызов этого метода запускается игра
+     */
+
+    // обьединяет все методы  для того чтобы можно было запустить игру вызовом метода start()
+    static void start(){
+        String finish;
+        do {
+            int attempts = readNumberOfAttempts();
+            guessNumber(attempts);
+            System.out.println("One more game? press any key if yes/ enter 'no' if not");
+            finish = scanner.next().toLowerCase();
+        }while (!finish.equals("no"));
+        scanner.close();
+        // str1 == str2
+    }
+//  считывает введенное пользователем с клавиатуры количество попыток
+    static int readNumberOfAttempts(){
+        System.out.println("Enter number of attempts ");
+        return scanner.nextInt();
+    }
+// считывает число, угадываемое пользователем
+    static int readNumber(){
+        System.out.println("Enter the number from 0 to 9");
+        return scanner.nextInt();
+    }
+//   в этом методе содержится логика игры. Т.е. реакция на действия пользователя
+    static void guessNumber(int attempts) {
+        while (attempts > 0){
+            int number = readNumber();
+            attempts--;
+
+            if ( number == secret){
+                System.out.println("You have guessed the secret number!");
+                return;
+
+            }else {
+                System.out.println("Wrong! You have "+attempts+" attempts left.");
+            }
+
+        }
+        System.out.println("Sorry, buddy. Maybe some other time. The secret number was "+secret);
+    }
+
+
+}
+code/homework14/src/Main.java
+public class Main {
+
+    /*
+С помощью цикла while написать метод, выводящий на экран куб числа от 1 до заданного числа n
+Пример:для числа n=3
+1 в кубе 1
+2 в кубе 8
+3 в кубе 27
+Задача2
+Используя цикл while написать метод, выводящий на экран сумму цифр от 1 до 5
+sum =15
+"sum of digits from 1 to 5 is" + sum
+     */
+
+    public static void main(String[] args) {
+
+  //   sumOfFive(100);
+  //   countCube(3);
+        multiplicationTable();
+
+
+    }
+/*
+Используя цикл while написать метод, выводящий на экран сумму цифр от 1 до 5
+sum =15
+"sum of digits from 1 to 5 is" + sum
+ */
+
+    static void sumOfFive(int n){
+
+        int i = 1;
+        int sum = 0;
+
+        while (i<=n){
+            sum = sum +i;//1+2+3+4+5
+            i++;
+
+        }
+        System.out.println(sum);
+
+    }
+    /*
+    С помощью цикла while написать метод, выводящий на экран куб числа от 1 до заданного числа n
+Пример:для числа n=3
+1 в кубе 1
+2 в кубе 8
+3 в кубе 27
+     */
+
+    static void countCube (int n){
+        int i = 1;
+
+        while (i <= n){
+            System.out.println("Number is: "+i+" and cube of "+i+ "is: "+(i*i*i));
+            i++;
+        }
+
+    }
+
+
+    // Вывести на экран таблицу умножения
+
+    static void multiplicationTable(){
+        int i = 1;
+        while(i <=9){
+            int j = 1;
+            while(j<=9) {
+                System.out.println(i + "*" + j + " = " + j * i);
+                j++;
+            }
+            System.out.println("*******************");
+            i++;
+            }
+
+        }
+    }

@@ -1,0 +1,256 @@
+Задачи на урок:
+Разбор ДЗ
+метод ToString
+Статические переменные и методы
+Method overloading
+Практика, решение задач
+Объектно-ориентированное программирование
+Static
+
+Кроме обычных методов и полей класс может иметь статические поля, методы, константы и инициализаторы. Например, главный класс программы имеет метод main, который является статическим.
+Для объявления статических переменных, констант, методов и инициализаторов перед их объявлением указывается ключевое слово static.
+
+При создании объектов класса для каждого объекта создается своя копия нестатических обычных полей. А статические поля являются общими для всего класса. Поэтому они могут использоваться без создания объектов класса. Статические методы также относятся ко всему классу в целом.
+
+Перегрузка методов
+В программе мы можем использовать методы с одним и тем же именем, но с разными типами и/или количеством параметров. Такой механизм называется перегрузкой методов (method overloading).
+
+Задача 1
+Создать класс Dog c полями name и counter. Cоздать несколько обьектов этого класса и вывести на печать количество созданных обьектов.
+
+Задача 2
+Создать класс Calculator, способный выполнять два арифметических действия - сложение двух чисел, вычитание двух чисел а также сложение трех чисел и вычитание трех чисел.
+Калькулятор должен работать как для целых чисел, так и для чисел с запятой. (т.е. в классе надо создать соответствующие методы и затем вызывать их в методе main)
+
+code/homework20/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+        Voter voter1 = new Voter("John","Street1",10);
+        Voter voter =voter1;
+
+        System.out.println(voter.getName());
+
+        voter1.setName("Kate");
+
+        System.out.println(voter.getName());
+
+
+        System.out.println(voter1.getName());
+
+        System.out.println(voter1.getName()+"'s age before setter: "+ voter1.getAge());
+
+        voter1.setAge(10);
+
+        System.out.println(voter1.getName()+"'s age after setter: "+voter1.getAge());
+
+
+        System.out.println(voter1);
+        int a =10;
+        int b = a;
+         b = 10;
+        String str = "Java";
+
+
+
+    }
+}
+code/homework20/src/Voter.java
+/*
+Задача1
+Создать класс Voter (Избиратель) , содержащий поля имя, адрес, возраст а
+также конструктор, геттеры и сеттеры. При создании должно быть учтено, что
+минимальный возраст в Германии для участия в выборах - 16 лет.
+ Создать несколько обьектов класса и вывести их на печать
+ */
+public class Voter {
+
+    private String name;
+    private String address;
+    private int age;
+
+
+    public Voter(String name, String address, int age){
+        this.name = name;
+        this.address = address;
+        this.age = age;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public int getAge(){
+        return age;
+    }
+
+    public void setName( String name){
+        this.name = name;
+    }
+
+    public void setAddress( String address ){
+        this.address = address;
+    }
+
+    public void setAge(int age){
+        if( age >= 16){
+            this.age = age;
+        } else {
+            System.out.println("too young to vote");
+        }
+    }
+
+
+}
+
+
+code/method_overloading/src/Main.java
+public class Main {
+    // Перегрузка методов (Method overloading)
+    /*
+    -свойство, позволяющее классу иметь различные методы с одинаковым именем, но с разным
+    количеством/последовательностью/типом параметров.
+    add ( int a, int b)
+    add ( int a, int b, int c)
+
+     */
+    public static void main(String[] args) {
+        Main m = new Main(); //  создаем обьект класса Main
+        // 1.методы с разным количеством аргументов
+        System.out.println(m.add(1,3));
+        System.out.println(m.add(1,2,3));
+        //2. методы с разным типом аргументов
+        System.out.println(m.add(2.6f,3.5f)); // число с точкой по умолчанию воспринимается в джаве как  тип
+                                                    // double. Поэтому принадлежность к типу float надо указывать явно
+                                                    // с помощью буквы f
+        System.out.println(m.add(10.5,5.5));
+
+        // последовательность типов параметров разная
+        System.out.println(m.add(5,"6"));
+        System.out.println(m.add("Java",1));
+
+
+        float var = 3.4f;
+    }
+ public   int  add(int a, int b){
+     int sum = a+b;
+     return sum;
+ }
+
+ public int add(int a, int b, int c){
+     return a+b+c;
+ }
+
+ public float add( float a,float b){
+        return a+b;
+ }
+
+ public double add ( double a, double b){
+     System.out.println("I am double");
+        return a+b;
+ }
+
+ public String add ( int a, String b){
+    // System.out.println(1 +"2");
+        return a+b;
+ }
+
+ public String add ( String b, int a){
+        return b+a;
+ }
+
+}
+
+code/static_members/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println("Counter before objects are created is "+Person.counter);
+        Person person1 = new Person("Bill",23);
+        Person person2 = new Person("Jack",45);
+        Person person3 = new Person("Mary",15);
+        System.out.println("Counter after objects are created is "+Person.counter);
+
+        person1.canTalk();
+        Person.sum(); // статические методы также не зависят от обьекта и вызываеются с помощью имени класса
+       // Math.
+
+
+      //  person1.
+
+        //Вызвать статическую переменную можно используя имя класса:
+        // Person.counter
+    }
+
+}
+code/static_members/src/Person.java
+public class Person {
+
+    String name;
+    int age;
+
+    static int counter; // статическая переменная обьявляется с использованием слова static. Статическая переменая
+                        // не принадлежит никакому обьекту, а является переменной класса.
+
+    public  Person(String name, int age){
+        this.name = name;
+        this.age = age;
+        counter++;
+    }
+
+    public void canTalk (){
+        System.out.println("I can talk");
+    }
+    public static void sum(){
+        System.out.println(1+2);
+    }
+
+}
+code/toString_method/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+        Student s1 = new Student(1,"John","Berlin");
+
+        // при печати обьекта вызывается метод toString
+        System.out.println(s1);
+
+        // метод toString в Джаве возвращает обьект в виде строки
+    }
+}
+code/toString_method/src/Student.java
+public class Student {
+ private    int number;
+ private    String name;
+ private    String city;
+
+    Student( int number, String name, String city){
+        this.number = number;
+        this.name = name;
+        this.city = city;
+    }
+
+    public int getNumber(){
+        return number;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getCity(){
+        return city;
+    }
+
+    // переопределяем метод toString для нашего класса Student
+    public String toString(){
+        return number+ " "+name+ " "+city;
+    }
+
+
+
+}

@@ -1,0 +1,276 @@
+Задачи на урок:
+Collection Framework -List,ArrayList
+Общее между ArrayList и обычными массивами
+Преимущества ArrayList
+Практика, решение задач
+ArrayList
+Программистам очень не нравилось одно свойство массива – его размер нельзя изменять. Что делать, если нужно сохранить в массиве ещё три элемента, а свободное место только одно?
+
+Единственным решением проблемы нехватки места в массиве было создание массива очень большого размера, чтобы все элементы туда точно поместились. Но это часто приводило к нерациональному расходу памяти. Если чаще всего в массиве хранилось три элемента, но был хотя бы мизерный шанс, что там их будет 100, приходилось создавать массив на 100 элементов.
+
+Поэтому они написали класс ArrayList (списочный массив), который выполнял ту же работу, что и массив, но мог изменять свой размер.
+
+Внутри каждого объекта типа ArrayList хранится обычный массив элементов. Когда ты считываешь элементы из ArrayList, он считывает их из своего внутреннего массива. Когда записываешь – записывает их во внутренний массив.
+
+Преимущества ArrayList
+Во-первых, ArrayList поддерживает несколько дополнительных действий, которые очень часто приходится делать программистам во время работы, и которых нет у массива. Например – вставка и удаление элементов из середины массива, и чтобы не оставалось дырок.
+
+Во-вторых, изменение размера: когда нужно записать во внутренний массив ещё один элемент, а свободного места там нет, то внутри ArrayList делается вот что: создаётся ещё один массив, в полтора раза больше размера внутреннего массива, плюс один элемент. все элементы из старого массива копируются в новый массив. новый массив сохраняется во внутренней переменной объекта ArrayList, старый массив объявляется мусором (мы просто перестаём хранить на него ссылку).
+
+см. задачу в коде урока (practice)
+
+code/main38/src/BinarySearch.java
+
+    public class BinarySearch {
+        public static void main(String[] args) {
+
+            int[] array = {2,4,5,67,98};
+            System.out.println(binarySearch(5,array));// вызов метода двоичного поиска
+            System.out.println(binarySearch(456,array));// вызов метода двоичного поиска
+        }
+
+        // Двоичный поиск. Этот вид поиска требует предварительной сортировки данных.
+    /*
+    Алгоритм делит входной массив на равные половины и с каждым проходом цикла  сравнивает искомый элемент с
+    элементом посередине. Поиск заканчивается если они равны. Иначе продолжаем искать элемент в той половине
+     массива, в которой он может находиться и "отбросив" ненужную половину.  Эти действия повторяются пока элемент
+     не будет найден или границы массива не сойдутся
+
+     */ // index         0 1 2  3  4
+        //int[] array = {2,4,5,67,98}; ищем 98
+        static int binarySearch( int search, int[] array){
+
+            int start = 0; // в переменной start  будет находиться индекс начала массива
+            int end = array.length-1; // в переменной end  будет находиться индекс конца массива
+
+            while(start <= end){ // условие окончания цикла
+
+                int middle = (start + end )/2; //  определяем индекс середины массива
+
+                if (search < array[middle]){ // если искомый элемент меньше элемента, стоящего посередине
+                    end = middle -1; // сдвигаем правую границу
+                }
+
+                if (search > array[middle]){
+                    start = middle +1; // если искомый элемент больше  элемента, стоящего посередине сдвигаем
+                    // левую границу
+                }
+
+                if (search == array[middle]) { // если искомый элемент = элементу посередине, то значит мы нашли его.
+                    return middle;             // программа заканчивается
+                }
+
+            }
+            return  -1;
+        }
+    }
+
+code/main38/src/Main.java
+public class Main {
+    /*
+f(n) = 9n +73               ->  O(n)
+f(n) = 1*235                -> O(1)
+f(n) = n^2 + 7n +123        -> O(n^2)
+f(n) = n^3 +2000n +8765     -> O(n^3)
+f(n) = n + sqrt(n)          -> O(n)
+
+
+2^1 = 2
+2^2 = 4
+2^3 = 8
+2^4 = 16
+2^5 = 32
+
+2^5 = 2*2*2*2*2 = 32
+Логарифм от числа 32  - это в какую степень нужно возвести двойку чтобы получить 32
+
+log(32) = 5
+
+f(n) = n
+f(n) = log(n)
+
+при бинарном поиске ( упорядоченный маасив разбиватеся пополам и искомое число сравнивается с серединой а потом
+тоже самое в оставшейся части массива если значение не найдено)
+0 итерация: размер массива  n
+1 итерация: размер массива  n/2  (2^1)
+2 итерация: размер массива  n/4  (2^2)
+3 итерация: размер массива  n/8  (2^3)
+....
+i-ая итерация:  размер массива n/2^i
+
+1 =n/2^i
+2^i =n
+i = log(n) // сложность алгоритма бинарного поиска
+O(logn)
+
+
+
+
+     */
+}
+code/our_collections/src/Main.java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Main {
+
+    // Java Collections Framework
+    /*
+    Коллекции  - это ряд интерфейсов и классов, с посощью которых
+    осуществляется эффективное хранение и обработка данных
+
+    List. -  упорядоченная коллекция ,  которая  также позволяет хранить повторяющиеся значения.
+    При доступе или записи элементов используется доступ по интдексу также как и в массиве
+    Классы, реализующие интерфейс Лист это ArrayList и LinkedList
+
+    ArrayList -  реализует интерфейс List  и в основе его массив, размеры которого меняются по мере заполнения.
+
+     */
+    public static void main(String[] args) {
+
+        // Конструкторы ArrayList:
+        // ArrayList() - для создания пустого листа
+        ArrayList<Integer> list = new ArrayList<>();
+
+        // ArrayList( int capacity)- создает лист с определенной начальной емкостью
+        ArrayList<Integer>listCapacity = new ArrayList<>(1000);
+
+        //ArrayList( Collection c)- создает лист, в который можно сразу добавить элементы например другого листа
+        ArrayList<Integer>newList = new ArrayList<>(list);
+
+        /*
+        методы ArrayList:
+
+        add() - добавить элемент
+         */
+        List<String> names = new ArrayList<>();
+        names.add("John");
+        names.add("Bill");
+
+        System.out.println(names);
+
+        // add(int index, object)- добавить элемент по индексу
+        names.add(1,"Peter");
+
+        System.out.println(names);
+
+
+        // set(int index, newObject) -  изменить значение элемента
+        names.set(2,"Barbara");
+
+        System.out.println(names);
+
+        // remove(Оbject) - удалить элемент из листа  по имени элемента. Если в листе несколько элементов с таким
+                            // названием, то будет удален тот, который встретится раньше
+        names.add("John");
+        System.out.println("with two Johns:");
+        System.out.println(names);
+        names.remove("John");
+        System.out.println("Array without John:");
+        System.out.println(names);
+
+        // remove(int index) ´- удаляет элемент , находящийся по данному индексу. После удаления элементы сдвигаются
+                                // влево
+
+        names.remove(1);
+        System.out.println(names);
+
+        //get(int index)-  получить элемент по индексу
+        System.out.println(names.get(0));
+        System.out.println(names.get(1));
+
+        //печать листа через for each
+        System.out.println("Print list with for Each cycle");
+        names.add("Tyrion Lannister");
+        names.add("Sandor Clegane");
+        names.add("White Wanderer");
+        for(String name: names){
+            System.out.println(name);
+        }
+
+       boolean res = names.add("Cersei Lannister");
+        System.out.println(res);
+
+        //size() -  возвращает размер листа
+
+        System.out.println("Number of names in our arraylist: "+names.size());
+        System.out.println(names);
+
+        //sort ArrayList  Collections.sort() - сортировка листа осуществляется с помощью метода sort()
+        // из вспомогательного класса Сollections
+        System.out.println("names before sort:");
+        System.out.println(names);
+        System.out.println("names after sort:");
+        Collections.sort(names);
+        System.out.println(names);
+
+        System.out.println("Sorted in reverse order:");
+        Collections.sort(names,Collections.reverseOrder());
+        System.out.println(names);
+
+        // boolean contains(Object o) - проверяет содержится ли искомый обьект в листе. Если да, вернет true
+
+        System.out.println("names contains John ?"+names.contains("John"));
+
+        // clear() -  удаляет все элементы из листа.
+        // isEmpty() - проверяет пустой ли лист
+
+        System.out.println("is list empty? "+names.isEmpty());
+        names.clear();
+        System.out.println("is list empty? "+names.isEmpty());
+        System.out.println(names);
+
+        // indexOf(Object o) - возвращает индекс элемента в листе. Если элемент не найден, то вернет -1
+        names.add("Tyrion Lannister");
+        names.add("Sandor Clegane");
+        names.add("White Wanderer");
+        names.add("White Wanderer");
+        System.out.println(names);
+
+        int position = names.indexOf("Black Wanderer");
+        System.out.println(position);
+
+        for(String name: names){
+            System.out.println(name);
+
+        }
+
+
+
+
+    }
+}
+code/practice/src/Main.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>();
+        names.add("John");
+        names.add("Mary");
+        names.add("Stephan");
+        names.add("Amalia");
+        names.add("Johan");
+        removeNamesLength4(names);
+
+
+    }
+
+    // Есть лист с именами : John, Mary, Stephan, Amalia,Johan. Написать метод, который вернет лист,
+    // в котором не содеражатся имена нашего листа длиной 4.
+   // [John, Mary, Stephan, Amalia,Johan] -> [Stephan, Amalia,Johan]
+
+    //public int myMethod( int num){}
+    public static List<String> removeNamesLength4( List<String> names){
+        List<String> result = new ArrayList<>();
+        for(String s : names){
+            if(s.length() == 4)
+                names.remove(s);
+        }
+        return  result;
+    }
+
+}

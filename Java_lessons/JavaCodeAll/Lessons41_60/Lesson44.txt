@@ -1,0 +1,1069 @@
+Задачи на урок:
+Set in Java
+Queue,Stack and Deque
+Практика, решение задач
+Set
+
+Интерфейс Set расширяет интерфейс Collection и представляет набор уникальных элементов. Set не добавляет новых методов, только вносит изменения в унаследованные. В частности, метод add() добавляет элемент в коллекцию и возвращает true, если в коллекции еще нет такого элемента.
+
+Обобщенный класс HashSet представляет хеш-таблицу. Он наследует свой функционал от класса AbstractSet, а также реализует интерфейс Set.
+
+Хеш-таблица представляет такую структуру данных, в которой все объекты имеют уникальный ключ или хеш-код. Данный ключ позволяет уникально идентифицировать объект в таблице.
+
+Для создания объекта HashSet можно воспользоваться одним из следующих конструкторов:
+
+HashSet(): создает пустой список
+
+HashSet(Collection<? extends E> col): создает хеш-таблицу, в которую добавляет все элементы коллекции col
+
+HashSet(int capacity): параметр capacity указывает начальную емкость таблицы, которая по умолчанию равна 16
+
+HashSet(int capacity, float koef): параметр koef или коэффициент заполнения, значение которого должно быть в пределах от 0.0 до 1.0, указывает, насколько должна быть заполнена емкость объектами прежде чем произойдет ее расширение. Например, коэффициент 0.75 указывает, что при заполнении емкости на 3/4 произойдет ее расширение.
+
+Класс HashSet не добавляет новых методов, реализуя лишь те, что объявлены в родительских классах и применяемых интерфейсах.
+
+см. задачи в коде занятия (класс Homework)
+
+code/main44/src/Homework.java
+public class Homework {
+
+    /*
+   1. C использованием множеств (Set)  написать метод, который принимает лист, в котором могут быть
+    повторяющиеся элементы и возвращает  лист без повторяющихся элементов.
+    ["John","John", Jack,Bill,Jack] -> John,Jack, Bill
+
+
+
+
+   2*. C использованием множеств написать метод, который вернет лист из повторяющихся элеменов из  начального листа .
+    Пример:   ["John","John", Jack,Bill,Jack, Piter ]-> John,Jack
+     */
+}
+code/main44/src/OurRandom.java
+import java.util.Random;
+
+public class OurRandom {
+
+    // класс Random
+
+    public static void main(String[] args) {
+
+
+        // создание экземпляра класса Random
+        Random random = new Random();
+
+        // генерация случайных чисел в диапазоне от 0 до 999
+      int randInt1 =  random.nextInt(1000);
+      int randInt2 =  random.nextInt(1000);
+      int randInt3 =  random.nextInt(1000);
+
+
+        System.out.println(randInt1);
+        System.out.println(randInt2);
+        System.out.println(randInt3);
+
+      double randomDouble =  random.nextDouble();
+      double randomDouble1 =  random.nextDouble();
+      double randomDouble2 =  random.nextDouble();
+
+        System.out.println(randomDouble);
+        System.out.println(randomDouble1);
+        System.out.println(randomDouble2);
+
+    }
+
+
+}
+code/main44/src/OurRandom.java
+import java.util.Random;
+
+public class OurRandom {
+
+    // класс Random
+
+    public static void main(String[] args) {
+
+
+        // создание экземпляра класса Random
+        Random random = new Random();
+
+        // генерация случайных чисел в диапазоне от 0 до 999
+      int randInt1 =  random.nextInt(1000);
+      int randInt2 =  random.nextInt(1000);
+      int randInt3 =  random.nextInt(1000);
+
+
+        System.out.println(randInt1);
+        System.out.println(randInt2);
+        System.out.println(randInt3);
+
+      double randomDouble =  random.nextDouble();
+      double randomDouble1 =  random.nextDouble();
+      double randomDouble2 =  random.nextDouble();
+
+        System.out.println(randomDouble);
+        System.out.println(randomDouble1);
+        System.out.println(randomDouble2);
+
+    }
+
+
+}
+code/our_collection44/src/ArrayListOperationsStrategy.java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class ArrayListOperationsStrategy  implements ListOperationsStrategy
+{
+
+    private static final Object object = 10; // элемент, который мы будем добавлять в лист
+    private Random rnd = new Random();
+
+
+    public void ourAdd( int nTimes){
+     //   OurList list = new OurArrayList();
+        List list = new ArrayList();
+
+        for( int i = 0; i < nTimes; i++){
+            list.add(object);
+        }
+    }
+
+    public void ourGet(int nTimes, List list){
+        int length = list.size();
+
+        for( int i = 0; i < nTimes; i++){
+            list.get(rnd.nextInt(length));// получение элементов листа случайным образом
+        }
+    }
+
+    public List getFilledList( int length){
+        List list = new ArrayList();
+
+        for( int i = 0;i < length;i++){
+            list.add(object);
+        }
+        return list;
+    }
+
+
+}
+code/our_collection44/src/Human.java
+public class Human {
+    String name;
+    int age;
+
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Human{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+code/our_collection44/src/LinkedListOperationsStrategy.java
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+public class LinkedListOperationsStrategy implements ListOperationsStrategy {
+    private static final Object object = 10; // элемент, который мы будем добавлять в лист
+    private Random rnd = new Random();
+
+
+    public void ourAdd( int nTimes){
+        List list = new LinkedList();
+
+        for( int i = 0; i < nTimes; i++){
+            list.add(object);
+        }
+    }
+
+    public void ourGet(int nTimes, List list){
+        int length = list.size();
+
+        for( int i = 0; i < nTimes; i++){
+            list.get(rnd.nextInt(length));// получение элементов листа случайным образом
+        }
+    }
+
+    public List getFilledList( int length){
+        List list = new LinkedList();
+
+        for( int i = 0;i < length;i++){
+            list.add(object);
+        }
+        return list;
+    }
+
+}
+code/our_collection44/src/ListOperationsStrategy.java
+import java.util.List;
+
+public interface ListOperationsStrategy {
+
+    void ourAdd(int nTimes);
+
+    List getFilledList(int length);
+
+
+    void  ourGet ( int nTimes, List list);
+}
+code/our_collection44/src/ListPerformanceTester.java
+import java.util.List;
+
+public class ListPerformanceTester {
+
+    private final ListOperationsStrategy strategy;
+
+    public ListPerformanceTester( ListOperationsStrategy strategy){
+        this.strategy = strategy;
+    }
+
+    public long testOurAddPerformance( int nTimes){ //тестирует время работы метода ourAdd
+        long now = System.currentTimeMillis(); // время на момент запуска метода
+        strategy.ourAdd(nTimes); // вызов метода ourAdd либо для OurArrayList либо OurLinkedList
+        return System.currentTimeMillis() - now; // разница между временем окончания работы листа и начала и есть
+                                                 // время его работы
+    }
+
+
+    public long  testOurGetPerformance( int nTimes, int length){
+        List list = strategy.getFilledList(length);
+        long now =System.currentTimeMillis();
+        strategy.ourGet(nTimes,list);
+        return System.currentTimeMillis() - now;
+    }
+}
+code/our_collection44/src/Main.java
+import our_collection.performance_test.ArrayListOperationsStrategy;
+import our_collection.performance_test.LinkedListOperationsStrategy;
+import our_collection.performance_test.ListOperationsStrategy;
+import our_collection.performance_test.ListPerformanceTester;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Jack");
+        String jack = list.get(0);
+
+        OurList<String> ourList = new OurArrayList<>();
+        ourList.ourAdd("Jack");
+        String ourJack = ourList.ourGet(0);
+    //    System.out.println(ourJack);
+        ourList.ourRemove("Jack");
+        ourList.ourAdd("John");
+
+        for(int i = 0; i<ourList.ourSize();i++){
+            System.out.println(ourList.ourGet(i));
+        }
+       // Arrays.toString(ourList);
+        Human john = new Human("John",20);
+        Human bill = new Human("Bill",24);
+        Human ann = new Human("Ann",24);
+        Human bill1 = new Human("Bill",24);
+        System.out.println("Bill equals Bill1 ? "+bill.equals(bill1));
+
+        OurArrayList<Human> humans = new OurArrayList();
+        humans.ourAdd(john);
+        humans.ourAdd(bill);
+        humans.ourAdd(ann);
+
+        for( int i = 0;i<humans.ourSize();i++){
+            System.out.println(humans.ourGet(i));
+        }
+
+        humans.ourRemove(bill);
+
+        System.out.println("After removing Bill");
+        for( int i = 0;i<humans.ourSize();i++){
+            System.out.println(humans.ourGet(i));
+        }
+
+        // Проверка быстродействия ( performance test )
+
+        ListOperationsStrategy arrayStrategy = new ArrayListOperationsStrategy();
+        ListOperationsStrategy linkedStrategy = new LinkedListOperationsStrategy();
+
+        ListPerformanceTester arrayTester = new ListPerformanceTester(arrayStrategy);
+        ListPerformanceTester linkedTester = new ListPerformanceTester(linkedStrategy);
+
+        System.out.println("arraylist: "+arrayTester.testOurAddPerformance(10000000));
+        System.out.println("linkedlist: "+linkedTester.testOurAddPerformance(10000000));
+
+        System.out.println("arraylist: "+arrayTester.testOurGetPerformance(1000000,1000));
+        System.out.println("linkedlist: "+linkedTester.testOurGetPerformance(1000000,1000));
+
+
+
+
+    }
+}
+code/our_collection44/src/OurArrayList.java
+public class OurArrayList<E> implements OurList<E>{
+
+    private Object[] source;  // исходный массив
+    private static final int INITIAL_CAPACITY = 16; // начальный размер нашего массива
+
+    private int size; //  размер нашего листа
+
+
+    public OurArrayList(){
+        source = new Object[INITIAL_CAPACITY]; // инициализируем наш массив  в конструкторе при
+                                                // создании нового листа
+    }
+
+
+
+    public void ourAdd( E value){
+        if ( source.length == size){     // если массив полностью заполнен , то создается новый
+            E[] newSource = (E[])new Object[source.length * 2];
+            System.arraycopy(source,0,newSource,0,source.length);
+            source = newSource;
+        }
+        source[size] = value;
+        size++;
+    }
+
+    @Override
+    public E ourGet(int index) {
+        if( index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        return (E) source[index];
+    }
+
+    @Override
+    public void ourSet(E value, int index) {
+        if( index >= size || index < 0)             // проверка находится ли индекс в разрешенных границах
+            throw new IndexOutOfBoundsException();
+        source[index] = value;
+    }
+
+    @Override
+    public int ourSize() {
+        return size;
+    }
+
+
+    public boolean ourContains( E o){
+        return false;
+    }
+
+    @Override
+    public boolean ourRemove(E value) {
+        for ( int i = 0; i < source.length; i++){
+            if( source[i].equals(value)){
+                ourRemoveById(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public E ourRemoveById(int index) {
+        if( index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        E result =(E) source[index];
+
+        System.arraycopy(source,index +1,source,index,source.length-(index + 1));
+        size--;
+        return result;
+    }
+}
+code/our_collection44/src/OurArrayListTest.java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class OurArrayListTest {
+
+    @Test
+    public void testOurAddOurGet_emptyObject_addsOneElement(){
+        OurArrayList list = new OurArrayList();
+
+        list.ourAdd(5); //5 добавлено на нулевую позицию
+
+        assertEquals(5,list.ourGet(0)); // проверяем равен ли элемент на нулевой позиции 5
+                                                            // с помощью ourGet()
+    }
+
+
+    @Test
+    public void testOurAddOurGet_emptyObject_addsSeveralElement(){
+        OurArrayList list = new OurArrayList();
+
+
+       Integer[] expected = {1,3,-5,18,7,89,34,2,50,24,-4,60,70,22,-101};
+       for ( int i = 0;i<expected.length;i++) {
+           list.ourAdd(expected[i]);  //  в цикле добавляем все элементы массива к нашему листу по очереди
+       }
+       //    assertEquals(1, list.ourGet(0));
+       //    assertEquals(3, list.ourGet(1));
+       //    assertEquals(-5, list.ourGet(2));
+
+        //  в цикле сравниваем соответствующие значения массива и результат работы метода ourGet для каждого элемента
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+    }
+
+    @Test
+    public void testSize_emptyList_addsOneElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+
+        assertEquals(1,list.ourSize());
+    }
+
+    @Test
+    public void testSize_emptyList_addsSeveralElements(){
+        OurArrayList list = new OurArrayList();
+
+        Integer[] expected = {1,3,-5,18,7,89,34,2,50,24,-4,60,70,22,-101};
+        for ( int i = 0;i<expected.length;i++) {
+            list.ourAdd(expected[i]);  //  в цикле добавляем все элементы массива к нашему листу по очереди
+        }
+        // проверяем работу метода ourSize с несколькими элементами
+        assertEquals(expected.length,list.ourSize());
+
+    }
+
+    @Test
+    public void  testSet_oneElment_changesElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(3);
+        list.ourSet(10,0);// меняем значение по индексу 0
+
+        assertEquals(10,list.ourGet(0));
+    }
+
+
+    @Test
+    public void testSet_severalElements_setsFirstLastMiddleElements(){
+        OurArrayList list = new OurArrayList();
+
+        Integer[] source = {1,3,-10,18,4};
+        for( int i = 0;i < source.length; i++){
+            list.ourAdd(source[i]);
+        }
+        list.ourSet(10,0);
+        list.ourSet(5,4);
+        list.ourSet(-5,2);
+
+        Integer[] expected = {10,3,-5,18,5};
+
+        for( int i = 0;i < source.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+        assertEquals(5,list.ourSize());
+    }
+
+    // хотим получить элемент по несуществующему индексу. При правильной работе метода должны получить exception
+    @Test
+    public void testGet_nonEmptyList_getOuterElement(){
+        OurArrayList<Integer> list = new OurArrayList<>();
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+       // Проверка бросает ли метод нужное нам исключение.
+       // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourGet(4));
+    }
+
+    @Test
+    public void testOurSet_nonEmptyList_putOuterElement(){
+        OurArrayList<Integer> list = new OurArrayList<>();
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourSet(76,4));
+    }
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesWrongElement(){
+        OurArrayList<Integer> list = new OurArrayList<>();
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourRemoveById(4));
+
+    }
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesFirstElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(0); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(5,object);
+
+        Integer[] expected = {15,2,13,7,57};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesMiddleElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(24);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(2); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(24,object);
+
+        Integer[] expected = {5,15,13,7,57};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesLastElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(5); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(57,object);
+
+        Integer[] expected = {5,15,2,13,7};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+
+
+
+
+
+
+}
+code/our_collection44/src/OurLinkedList.java
+public class OurLinkedList<E> implements OurList<E> {
+
+    private int size;
+    private Node<E> first;
+    private Node<E> last;
+
+    public OurLinkedList(){
+
+    }
+
+
+    public void ourAdd(E value){ //  добавить значение в лист
+        if(size > 0){ // если уже есть хотя бы один элемент
+            Node<E> newNode = new Node<>(null,last,value);
+            last.next =newNode;
+            last = newNode;
+
+        } else { // если лист пустой
+            Node<E> newNode = new Node<>(null, null, value);
+            first = newNode;
+            last = newNode;
+        }
+        size++;
+    }
+
+
+    public E ourGet( int index){ // получает значение из листа
+        if( index >=size || index < 0) // находится ли индекс в границах листа
+            throw new IndexOutOfBoundsException();
+
+        Node<E> needle = getNode( index );
+
+        return needle.value; // возвращает значение, записанное в ноде
+    }
+
+
+    private Node<E> getNode( int index){ // поиск ноды по индексц
+        Node<E> needle = first; // присваиваем значение самого первого элемента
+        for(int i = 0; i < index; i++){
+            needle = needle.next; // в цикле проходим последовательно по всем элементам пока i не равно index
+        }
+        return needle;
+    }
+
+    public void ourSet( E o, int index){ // заменить значение по индексу
+        if( index >=size || index < 0) // находится ли индекс в границах листа
+            throw new IndexOutOfBoundsException();
+
+        Node needle = getNode(index); // находим нужный элемент
+        needle.value = o;  // меняем значение
+    }
+
+    public int ourSize(){
+        return size;
+    }
+
+    public boolean ourContains( E o){ //  проверяет есть ли искомый элемент в листе
+        Node needle = first;
+
+        for( int i = 0; i < size; i++){
+            if ( needle.value.equals(o)) // если находится значение элемента равное о, то возвращаем true
+                return true;
+
+            needle = needle.next; //  переход к следующей ноде
+        }
+        return false;
+    }
+
+
+    public boolean ourRemove ( E o){ //  удаоить элемент из листа по значению
+        Node needle = first;
+
+        for( int i = 0; i < size; i++){
+            if ( needle.value.equals(o)) { // если находится значение элемента равное о, то удвляем его и возвращаем true
+                ourRemoveById(i);
+                return true;
+            }
+            needle = needle.next; //  переход к следующей ноде
+        }
+        return false;
+
+    }
+
+
+    public E ourRemoveById( int index){
+        if( index >=size || index < 0) // находится ли индекс в границах листа
+            throw new IndexOutOfBoundsException();
+
+        Node<E> nodeToRemove = getNode(index); //  находим элемент, который нужно удалить
+        Node<E> left = nodeToRemove.prev;
+        Node<E> right = nodeToRemove.next;
+
+        if( index > 0 && index < size -1){ //случай, когда элемент не первый и не последний
+                nodeToRemove.next = null;
+                nodeToRemove.prev = null;
+
+                left.next = right;
+                right.prev = left;
+
+        } else if (index == 0){ // если нужно удалить самую первую ноду
+            right.prev = null;
+            first = right;
+
+        } else {  //если нужно удалить последнюю ноду
+            left.next = null;
+            last = left;
+        }
+
+        size--;
+
+        return  nodeToRemove.value;
+
+
+    }
+
+
+
+
+    private static class Node<E>{
+        E value;
+      Node<E> next; //ссылка на след.элт
+      Node<E> prev; // ссылка на предыдущий
+
+      Node(){}
+
+      Node( Node<E>next, Node<E> prev, E value)  {
+          this.next = next;
+          this.prev = prev;
+          this.value = value;
+      }
+
+
+    }
+}
+code/our_collection44/src/OurLinkedListTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OurLinkedListTest {
+
+    OurLinkedList list;
+
+    @BeforeEach
+    public void init(){
+        list = new OurLinkedList();
+    }
+
+    @Test
+    public void testOurAddOurGet_emptyObject_addsOneElement(){
+
+        list.ourAdd(5); //5 добавлено на нулевую позицию
+
+        assertEquals(5,list.ourGet(0)); // проверяем равен ли элемент на нулевой позиции 5
+        // с помощью ourGet()
+    }
+
+
+    @Test
+    public void testOurAddOurGet_emptyObject_addsSeveralElement(){
+
+        Integer[] expected = {1,3,-5,18,7,89,34,2,50,24,-4,60,70,22,-101};
+        for ( int i = 0;i<expected.length;i++) {
+            list.ourAdd(expected[i]);  //  в цикле добавляем все элементы массива к нашему листу по очереди
+        }
+        //    assertEquals(1, list.ourGet(0));
+        //    assertEquals(3, list.ourGet(1));
+        //    assertEquals(-5, list.ourGet(2));
+
+        //  в цикле сравниваем соответствующие значения массива и результат работы метода ourGet для каждого элемента
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+    }
+
+    @Test
+    public void testSize_emptyList_addsOneElement(){
+
+        list.ourAdd(5);
+
+        assertEquals(1,list.ourSize());
+    }
+
+    @Test
+    public void testSize_emptyList_addsSeveralElements(){
+
+        Integer[] expected = {1,3,-5,18,7,89,34,2,50,24,-4,60,70,22,-101};
+        for ( int i = 0;i<expected.length;i++) {
+            list.ourAdd(expected[i]);  //  в цикле добавляем все элементы массива к нашему листу по очереди
+        }
+        // проверяем работу метода ourSize с несколькими элементами
+        assertEquals(expected.length,list.ourSize());
+
+    }
+
+    @Test
+    public void  testSet_oneElment_changesElement(){
+        list.ourAdd(3);
+        list.ourSet(10,0);// меняем значение по индексу 0
+
+        assertEquals(10,list.ourGet(0));
+    }
+
+
+    @Test
+    public void testSet_severalElements_setsFirstLastMiddleElements(){
+
+        Integer[] source = {1,3,-10,18,4};
+        for( int i = 0;i < source.length; i++){
+            list.ourAdd(source[i]);
+        }
+        list.ourSet(10,0);
+        list.ourSet(5,4);
+        list.ourSet(-5,2);
+
+        Integer[] expected = {10,3,-5,18,5};
+
+        for( int i = 0;i < source.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+        assertEquals(5,list.ourSize());
+    }
+
+    // хотим получить элемент по несуществующему индексу. При правильной работе метода должны получить exception
+    @Test
+    public void testGet_nonEmptyList_getOuterElement(){
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourGet(4));
+    }
+
+    @Test
+    public void testOurSet_nonEmptyList_putOuterElement(){
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourSet(76,4));
+    }
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesWrongElement(){
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourRemoveById(4));
+
+    }
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesFirstElement(){
+
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(0); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(5,object);
+
+        Integer[] expected = {15,2,13,7,57};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesMiddleElement(){
+
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(24);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(2); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(24,object);
+
+        Integer[] expected = {5,15,13,7,57};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesLastElement(){
+
+
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(5); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(57,object);
+
+        Integer[] expected = {5,15,2,13,7};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+    @Test
+    public void test_contains_nonEmptyList_containsElements(){
+
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(3);
+        list.ourAdd(16);
+        list.ourAdd(20);
+
+        assertTrue(list.ourContains(5));
+        assertTrue(list.ourContains(16));
+        assertTrue(list.ourContains(20));
+    }
+
+
+    @Test
+    public void test_contains_nonEmptyList_notContainsElements(){
+
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(3);
+        list.ourAdd(16);
+        list.ourAdd(20);
+
+        assertFalse(list.ourContains(45));
+        assertFalse(list.ourContains(160));
+        assertFalse(list.ourContains(2034));
+    }
+
+
+
+
+
+
+}
+code/our_collection44/src/OurList.java
+public interface OurList<E>{
+
+    void ourAdd(E o); //  добавить значение
+
+    E ourGet( int index); // получить значение ро индексу
+
+    void ourSet(E o, int index ); // заменить значение по индексу
+
+    int ourSize(); // возвращает размер нашего листа
+
+    boolean ourContains( E o);
+
+    boolean ourRemove(E o); //  удаляет элемент по значению
+
+    E ourRemoveById( int index);//  удаление по индексу
+
+
+}
+code/our_set/src/Main.java
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Main {
+
+    // Set  - коллекция, в которой не может содержаться дубликатов.
+    /*
+     Есть три основные реализации Сета. Это HashSet, TreeSet, LinkedHashSet
+
+     HashSet
+
+     1. Внутри HashSet   использует HashTable, а фактически  обьект HashMap.
+     2. Элементы из Hashset возвращаются в произвольном порядке.
+     */
+
+    public static void main(String[] args) {
+
+        // добавление элементов с помощью метода add()
+        Set<String> countries = new HashSet<>();
+        countries.add("France");
+        countries.add("France");
+        countries.add("Germany");
+        countries.add("Germany");
+        countries.add("Great Britain");
+
+        for( String country: countries)
+            System.out.println(country);
+
+        System.out.println(countries);
+
+
+        System.out.println("List in Set");
+        List<String> countries1 = new ArrayList<>();
+        countries1.add("France");
+        countries1.add("France");
+        countries1.add("Germany");
+        countries1.add("Germany");
+        countries1.add("Great Britain");
+        System.out.println(countries1);
+
+        Set<String> setCountries = new HashSet<>(countries1);
+        System.out.println("Countries in set: "+setCountries);
+
+        // удаление элементов метод remove()
+        setCountries.remove("France");
+        System.out.println("Without France: "+setCountries);
+
+        setCountries.addAll(countries1);
+        System.out.println("Add all countries"+ setCountries);
+
+    }
+
+    /*
+    некоторые конструкторы его:
+    HashSet () -создает пустой хэшсет
+    HashSet (Collection) - создается хешсет с элементами, скопированными из коллекции
+     */
+
+
+
+
+}

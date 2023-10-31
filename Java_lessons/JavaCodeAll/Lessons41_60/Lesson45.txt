@@ -1,0 +1,268 @@
+Задачи на урок:
+Set in Java
+TreeSet, LinkedHashSet
+Практика, решение задач
+Set
+
+Интерфейс Set расширяет интерфейс Collection и представляет набор уникальных элементов. Set не добавляет новых методов, только вносит изменения в унаследованные. В частности, метод add() добавляет элемент в коллекцию и возвращает true, если в коллекции еще нет такого элемента.
+
+Обобщенный класс HashSet представляет хеш-таблицу. Он наследует свой функционал от класса AbstractSet, а также реализует интерфейс Set.
+
+Хеш-таблица представляет такую структуру данных, в которой все объекты имеют уникальный ключ или хеш-код. Данный ключ позволяет уникально идентифицировать объект в таблице.
+
+Для создания объекта HashSet можно воспользоваться одним из следующих конструкторов:
+
+HashSet(): создает пустой список
+
+HashSet(Collection<? extends E> col): создает хеш-таблицу, в которую добавляет все элементы коллекции col
+
+HashSet(int capacity): параметр capacity указывает начальную емкость таблицы, которая по умолчанию равна 16
+
+HashSet(int capacity, float koef): параметр koef или коэффициент заполнения, значение которого должно быть в пределах от 0.0 до 1.0, указывает, насколько должна быть заполнена емкость объектами прежде чем произойдет ее расширение. Например, коэффициент 0.75 указывает, что при заполнении емкости на 3/4 произойдет ее расширение.
+
+Класс HashSet не добавляет новых методов, реализуя лишь те, что объявлены в родительских классах и применяемых интерфейсах.
+
+см. код занятия practice -> Main
+
+code/homework45/src/Homework.java
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Homework {
+
+    /*
+     1. C использованием множеств (Set)  написать метод, который принимает лист, в котором могут быть
+      повторяющиеся элементы и возвращает  лист без повторяющихся элементов.
+      ["John","John", Jack,Bill,Jack] -> John,Jack, Bill
+
+     2*. C использованием множеств написать метод, который вернет лист из повторяющихся элеменов из  начального листа .
+      Пример:   ["John","John", Jack,Bill,Jack, Piter ]-> John,Jack
+       */
+  public List<String> removeDuplicates( List<String> input){
+      Set<String> set = new HashSet<>(input);
+
+      return new ArrayList<>(set);
+  }
+
+
+  public List<String> getDuplicates( List<String>input){
+      Set<String>set = new HashSet<>();
+      List<String> duplicates = new ArrayList<>();
+
+      for( String s: input){
+          if(!set.add(s) && !duplicates.contains(s))
+              duplicates.add(s);
+      }
+      return duplicates;
+  }
+
+}
+code/homework45/src/HomeworkTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HomeworkTest {
+    private Homework homework;
+
+    @BeforeEach
+    public void init(){
+        homework = new Homework();
+    }
+
+    @Test
+    public void removeDuplicatesOneElement(){
+        List<String> actual = Arrays.asList("John");
+        List<String> expected = Arrays.asList("John");
+
+        assertEquals(actual,homework.removeDuplicates(expected));
+    }
+
+
+    @Test
+    public void removeDuplicatesNoDuplicates(){
+        List<String> actual = Arrays.asList("John","Jack","Bill","Ann");
+        List<String> expected = Arrays.asList("Ann","Bill","Jack","John");
+
+        List<String> result = homework.removeDuplicates(actual);
+        Collections.sort(result);
+        assertEquals(expected,result);
+    }
+
+
+    @Test
+    public void removeDuplicatesSeveralDuplicates(){
+        List<String> actual = Arrays.asList("John","Jack","Bill","Ann","John","Bill");
+        List<String> expected = Arrays.asList("John","Jack","Bill","Ann");
+        Collections.sort(expected);
+
+        List<String> result = homework.removeDuplicates(actual);
+        Collections.sort(result);
+
+        assertEquals(expected,result);
+    }
+
+
+    @Test
+    public void getDuplicatesOneElement() {
+        List<String> actual = Arrays.asList("John");
+        List<String> expected = Arrays.asList();
+        assertEquals(expected, homework.getDuplicates(actual));
+    }
+
+
+    @Test
+    public void getDuplicatesNoDuplicates() {
+        List<String> actual = Arrays.asList("John","Jack","Ann","Mary");
+        List<String> expected = Arrays.asList();
+        assertEquals(expected, homework.getDuplicates(actual));
+    }
+
+
+    @Test
+    public void getDuplicatesOneDuplicate() {
+        List<String> actual = Arrays.asList("John","Jack","Ann","Mary","Mary","John");
+        List<String> expected = Arrays.asList("Mary","John");
+        assertEquals(expected, homework.getDuplicates(actual));
+    }
+
+
+    @Test
+    public void getDuplicates_twoJohns_threeMarys() {
+        List<String> actual = Arrays.asList("Mary","John","Jack","Ann","Mary","Mary","John");
+        List<String> expected = Arrays.asList("Mary","John");
+        assertEquals(expected, homework.getDuplicates(actual));
+    }
+
+
+
+    @Test
+    public void getDuplicates_allMarys() {
+        List<String> actual = Arrays.asList("Mary","Mary","Mary","Mary");
+        List<String> expected = Arrays.asList("Mary");
+        assertEquals(expected, homework.getDuplicates(actual));
+    }
+
+
+
+
+
+}
+code/our_set45/src/Main.java
+import java.util.LinkedHashSet;
+import java.util.TreeSet;
+
+public class Main {
+
+   /*
+    Двоичное дерево
+        Правила построения:
+        1. Каждый узел имеет не более двух детей
+        2. Каждое значение, которое меньше значения узла, станет левым ребенком
+        3. Каждое значение, большее или равное значению узла, станет правым ребенком
+
+
+
+
+        // TreeSet -  сортирует элементы по возрастанию
+    */
+
+    public static void main(String[] args) {
+        TreeSet<String> countries = new TreeSet<>();
+
+        countries.add("Germany");
+        countries.add("Germany");
+        countries.add("England");
+        countries.add("Bangladesh");
+        countries.add("Bangladesh");
+        countries.add("Austria");
+        countries.add("Australia");
+
+        System.out.println(countries);
+
+
+        // LinkedHashSet
+
+        LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>();
+      //  TreeSet<Integer> linkedHashSet = new TreeSet<>();
+        linkedHashSet.add(3);
+        linkedHashSet.add(1);
+        linkedHashSet.add(7);
+        linkedHashSet.add(2);
+        linkedHashSet.add(23);
+
+        System.out.println(linkedHashSet);
+    }
+}
+code/practice45/src/Main.java
+public class Main {
+
+    // Есть массив строк, в котором перечислены марки автомобилей, имеющиеся в наличии в салоне.
+    // Написать метод, проверяющий есть ли нужная клиенту машина в салоне. Название машины вводится с клавиатуры
+    // ["Audi","Ford","BMW","Honda","Mazda"]
+
+    /*
+    1. создать метод public static void findCar(String[] cars, String carToFind)
+    2. В цикле for пройти по элементам массива  и четез if  сравнить каждый элемент массива с искомой машиной.
+    3. Если нашли, выоводим на экран соответствующее уведомление. Если нет, то уведомление что такой машины
+        нет и предложение взять одну из имеющихся в наличии  с перечислением их
+     */
+
+    /*
+    Написать метод, который при вводе с клавиатуры дня недели отвечает на вопрос является ли этот день выходным.
+     ( для выходного it is true , для рабочего it is false.  Использовать ENUM. День недели вводится со сканера.
+
+     1. Создпть Enum, содержащий дни недели.
+     2. Создать обьект сканера
+     3. В методе используя константы энума сделать switch, который будет возвращать результат true  или false  в зависимости
+        от введенного со сканера дня недели
+
+     Вариант со звездочкой :
+      -разделить решение на отдельные методы, каждый из которых решает свою задачу
+     ( например, ввод значения с клавиатуры).
+     - проверить что произойдет в случае неверного ввода с клавиатуры и подумать как решить проблему если она возникнет
+
+
+     */
+
+}
+code/practice45/src/Salon.java
+import java.util.Scanner;
+
+public class Salon {
+
+    public static void main(String[] args) {
+
+        String[] salon = {"Audi","Ford","BMW","Honda","Mazda"};
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter car brand");
+        String carToFind = scanner.nextLine();
+
+        findCar(salon,carToFind);
+    }
+
+    public static void findCar( String[]cars, String carToFind){
+
+        for ( int i = 0;i<cars.length;i++){
+
+            if(cars[i].equalsIgnoreCase(carToFind)){
+                System.out.println("This car is available");
+                return;
+            }
+        }
+        System.out.println("This car is not available. Take ");
+
+        for( String car: cars){
+            System.out.print(car+" ");
+        }
+    }
+}

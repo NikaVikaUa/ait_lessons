@@ -1,0 +1,309 @@
+Задачи на урок:
+Разбор дз
+Интерфейсы Iterator и Iterable
+Напишем свой ArrayList
+ArrayList
+Программистам очень не нравилось одно свойство массива – его размер нельзя изменять. Что делать, если нужно сохранить в массиве ещё три элемента, а свободное место только одно?
+
+Единственным решением проблемы нехватки места в массиве было создание массива очень большого размера, чтобы все элементы туда точно поместились. Но это часто приводило к нерациональному расходу памяти. Если чаще всего в массиве хранилось три элемента, но был хотя бы мизерный шанс, что там их будет 100, приходилось создавать массив на 100 элементов.
+
+Поэтому они написали класс ArrayList (списочный массив), который выполнял ту же работу, что и массив, но мог изменять свой размер.
+
+Внутри каждого объекта типа ArrayList хранится обычный массив элементов. Когда ты считываешь элементы из ArrayList, он считывает их из своего внутреннего массива. Когда записываешь – записывает их во внутренний массив.
+
+Преимущества ArrayList
+Во-первых, ArrayList поддерживает несколько дополнительных действий, которые очень часто приходится делать программистам во время работы, и которых нет у массива. Например – вставка и удаление элементов из середины массива, и чтобы не оставалось дырок.
+
+Во-вторых, изменение размера: когда нужно записать во внутренний массив ещё один элемент, а свободного места там нет, то внутри ArrayList делается вот что: создаётся ещё один массив, в полтора раза больше размера внутреннего массива, плюс один элемент. все элементы из старого массива копируются в новый массив. новый массив сохраняется во внутренней переменной объекта ArrayList, старый массив объявляется мусором (мы просто перестаём хранить на него ссылку).
+
+Написать метод, принимающий лист целых чисел и целое число и возвращающий лист только с элементами меньшими этого числа
+
+code/homework39/src/Main.java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+
+        List<String> actual = Arrays.asList("John", "Mary", "Stephan", "Amalia","Johan");
+
+        Main m = new Main();
+        System.out.println(m.removeLength4(actual));
+
+    }
+
+    /*
+     Есть лист с именами : John, Mary, Stephan, Amalia,Johan. Написать метод, который вернет лист,
+// в котором не содеражатся имена нашего листа длиной 4.
+// [John, Mary, Stephan, Amalia,Johan] -> [Stephan, Amalia,Johan]
+     */
+
+    public  List<String> removeLength4 (List<String>list){
+        List<String> result = new ArrayList<>();
+
+        for( String s : list){
+            if ( s.length() != 4)
+                result.add(s);
+        }
+        return result;
+    }
+
+}
+code/homework39/src/MainTest.java
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MainTest {
+    Main m = new Main();
+
+ //   @BeforeEach
+ //   public void init(){
+ //       m = new Main();
+
+
+  //  }
+
+    @Test
+    public void list_with_length4(){
+        List<String> actual = Arrays.asList("John", "Mary", "Stephan", "Amalia","Johan");// метод asList  класса
+                                                                    // Arrays для быстрого создания листа
+
+                            // еще один метод для быстрого созлания листа
+        List<String>expected = List.of("Stephan", "Amalia","Johan");
+
+    //    assertEquals(expected,;
+    }
+
+}
+code/iterator_iterable/src/Main.java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Main {
+    // Интерфейс Итератор
+
+    /*
+    interface Iterator<E>{
+
+    E next() - позволяет получить следующий элемент при переборе листа
+    boolean  hasNext() - позволяет узнать есть ли следующий элемент  и не достигли ли мы конца листа.
+                        Если элемент еще есть, то вернется true
+    void remove() -  удаляет текущий элемент
+    }
+
+     */
+
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>();
+        names.add("John");
+        names.add("Jack");
+        names.add("Bill");
+        names.add("Ann");
+
+
+       Iterator<String> ourIterator = names.iterator(); // получаем обьект итератор с помощью iterator()
+
+        System.out.println(ourIterator.next());
+        System.out.println(ourIterator.next());
+        System.out.println(ourIterator.next());
+        System.out.println(ourIterator.next());
+        if(ourIterator.hasNext())
+            System.out.println(ourIterator.next());
+
+        while (ourIterator.hasNext()){
+            String name =ourIterator.next();
+            if(name.length() == 3)
+                ourIterator.remove();
+        }
+        System.out.println(names);
+    }
+
+
+
+}
+code/iterator_iterable/src/OurListIterator.java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class OurListIterator {
+
+    // ListIterator - интерфейс для листов. Он предоставляет больше возможностей,
+    /*
+    т.е. несколько доп методов.
+    void add(E object) - вставляет элемент перед обьектом, который должен
+                        быть возвращен методом next(). Остальные элементы сдвигаются
+
+    boolean hasNext()  - тоже что и в обычном итераторе
+
+    boolean hasPrevious() - возвращает true  если есть предыдущий элемент. Иначе false
+
+    next()
+
+    previous() - возвращает текущий элемент и переходит к предыдущему. Если его нет, то выбрасывает исключение
+
+    int nextIndex() - возвращает индекс след. элемента. Если нет элемента, он возвращает размер листа
+    int previousIndex() - возвращает индекс предыдущего элемента, а если его нет, то он возвращает -1
+
+    void set (object) -  присваивает новое значение текущему элементу
+
+    void remove()
+
+     */
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>();
+        names.add("John");
+        names.add("Jack");
+        names.add("Bill");
+        names.add("Ann");
+
+        ListIterator<String> ourIterator = names.listIterator();
+
+        System.out.println("moving forward");
+        while(ourIterator.hasNext()){
+            System.out.println(ourIterator.next());
+        }
+        ourIterator.set("Kate");
+
+
+        System.out.println("\nmoving backwards");
+        while (ourIterator.hasPrevious()){
+            System.out.println(ourIterator.previous());
+        }
+
+    }
+}
+code/our_collection_new/src/OurArrayList.java
+public class OurArrayList<E> implements OurList{
+
+    private Object[] source;  // исходный массив
+    private static final int INITIAL_CAPACITY = 16; // начальный размер нашего массива
+
+    private int size; //  размер нашего листа
+
+
+    public OurArrayList(){
+        source = new Object[INITIAL_CAPACITY]; // инициализируем наш массив  в конструкторе при
+                                                // создании нового листа
+    }
+
+
+
+    @Override
+    public void ourAdd(Object o) {
+
+    }
+
+    @Override
+    public Object ourGet(int index) {
+        return null;
+    }
+
+    @Override
+    public void ourSet(Object o, int index) {
+
+    }
+
+    @Override
+    public int ourSize() {
+        return size;
+    }
+
+    @Override
+    public boolean ourRemove(Object o) {
+        return false;
+    }
+
+    @Override
+    public Object ourRemoveById(int index) {
+        return null;
+    }
+}
+code/our_collection_new/src/OurList.java
+public interface OurList<E>{
+
+    void ourAdd(E o); //  добавить значение
+
+    E ourGet( int index); // получить значение ро индексу
+
+    void ourSet(E o, int index ); // заменить значение по индексу
+
+    int ourSize(); // возвращает размер нашего листа
+
+    boolean ourRemove(E o); //  удаляет элемент по значению
+
+    E ourRemoveById( int index);//  удаление по индексу
+
+
+}
+code/our_iterable/src/Main.java
+import java.util.Iterator;
+
+public class Main {
+    public static void main(String[] args) {
+        OurIterableString str = new OurIterableString("Hello");
+
+    //    for(char ch: str){
+    //        System.out.print(ch+" ");
+    //    }
+
+        System.out.println("\nPrint with our iterator");
+
+        Iterator<Character> ourIterator = str.iterator();
+
+        while( ourIterator.hasNext()){
+            char ch = ourIterator.next();
+            System.out.println(ch);
+        }
+    }
+
+}
+code/our_iterable/src/OurIterableString.java
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class OurIterableString implements Iterable<Character>, Iterator<Character> {
+
+    private String str;
+    private int  counter = 0; // будет считать
+
+
+    public OurIterableString(String str){
+        this.str = str;
+    }
+
+    // следующие три метода реализуют интерфейс Итератор (Iterator)
+
+    public boolean hasNext(){
+        if( counter < str.length()){
+            return true;
+        }
+        return false;
+    }
+
+
+    public Character next(){
+        if( counter == str.length())
+            throw new NoSuchElementException(); // отсутствует элемент, который можно вернуть. Конец строки
+
+        counter++;
+        return str.charAt(counter-1);
+    }
+
+    public void remove(){
+        throw new UnsupportedOperationException(); // опреация не поддерживается
+    }
+
+    //этот метод реализует интерфейс Iterable
+    public Iterator<Character>iterator(){
+        return this;
+    }
+
+
+}

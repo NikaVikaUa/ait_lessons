@@ -1,0 +1,263 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Multithreading
+
+****************************************************************************************************************
+
+Многопоточность
+
+Большинство языков программирования поддерживают такую важную функциональность как многопоточность, и Java в этом плане не исключение. При помощи многопоточности мы можем выделить в приложении несколько потоков, которые будут выполнять различные задачи одновременно. Если у нас, допустим, графическое приложение, которое посылает запрос к какому-нибудь серверу или считывает и обрабатывает огромный файл, то без многопоточности у нас бы блокировался графический интерфейс на время выполнения задачи. А благодаря потокам мы можем выделить отправку запроса или любую другую задачу, которая может долго обрабатываться, в отдельный поток. Поэтому большинство реальных приложений, которые многим из нас приходится использовать, практически не мыслимы без многопоточности.
+
+Класс Thread
+В Java функциональность отдельного потока заключается в классе Thread. И чтобы создать новый поток, нам надо создать объект этого класса. Но все потоки не создаются сами по себе. Когда запускается программа, начинает работать главный поток этой программы. От этого главного потока порождаются все остальные дочерние потоки.
+По умолчанию именем главного потока будет main.
+
+Для управления потоком класс Thread предоставляет еще ряд методов. Наиболее используемые из них:
+
+getName(): возвращает имя потока
+
+setName(String name): устанавливает имя потока
+
+getPriority(): возвращает приоритет потока
+
+setPriority(int proirity): устанавливает приоритет потока. Приоритет является одним из ключевых факторов для выбора системой потока из кучи потоков для выполнения. В этот метод в качестве параметра передается числовое значение приоритета - от 1 до 10. По умолчанию главному потоку выставляется средний приоритет - 5.
+
+isAlive(): возвращает true, если поток активен
+
+isInterrupted(): возвращает true, если поток был прерван
+
+join(): ожидает завершение потока
+
+run(): определяет точку входа в поток
+
+sleep(): приостанавливает поток на заданное количество миллисекунд
+
+start(): запускает поток, вызывая его метод run()
+
+***************************************************************************************************************
+
+Задача 1
+Написать метод 100 раз печатающий char и вывести на экран результат его работы для двух потоков 
+( например, один поток печатает # , второй *). В конце должно выводиться " end of main"
+
+*****************************************************************************************************************
+
+code/homework62/src/Homework.java
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Homework {
+    public static void main(String[] args) {
+        getModifiedList("inputList.csv","outputList.csv");
+    }
+    /*
+    Пусть есть текстовый  файл такого вида:  имя, фамилия, оборудование, цена ( имена могут
+        повторяться)
+        Evgeny, Grazhdanskiy, Notebook, 500
+        John, Smith, Mac, 800
+        Evgeny, Grazhdanskiy, Keybord, 25
+        John, Smith, Mouspad,5
+        Jack, Burns, Apple, 1000
+
+
+        Нужно написать  метод,  который запишет эту информацию в выходной файл в таком виде:
+        имя фамилия сумма позиций
+        Evgeny Grazhdanskiy 525
+        John Smith 805
+        Jack Burns 1000
+     */
+
+    public static void getModifiedList( String inFile, String outFile){
+        try(BufferedReader br = new BufferedReader( new FileReader(inFile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outFile)))    {
+
+            String line;
+            Map<String,Integer>result = new HashMap<>();
+
+            while ((line = br.readLine()) != null){
+                System.out.println(line);
+
+                String[] entry = line.split(",");
+                String name = entry[0].trim().concat(" ").concat(entry[1].trim());
+                int price = Integer.parseInt(entry[3].trim());
+
+                if( result.containsKey(name))
+                    result.put(name,price + result.get(name));
+                else result.put(name,price);
+
+                // john smith = 300
+            }
+            for(Map.Entry<String,Integer>me : result.entrySet()){
+                bw.write(me.getKey()+' '+me.getValue());
+                bw.newLine();
+            }
+
+        }catch ( IOException e){
+            e.printStackTrace();
+        }
+    }
+}
+
+******************************************************************************************************************
+
+code/multithreading_fundamentals/src/Main.java
+public class Main {
+   /*
+    есть два вида многозадачности :
+    1. process-based  - когда выполняется несколько программ ( процессов) одновременно
+    2. thread -based  -  когда выполняется несколько задач в одной программе  одновременно
+     Состояния потока :
+     New -  еще не запущенный поток
+     Running - испоняющийся
+     Blocked - заблокированный поток, который ждет возможности возобновления работы
+     Waiting - состояние ожидания возобновления работы
+     Terminated -  закончивший работу
+
+     // многопоточность в джаве основана на классе Thread и интерфейсе Runnable
+
+     // основные методы класса Thread:
+        getName() -  возвращает имя потока
+        getPriority() - возвращает приоритет потока
+        setPriority( int priority) -  установить приоритет
+        isAlive() - возвращает true  если поток активен
+        isInterrupted -  true  если поток был прерван
+        join() - ожидает заврешение потока
+        run() - точка входа в поток
+        sleep() -  приостанавливает выполнение потока
+        start() -  запускает поток
+    */
+   public static void main(String[] args) throws InterruptedException {
+    //   Thread t = Thread.currentThread();
+    //   System.out.println(t.getName());
+    //   System.out.println(t);
+
+       //  создание потоков
+
+      // 1. наследование от класса Thread
+
+       System.out.println("Main thread  started");
+       Thread thread1 = new OurThread("OurThread1");
+       Thread thread2 = new OurThread("OurThread2");
+
+       thread1.start();
+       thread2.start();
+
+
+           thread1.join();
+           thread2.join();
+
+
+   //    for (int i = 3; i < 10; i++)
+   //        new OurThread("OurThread"+i).start();
+
+
+       Thread ourThread = new OurThread("ourThreadNew");
+       ourThread.start();
+       ourThread.join();
+
+       // 2. реализация интерфейса runnable -  имеет единственный метод run()
+       // конструктор Thread( Runnable runnable, String name)
+
+       Thread ourThreadRun = new Thread( new OurThreadRun(),"MyRunnable Thread");
+       ourThreadRun.start(); // используется для запуска потока
+       ourThreadRun.join();
+
+       System.out.println("Main thread finished");
+
+
+   }
+
+}
+
+*****************************************************************************************************************
+
+code/multithreading_fundamentals/src/OurThread.java
+public class OurThread extends Thread{
+
+    public OurThread( String name ){ // передается имя потока
+        super(name);
+    }
+
+    public void run(){ // здесь находится код, который и будет выполняться в потоке.
+
+        System.out.println(Thread.currentThread().getName()+" started");
+        try {
+            Thread.sleep(300);
+        }
+        catch (InterruptedException e){
+            System.out.println("Has been interrupted");
+        }
+        System.out.println(Thread.currentThread().getName()+" finished");
+    }
+}
+
+****************************************************************************************************************
+
+code/multithreading_fundamentals/src/OurThreadRun.java
+public class OurThreadRun implements Runnable{
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName()+" started");
+        try {
+            Thread.sleep(300);
+        }
+        catch (InterruptedException e){
+            System.out.println("Has been interrupted");
+        }
+        System.out.println(Thread.currentThread().getName()+" finished");
+    }
+}
+
+***************************************************************************************************************
+
+code/threads_sync/src/CommonResource.java
+public class CommonResource {
+
+    int v = 0;
+}
+
+***************************************************************************************************************
+
+code/threads_sync/src/Main.java
+public class Main {
+    //  Синхронизация потоков
+
+    public static void main(String[] args) {
+
+        CommonResource commonResource = new CommonResource();
+
+        for( int i = 1; i <= 5; i++){
+            Thread ourThread = new Thread( new OurNewThread(commonResource));
+            ourThread.setName("Thread"+i);
+            ourThread.start();
+        }
+    }
+}
+
+**************************************************************************************************************
+
+code/threads_sync/src/OurNewThread.java
+public class OurNewThread implements Runnable {
+
+    CommonResource resource;
+
+    public OurNewThread( CommonResource resource){
+        this.resource = resource;
+    }
+
+    public void run(){
+        resource.v = 1;
+        for( int i = 0; i < 5; i++){
+            System.out.println(Thread.currentThread().getName()+" , resource = "+resource.v);
+            resource.v++;
+            try{
+                Thread.sleep(50);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+
+            }
+        }
+    }
+}

@@ -1,0 +1,390 @@
+Задачи на урок:
+Разбор домашнего задания
+напишем свою HashMap
+Практика, решение задач
+HashMap
+
+HashMap<K, V> представляет отображение или иначе говоря словарь, где каждый элемент представляет пару "ключ-значение". При этом все ключи уникальные в рамках объекта Map. Такие коллекции облегчают поиск элемента, если нам известен ключ - уникальный идентификатор объекта.
+
+Среди методов HashMap можно выделить следующие:
+
+clear(): очищает коллекцию
+
+containsKey(): возвращает true, если коллекция содержит ключ k
+
+containsValue(Object v): возвращает true, если коллекция содержит значение v
+
+equals(Object obj): возвращает true, если коллекция идентична коллекции, передаваемой через параметр obj
+
+isEmpty: возвращает true, если коллекция пуста
+
+get(Object k): возвращает значение объекта, ключ которого равен k. Если такого элемента не окажется, то возвращается значение null
+
+getOrDefault(Object k, V defaultValue): возвращает значение объекта, ключ которого равен k. Если такого элемента не окажется, то возвращается значение defaultVlue
+
+put(K k, V v): помещает в коллекцию новый объект с ключом k и значением v. Если в коллекции уже есть объект с подобным ключом, то он перезаписывается. После добавления возвращает предыдущее значение для ключа k, если он уже был в коллекции. Если же ключа еще не было в коллекции, то возвращается значение null
+
+putIfAbsent(K k, V v): помещает в коллекцию новый объект с ключом k и значением v, если в коллекции еще нет элемента с подобным ключом.
+
+Set keySet(): возвращает набор всех ключей отображения
+
+values(): возвращает набор всех значений отображения
+
+putAll(map): добавляет в коллекцию все объекты из map
+
+remove(Object k): удаляет объект с ключом k
+
+size(): возвращает количество элементов коллекции
+
+Чтобы положить объект в коллекцию, используется метод put, а чтобы получить по ключу - метод get.
+
+HashMap также позволяет получить наборы как ключей, так и значений.
+
+code/main49/src/Homework.java
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Homework {
+
+
+    /*
+    // Есть лист имен, где некоторые имена повторяются. Написать метод, который по имени вернет
+    // количество вхождений этого имени в лист.
+    // public nameToNumberOccurence ( List<String> list, String name)   -> 3
+     */
+
+    public int nameToNumberOccurence (List<String> list, String name){
+        Map<String,Integer> nameByNumber = new HashMap<>();
+
+        for( String s: list){
+            if(nameByNumber.containsKey(s))
+                nameByNumber.put(s,nameByNumber.get(s)+1);
+
+            else
+                nameByNumber.put(s,1);
+        }
+          return nameByNumber.getOrDefault(name,0);
+        // метод getOrDefault() -  возвращает значение по ключу если оно существует или дефолтное
+        // значение, если такого ключа нет. Дефолтное значение задается в качестве второго параметра метода.
+        //
+        }
+}
+code/main49/src/HomeworkTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HomeworkTest {
+
+   private Homework homework;
+
+   @BeforeEach
+   public void init(){
+       homework = new Homework();
+   }
+
+   @Test
+   public void numeToNumberOccurence_test_2Occurences(){
+       List<String> input = Arrays.asList("John","Mary","Ann","John");
+
+       assertEquals(2,homework.nameToNumberOccurence(input,"John"));
+   }
+
+
+    @Test
+    public void numeToNumberOccurence_test_1Occurences(){
+        List<String> input = Arrays.asList("John","Mary","Ann","John");
+
+        assertEquals(1,homework.nameToNumberOccurence(input,"Ann"));
+    }
+
+
+    @Test
+    public void numeToNumberOccurence_test_0_Occurences(){
+        List<String> input = Arrays.asList("John","Mary","Ann","John");
+
+        assertEquals(0,homework.nameToNumberOccurence(input,"Evgeny"));
+    }
+
+
+    @Test
+    public void numeToNumberOccurence_test_onlyTwoJohns(){
+        List<String> input = Arrays.asList("John","John");
+
+        assertEquals(2,homework.nameToNumberOccurence(input,"John"));
+    }
+
+
+    @Test
+    public void numeToNumberOccurence_test_empty(){
+        List<String> input = Arrays.asList();
+
+        assertEquals(0,homework.nameToNumberOccurence(input,"Ann"));
+    }
+
+}
+code/our_hashMap/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+      //  for(int i=1;i<=43;i++)
+         //   System.out.println(i%10);
+
+        int x = 1;
+        int y = x++;
+    //    System.out.println("y= "+y);
+    //    System.out.println("x= "+x);
+
+        x = 1;
+         y = ++x;
+    //    System.out.println("y= "+y);
+    //    System.out.println("x= "+x);
+
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+
+
+        System.out.println("size is "+newMap.size());
+        System.out.println("get1 is"+newMap.get(1));
+        System.out.println("get2 is"+newMap.get(2));
+        System.out.println("get3 is"+newMap.get(3));
+
+        System.out.println("remove key 1"+newMap.remove(1));
+        System.out.println("remove key 8"+newMap.remove(8));
+
+        System.out.println("map contains key 1 "+newMap.contains(1));
+        System.out.println("get 1 ="+newMap.get(1));
+        System.out.println("get 3 ="+newMap.get(3));
+
+    }
+}
+code/our_hashMap/src/OurHashMap.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class OurHashMap<E,T>  implements OurMap<E,T>{
+    private static int CAPACITY = 10000;
+    List<Node<E,T>>[] source =new ArrayList[CAPACITY];
+    int size;
+
+    public void put(E key, T value){
+        int index =Math.abs(key.hashCode()%CAPACITY);
+
+
+        if(source[index] == null){
+            List<Node<E,T>> list = new ArrayList<>();
+            Node<E,T>newNode = new Node<>(key,value);
+            list.add(newNode);
+            source[index] = list;
+            size++;
+        }else{
+
+            boolean wasFound = false;
+
+            for( Node node : source[index]){
+                if(key.equals(node.key)){
+                    wasFound = true;
+                    node.value = value;
+                    break;
+                }
+            }
+
+            if(!wasFound){
+                Node<E,T> newNode = new Node<>(key,value);
+                source[index].add(newNode);
+                size++;
+            }
+        }
+    }
+
+    public T get( E key){
+        Node<E,T> node = findNode(key);
+        return node != null ? node.value : null;
+    }
+
+    public boolean contains( E key ){
+        Node<E,T> node = findNode(key);
+        return  node != null;
+    }
+
+
+    private Node<E,T> findNode(E key){
+        int index = Math.abs(key.hashCode() % CAPACITY);
+
+        if(source[index] != null){
+            for( Node<E,T>node : source[index]){
+                if( key.equals(node.key)){
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public boolean remove( E key ){
+        Node<E,T> node = findNode(key);
+        if( node == null)
+            return false;
+
+        int index = Math.abs(key.hashCode() % CAPACITY);
+        source[index].remove(node); // используется метод remove() листа
+        node.value = null;
+        node.key = null;
+        size--;
+        return true;
+    }
+
+    public int size(){
+        return size;
+    }
+
+
+
+
+
+
+
+
+
+    private static class Node<E,T>{
+        E key;
+        T value;
+
+        public Node( E key, T value){
+            this.key = key;
+            this.value = value;
+        }
+
+    }
+}
+code/our_hashMap/src/OurHashMapTest.java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OurHashMapTest {
+
+    @Test
+    public void testSizePut_emptyMap_newElements(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals(3,newMap.size());
+    }
+
+
+    @Test
+    public void testSizePut_emptyMap_noElements(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+
+        assertEquals(0,newMap.size());
+    }
+
+
+    @Test
+    public void testSizePut_NotEmptyMap_nonExistKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals(3,newMap.size());
+        newMap.put(4,"d");
+        assertEquals(4,newMap.size());
+    }
+
+
+    @Test
+    public void testSizePut_NotEmptyMap_ExistKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals(3,newMap.size());
+        newMap.put(2,"d");
+        assertEquals(3,newMap.size());
+    }
+
+
+    @Test
+    public void testGetContains_NotEmptyMap_ExistKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals("b",newMap.get(2));
+        assertEquals("a",newMap.get(3));
+        assertEquals("c",newMap.get(1));
+
+    }
+
+
+    @Test
+    public void testGetContains_NotEmptyMap_nonExistKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals(null,newMap.get(5));
+
+
+    }
+
+    @Test
+    public void testGetContains_emptyMap_nonExistKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+
+        assertEquals(null,newMap.get(5));
+
+    }
+
+    @Test
+    public void testRemove_NotEmptyMap_existKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals(3,newMap.size());
+        newMap.remove(2);
+        assertEquals(2,newMap.size());
+        assertEquals(null,newMap.get(2));
+
+
+    }
+
+
+    @Test
+    public void testRemove_NotEmptyMap_nonExistKey(){
+        OurMap<Integer,String> newMap = new OurHashMap<>();
+        newMap.put(3,"a");
+        newMap.put(2,"b");
+        newMap.put(1,"c");
+        assertEquals(3,newMap.size());
+        newMap.remove(5);
+        assertEquals(3,newMap.size());
+        assertEquals(null,newMap.get(5));
+
+
+    }
+
+}
+code/our_hashMap/src/OurMap.java
+public interface OurMap<E,T> {
+
+    public void put( E key, T value);
+
+    public T get(E key);
+
+    public boolean contains( E key);
+
+    public boolean remove ( E key);
+
+    public int size();
+}

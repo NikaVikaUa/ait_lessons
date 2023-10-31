@@ -1,0 +1,355 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Стандартные функциональные интерфейсы
+Ссылки на метод
+Лямбда выражения
+
+Среди новшеств, которые были привнесены в язык Java с выходом JDK 8, особняком стоят лямбда-выражения. Лямбда представляет набор инструкций, которые можно выделить в отдельную переменную и затем многократно вызвать в различных местах программы.
+
+Основу лямбда-выражения составляет лямбда-оператор, который представляет стрелку ->. Этот оператор разделяет лямбда-выражение на две части: левая часть содержит список параметров выражения, а правая собственно представляет тело лямбда-выражения, где выполняются все действия.
+
+Лямбда-выражение не выполняется само по себе, а образует реализацию метода, определенного в функциональном интерфейсе. При этом важно, что функциональный интерфейс должен содержать только один единственный метод без реализации.
+
+Ссылка на метод
+Начиная с JDK 8 в Java можно в качестве параметра в метод передавать ссылку на другой метод. В принципе данный способ аналогичен передаче в метод лямбда-выражения.
+
+Ссылка на метод передается в виде имя_класса::имя_статического_метода (если метод статический) или объект_класса::имя_метода (если метод нестатический).
+
+Встроенные функциональные интерфейсы
+В JDK 8 вместе с самой функциональностью лямбда-выражений также было добавлено некоторое количество встроенных функциональных интерфейсов, которые мы можем использовать в различных ситуациях и в различные API. В частности, в Stream API - прикладном интерфейсе для работы с данными. основные из этих интерфейсов:
+
+Predicate
+
+Consumer
+
+Function<T,R>
+
+Supplier
+
+UnaryOperator
+
+BinaryOperator
+
+code/homework52/src/Auto.java
+public class Auto implements  Comparable<Auto>{
+    public  String make;
+    public  String model;
+    public int price;
+
+    public Auto(String make, String model, int price) {
+        this.make = make;
+        this.model = model;
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Auto{" +
+                "make='" + make + '\'' +
+                ", model='" + model + '\'' +
+                ", price=" + price +
+                '}';
+    }
+
+    public int compareTo(Auto o){
+        int flag = (this.model.compareTo(o.model));
+        if( flag == 0)
+            flag = Integer.compare(this.price,o.price);
+        return flag;
+    }
+}
+code/homework52/src/Main.java
+import java.util.*;
+
+public class Main {
+
+
+    public Map<String, Set<Auto>> autoByMake(List<Auto> autos){
+        Map<String,Set<Auto>> autoByMakeMap = new TreeMap<>();
+
+        for(Auto auto:autos){
+            if( autoByMakeMap.containsKey(auto.make)){
+                Set<Auto> value = autoByMakeMap.get(auto.make);
+                value.add(auto);
+                autoByMakeMap.put(auto.make,value);
+            }
+            else{
+                Set<Auto>value = new TreeSet<>();
+                value.add(auto);
+                autoByMakeMap.put(auto.make,value);
+            }
+
+        }
+        return autoByMakeMap;
+    }
+
+
+    public Map<Character, List<String>> getWordsByLetter( List<String>words){
+        Map<Character,List<String>>wordsByLetterMap = new TreeMap<>();
+
+        for( String word:words){
+            char key = word.charAt(0);
+            if(wordsByLetterMap.containsKey(key)){
+                List<String>value = wordsByLetterMap.get(key);
+                value.add(word);
+                Collections.sort(value);
+                wordsByLetterMap.put(key,value);
+            }
+            else{
+                List<String>value = new ArrayList<>();
+                value.add(word);
+                wordsByLetterMap.put(key,value);
+            }
+        }
+        return wordsByLetterMap;
+    }
+}
+code/homework52/src/MainTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MainTest {
+
+    private Main m;
+    private List<Auto> autos;
+
+    Auto auto1 = new Auto("Volvo","c60",10);
+    Auto auto2 = new Auto("Mercedes","amers",40000);
+    Auto auto3 = new Auto("Volvo","a60",5000);
+    Auto auto4 = new Auto("Volvo","a60",1000);
+    Auto auto5 = new Auto("Mercedes","bmers",30000);
+    Auto auto6 = new Auto("Mercedes","bmers",1000000000);
+    Auto auto7 = new Auto("BMW","X6",10);
+
+    @BeforeEach
+    public void init(){
+        m = new Main();
+        autos = new ArrayList<>();
+
+        autos.add(auto1);
+        autos.add(auto2);
+        autos.add(auto3);
+        autos.add(auto4);
+        autos.add(auto5);
+        autos.add(auto6);
+        autos.add(auto7);
+    }
+
+    @Test
+    public void test_autos() {
+        Set<Auto> bmw = new TreeSet<>();
+        bmw.add(auto7);
+
+
+        Set<Auto> mercedes = new TreeSet<>();
+        mercedes.add(auto2);
+        mercedes.add(auto5);
+        mercedes.add(auto6);
+
+        Set<Auto>volvo = new TreeSet<>();
+        volvo.add(auto4);
+        volvo.add(auto3);
+        volvo.add(auto1);
+
+        Map<String, Set<Auto>> expected = new TreeMap<>();
+        expected.put(auto7.make,bmw);
+        expected.put(auto2.make,mercedes);
+        expected.put(auto4.make,volvo);
+
+        assertEquals(expected,m.autoByMake(autos));
+    }
+
+    @Test
+    public void test_autos_one(){
+
+        Set<Auto> mercedes = new TreeSet<>();
+        mercedes.add(auto2);
+        mercedes.add(auto5);
+        mercedes.add(auto6);
+
+        Map<String,Set<Auto>> expected = new TreeMap<>();
+        expected.put(auto2.make,mercedes);
+
+        List<Auto> newAutos = Arrays.asList(auto2,auto6,auto5);
+        assertEquals(expected,m.autoByMake(newAutos));
+    }
+
+
+    @Test
+    public void test_autos_empty(){
+        Map<String,Set<Auto>>expected = new TreeMap<>();
+        List<Auto> newAutos = Arrays.asList();
+
+        assertEquals(expected,m.autoByMake(newAutos));
+    }
+
+    @Test
+    public void test_wordsByLetter(){
+        List<String>words = Arrays.asList("hello","world","hell","hallo","warld");
+        List<String>h = Arrays.asList("hallo","hell","hello");
+        List<String>w = Arrays.asList("warld","world");
+
+        Map<Character,List<String>> expected = new TreeMap<>();
+        expected.put('h',h);
+        expected.put('w',w);
+
+        assertEquals(expected,m.getWordsByLetter(words));
+    }
+
+
+    @Test
+    public void test_wordsByLetter_empty(){
+        List<String>words = List.of();
+        Map<Character,List<String>>expected = new TreeMap<>();
+
+        assertEquals(expected, m.getWordsByLetter(words));
+    }
+
+
+}
+code/some_hashmap_methods/src/FindDominant.java
+import java.util.HashMap;
+import java.util.Map;
+
+public class FindDominant {
+    /*
+    Есть массив целых положит  чисел . Найьт элемент если он есть, встречающийся
+    в массиве больше половины раз, т.е. больше length/2.
+    Если нет , вернуть -1
+    2 2 2 2 3 3 3 3
+     */
+
+    public int findDominant( int[] ints){
+        Map<Integer,Integer> occurences = new HashMap<>();
+
+        for(int i : ints){
+        int res = occurences.merge(i,1, (oldVal,newVal)->oldVal+newVal);
+            if(res > ints.length/2){
+                return i;
+            }
+        }
+        return  -1;
+    }
+}
+code/some_hashmap_methods/src/FindDominantTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FindDominantTest {
+    private FindDominant findDominant;
+
+    @BeforeEach
+    public void init(){
+        findDominant = new FindDominant();
+    }
+
+
+    @Test
+    public void testFindDom_no_dominant(){
+        int[]actual = {2,2,2,3,3,3} ;
+        assertEquals(-1,findDominant.findDominant(actual));
+    }
+
+
+    @Test
+    public void testFindDom_dominant_exists(){
+        int[]actual = {2,3,2,2,3,3,3} ;
+        assertEquals(3,findDominant.findDominant(actual));
+    }
+
+}
+code/some_hashmap_methods/src/ForEachMethod.java
+import java.util.HashMap;
+
+public class ForEachMethod {
+
+    // hashmap.forEach(action)
+   // action -  действия, которые должны быть выполнены с каждым элементом
+
+    public static void main(String[] args) {
+        HashMap<String,Integer> prices = new HashMap<>();
+        prices.put("SonyTV", 200);
+        prices.put("HPprinter",300);
+        prices.put("SamsungHandy",150);
+
+        prices.forEach((key,value)->{
+
+            value = value/2;
+            System.out.println(key+" = "+value);
+
+        });
+    }
+}
+code/some_hashmap_methods/src/OurHashMapMerge.java
+import java.util.HashMap;
+
+public class OurHashMapMerge {
+
+    public static void main(String[] args) {
+        //  метод merge()
+        // hashmap.merge( key, value, remappingFunction)
+        /*
+
+         */
+        HashMap<String,Integer> prices = new HashMap<>();
+        prices.put("SonyTV", 200);
+        prices.put("HPprinter",300);
+        prices.put("SamsungHandy",150);
+
+        System.out.println(prices);
+        // новый ключ
+      int returnedValue =  prices.merge("Clock",100, (oldValue,newValue)->oldValue+newValue);
+        System.out.println("Price of clock: "+ returnedValue);
+
+        System.out.println("updated map:");
+        System.out.println(prices);
+
+
+        // когда ключ есть
+        HashMap<String,String> countries = new HashMap<>();
+        countries.put("Paris","France");
+        countries.put("Washington","America");
+        countries.put("London","UK");
+
+        System.out.println("countries: ");
+        System.out.println(countries);
+
+        String returnedCountry =
+                countries.merge("London","England",(oldValue,newValue)->oldValue +"/" +newValue);
+
+        System.out.println(returnedCountry);
+        System.out.println(countries);
+
+
+        // соединить две мапы с помощью метода merge()
+        HashMap<String,Integer> prices1 = new HashMap<>();
+        prices1.put("SonyTV", 200);
+        prices1.put("HPprinter",300);
+
+
+        HashMap<String,Integer> prices2 = new HashMap<>();
+        prices2.put("SamsungHandy", 150);
+        prices2.put("HPprinter",257);
+
+
+        prices2.forEach((key,value)->prices1.merge(key,value,(oldValue,newValue)-> {
+            if (oldValue < newValue){
+                return oldValue;
+            }
+            else {
+                return newValue;
+            }
+
+        }));
+        System.out.println("prices1 new:");
+        System.out.println(prices1);
+
+
+    }
+}

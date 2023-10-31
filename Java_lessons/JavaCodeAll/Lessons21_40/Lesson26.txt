@@ -1,0 +1,272 @@
+Задачи на урок:
+Проект Pizza Factory
+Интерфейсы в Джава
+Интерфейсы
+
+Механизм наследования очень удобен, но он имеет свои ограничения. В частности мы можем наследовать только от одного класса, в отличие, например, от языка С++, где имеется множественное наследование.
+
+В языке Java подобную проблему частично позволяют решить интерфейсы. Интерфейсы определяют некоторый функционал, не имеющий конкретной реализации, который затем реализуют классы, применяющие эти интерфейсы. И один класс может применить множество интерфейсов.
+
+Чтобы определить интерфейс, используется ключевое слово interface.
+Интерфейс может определять константы и методы, которые могут иметь, а могут и не иметь реализации. Методы без реализации похожи на абстрактные методы абстрактных классов. Так, в данном случае объявлен один метод, который не имеет реализации.
+
+Все методы интерфейса не имеют модификаторов доступа, но фактически по умолчанию доступ public, так как цель интерфейса - определение функционала для реализации его классом. Поэтому весь функционал должен быть открыт для реализации.
+
+Чтобы класс применил интерфейс, надо использовать ключевое слово implements.
+
+Задача1
+Создать классы, содержащие методы для подсчета площади и периметра прямоугольника и круга, реализующие интерфейс Shape с методами getArea и getPerimeter. В классе Main создать несколько обьектов этих классов и вывести на печать значения площади и периметра каждого.
+
+Задача2*
+Дополнительно к классам и интерфейсу из задачи 1 создать класс ShapeCalculator, содержащий метод для вычисления общей площади фигур. Протестировать этот метод
+
+code/final_keyword/src/A.java
+//final class A {
+public class A {
+   final void method1(){
+        System.out.println("This is a  final method");
+    }
+}
+code/final_keyword/src/B.java
+public class B extends A{
+  //  void method1(){
+  //      System.out.println("Illegal");
+
+  //  }
+}
+code/interfaces_java/src/Animal.java
+public abstract class Animal {
+
+    public abstract void sound();
+}
+code/interfaces_java/src/Car.java
+public class Car implements Moveable,Driveable{
+
+ public void canMove(){
+     System.out.println("Car drives");
+ }
+
+ public void drive(){
+     System.out.println("a car can drive");
+ }
+}
+code/interfaces_java/src/Demo.java
+public class Demo implements Interf2{
+    @Override
+    public void method2() {
+
+    }
+
+    @Override
+    public void method1() {
+
+    }
+}
+code/interfaces_java/src/Driveable.java
+public interface Driveable {
+    void drive();
+
+    default void stop(){
+        System.out.println("can stop");
+    }
+}
+code/interfaces_java/src/Flyable.java
+public interface Flyable {
+    void canFly();
+}
+code/interfaces_java/src/Horse.java
+public class Horse extends Animal implements Moveable,Driveable{
+
+  public void canMove(){
+      System.out.println("Horse runs");
+  }
+
+  public void drive(){
+      System.out.println("a horse can be driven by a rider");
+  }
+
+
+  public void sound(){
+      System.out.println("Horse neighs");
+  }
+}
+code/interfaces_java/src/Interf1.java
+public interface Interf1 {
+    void method1();
+}
+code/interfaces_java/src/Interf2.java
+public interface Interf2 extends Interf1 {
+    void method2();
+}
+code/interfaces_java/src/Karlson.java
+public class Karlson implements Flyable{
+    @Override
+    public void canFly() {
+        System.out.println("Karlson can fly");
+    }
+}
+code/interfaces_java/src/Main.java
+public class Main {
+
+    // Интерфейс в джаве похож на абстрактный класс , но не является классом.
+    // Изначальная идея интерфейса заключается в пердоставлении полной абстракции в отличие
+    // от абстрактного класса.
+    // Методы интерфейса не имеют тела и поэтому все такие методы должны быть реализованы
+    // классом, реализующим интерфейс
+    //  для указания на то, что класс реализует интерфейс используется слово implements
+    // Создать обьект интерфейса нельзя
+    // Интерфейс не может реализовывать другой интерфейс, но может его расширять.
+    // В этом случае класс, реализующий такой интерфейс должен будет реализовать
+    // методы обоих интерфейсов
+
+    public static void main(String[] args) {
+        Horse horse = new Horse();
+        Car car = new Car();
+        horse.canMove();
+        car.canMove();
+        horse.drive();
+        car.drive();
+        car.
+
+
+        Moveable car1 = new Car();
+        Moveable horse1 = new Horse();
+        car1.canMove();
+        horse1.canMove();
+
+        Driveable car2 = new Car();
+        Driveable horse2 = new Horse();
+
+        Flyable plane = new Plane();
+        Flyable moscito = new Moscito();
+        Karlson karlson = new Karlson();
+        plane.canFly();
+        moscito.canFly();
+        karlson.canFly();
+
+
+    }
+}
+code/interfaces_java/src/Moscito.java
+public class Moscito implements Flyable{
+    @Override
+    public void canFly() {
+        System.out.println("Moscito can fly");
+    }
+}
+code/interfaces_java/src/Moveable.java
+public interface Moveable {
+ void canMove();
+}
+code/interfaces_java/src/Plane.java
+public class Plane implements Flyable{
+
+    @Override
+    public void canFly() {
+        System.out.println("A plane can fly");
+    }
+}
+code/pizza_factory_new/src/Main.java
+public class Main {
+
+    /*
+    Создать фабрику по производству пиццы. Фабрика должна уметь готовить следующие виды пиццы:
+    Гавайи,Моцарелла,Салями. Каждый вид пиццы должен уметь: подготавливаться ( накладывать ингредиенты и т.д.)
+    , печься и упаковываться. В каждом случае должно быть понятно о какой пицце идет речь.
+    Класс Main не должен создавать новый обьект пиццы, а из него должен поступать "заказ" на изготовление требуемого
+    вида пиццы ( создание обьекта) в класс PizzaFactory, который и должен выбрать нужную пиццу для изготовления
+     */
+    public static void main(String[] args) {
+        PizzaFactory factory = new PizzaFactory();
+
+        Pizza salami = factory.createPizza("PIZZA_SALAMI");
+      //  Pizza salami = new PizzaSalami();
+        salami.orderPizza();
+
+        Pizza hawaii = factory.createPizza("PIZZA_HAWAII");
+        hawaii.orderPizza();
+    }
+}
+code/pizza_factory_new/src/Pizza.java
+public  abstract class Pizza {
+
+    private String type; //  тип пиццы
+
+    public Pizza( String type){
+        this.type = type;
+    }
+
+
+    public void orderPizza(){
+        prepare();
+        bake();
+        pack();
+    }
+
+ protected abstract void prepare();
+
+ private void bake()  {
+      System.out.println("Baking "+type);
+  }
+
+ private void pack(){
+      System.out.println("Packing "+type);
+  }
+
+
+}
+code/pizza_factory_new/src/PizzaFactory.java
+public class PizzaFactory {
+
+    public Pizza createPizza( String pizzaType){
+
+        switch (pizzaType){
+            case "PIZZA_SALAMI": return new PizzaSalami();
+            case "PIZZA_MOZARELLA": return new PizzaMozarella();
+            case "PIZZA_HAWAII": return new PizzaHawaii();
+            default: return null;
+
+        }
+
+    }
+}
+code/pizza_factory_new/src/PizzaHawaii.java
+public class PizzaHawaii extends Pizza{
+
+    private  static String type = "Pizza Hawaii";
+
+    public PizzaHawaii(){
+        super(type);
+       // super("Pizza Hawaii");
+    }
+
+    public void prepare(){
+        System.out.println("Preparing pizza with ananas and cheese");
+    }
+}
+code/pizza_factory_new/src/PizzaMozarella.java
+public class PizzaMozarella extends Pizza{
+
+    private static String type = "Pizza Mozarella";
+
+    public PizzaMozarella(){
+        super(type);
+    }
+
+    public void prepare(){
+        System.out.println("Preparing pizza with mozarella cheese");
+    }
+}
+code/pizza_factory_new/src/PizzaSalami.java
+public class PizzaSalami extends Pizza{
+
+    private static String type = "Pizza Salami";
+
+    public PizzaSalami(){
+        super(type);
+    }
+
+    public void prepare(){
+        System.out.println("Preparing pizza with salami, cheese, tomatoes");
+    }
+}

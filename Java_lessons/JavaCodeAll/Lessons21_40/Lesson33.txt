@@ -1,0 +1,346 @@
+Задачи на урок:
+Обсуждение и разбор дз
+класс Enum
+Работа с датами и временем
+Перечисления enum
+
+Кроме отдельных примитивных типов данных и классов в Java есть такой тип как enum или перечисление. Перечисления представляют набор логически связанных констант. Объявление перечисления происходит с помощью оператора enum, после которого идет название перечисления. Затем идет список элементов перечисления через запятую:
+
+enum Day{
+
+MONDAY,
+TUESDAY,
+WEDNESDAY,
+THURSDAY,
+FRIDAY,
+SATURDAY,
+SUNDAY
+}
+
+Работа с датами и временем
+
+Класс LocalDate из пакета java.time предназначен для работы с датами. Функционал этого класса позволяет создавать даты и изменять их, добавляя и отнимая необходимое количество дней/месяцев/лет.
+
+Основные методы LocalDate:
+
+static LocalDate now(): возвращает объект, который представляет текущую дату
+
+static LocalDate of(int year, int month, int day): возвращает объект, который представляет дату с определенными годом, месяцем и днем
+
+int getYear(): возвращает год даты
+
+int getMonthValue(): возвращает месяц
+
+int getDayOfMonth(): возвращает день месяца (значение от 1 до 31)
+
+int getDayOfYear(): возвращает номер дня года (значение от 1 до 365)
+
+DayOfWeek getDayOfWeek(): возвращает день недели в виде значения перечисления DayOfWeek
+
+LocalDate plusDays(int n): добавляет к дате некоторое количество дней
+
+LocalDate plusWeeks(int n): добавляет к дате некоторое количество недель
+
+LocalDate plusMonths(int n): добавляет к дате некоторое количество месяцев
+
+LocalDate plusYears(int n): добавляет к дате некоторое количество лет
+
+LocalDate minusDays(int n): отнимает от даты некоторое количество дней
+
+LocalDate minusMonths(int n): отнимает от даты некоторое количество месяцев
+
+LocalDate minusWeeks(int n): отнимает от даты некоторое количество недель
+
+LocalDate minusYears(int n): отнимает от даты некоторое количество лет
+
+Получить и вывести на экран:
+-текущую дату
+-текущий год, месяц и день
+Создать дату , например день рождения и вывести на экран
+Создать две даты и проверить на равенство
+Получить и вывести на экран текущее время
+текущее время + 3 часа
+Создать дату на неделю позже сегодняшней
+Создать дату, которая была на год раньше сегодняшней используя метод minus
+Создать дату на год позже сегодняшней используя plus метод
+Создать даты tomorrow и yesterday и проверить находятся ли они до или после сегодняшней
+P.S. Для решения некоторых задач возможно потребуется посмотреть методы самостоятельно в классах LocalTime и LocalDate.
+
+code/java_date_time/src/Main.java
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class Main {
+    // Date and Time in Java
+    //  Начиная с Java 8  появились новые классы для работы с временем и датой
+    /*
+    Существовавшие до этого классы имели ряд недостатков:
+    1. Не были потокобезопасными
+    2. Плохой дизайн и работа методов
+    3. Не учитывались временные зоны.
+
+    Новые классы для работы с датой и временем :
+    1.LocalDate
+    2.LocalTime
+    3.LocalDateTime
+    4.ZonedDateTime
+    5.Period
+    6.Duration
+
+    Классы 1-3 импользуются наиболее часто, представляют местное время и в основном когда указывать временные зоны
+    в явном виде не нужно
+
+    Класс LocalTime - представляет время без учета зональности с точностью до наносекунд
+     */
+
+    public static void main(String[] args) {
+
+
+        LocalTime currentTime = LocalTime.now(); //  now() -  возвращает текущее время
+        System.out.println("Time now is "+currentTime);
+
+        // создание обьекта LocalTime  с помощью метода of()
+        LocalTime localTime = LocalTime.of(20,18,34);
+        System.out.println(localTime);
+
+        LocalTime localTime1 = LocalTime.of(20,21,34,1234);
+
+        // получить часы
+        System.out.println("Hour:"+localTime1.getHour());
+
+        // минуты
+        System.out.println("Minute:"+localTime1.getMinute());
+
+        // секунды
+        System.out.println("Seconds:"+localTime1.getSecond());
+
+        //  наносекунды
+        System.out.println("Nanos:"+ localTime1.getNano());
+
+
+        LocalTime timeNow = LocalTime.now();
+        System.out.println("Local time now is "+timeNow);
+
+        LocalTime localTimePlus5 = timeNow.plusHours(5); // прибавляет заданное количество часов
+        System.out.println("time now plus 5 hours is "+localTimePlus5);
+
+        //  такие же методы существуют для минут, секунд, наносекунд
+
+
+        // отнять определенное количество минут
+        LocalTime localTimeMinusMinutes = timeNow.minusMinutes(30);
+        System.out.println("time now 30 minutes less is "+localTimeMinusMinutes);
+        //  такие же методы существуют для часов, секунд, наносекунд
+
+        // isBefore() and isAfter()
+
+        LocalTime nowTime = LocalTime.now();
+        LocalTime localTime2 = LocalTime.of(19,24,56);
+
+        /*
+         метод isBefore проверяет будеь ли время localtime на котором он
+         вызывается раньше чем время с которым он сравнивается. Возвращает true  или false
+
+         */
+        System.out.println("Current time is: "+nowTime);
+        System.out.println("localTime2 is "+localTime2);
+
+        System.out.println("Time now is before localTime2 ? "+nowTime.isBefore(localTime2));
+
+        /*
+         метод isBefore проверяет будеь ли время localtime на котором он
+         вызывается позже чем время с которым он сравнивается. Возвращает true  или false
+         */
+        System.out.println("Time now is after localTime2 ? "+nowTime.isAfter(localTime2));
+
+        // LocalDate.  Представляет дату в формате год-месяц-день 2023-07-05 . Не учитывает временную зону
+
+        LocalDate dateNow = LocalDate.now();
+        System.out.println("Date now is"+dateNow);
+
+        LocalDate myDate = LocalDate.of(2023,07,05);
+
+        System.out.println("Is 2023 leap year ? "+ myDate.isLeapYear());// определяет високосный год
+
+        // текущая дата минус один день
+        LocalDate lastDay = dateNow.minusDays(1);
+        System.out.println("yesterday was "+lastDay);
+
+        // завтрашний день
+        LocalDate tomorrow = dateNow.plusDays(1);
+        System.out.println(tomorrow);
+
+
+
+
+
+
+    }
+
+
+}
+code/main33/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+ /*
+    Задача1
+Обьявить и инициализировать двумерный массив целых чисел с количеством элементов
+по своему усмотрению. Вывести все элементы массива в цикле на печать
+*/
+        int[][] table = {{1, 2, -3}, {4, 5, 6}, {-7, 8,-1}};
+        print2DimArray(table);
+
+
+        System.out.println("sum of subarray elts is " + sumOfEltsSubArray(table, 1));
+        System.out.println("sum of array's elements is " + sumElements(table));
+
+        System.out.println("array has the following subarrays with zero sum");
+        printZeroSubArrayIndex(table);
+
+    /*    for( int i = 0;i< table.length;i++){
+
+            for ( int j = 0;j<table[i].length;j++){
+                System.out.print(table[i][j]+"\t");
+            }
+            System.out.println();
+        }*/
+
+    }
+
+    // метод для печати двумерного массива
+    public static void print2DimArray(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+
+            for (int j = 0; j < array[i].length; j++) {
+                System.out.print(array[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    // просуммировать все элементы двумерного массива используя цикл for each
+
+    public static int sumElements(int[][] table) {
+        int sum = 0;
+        for (int[] x : table) {
+            for (int y : x) {
+                sum += y;
+            }
+        }
+        return sum;
+    }
+
+
+ /*
+Задача2*
+Пусть есть двумерный массив целых чисел. Написать метод, принимающий этот массив и номер одного из
+подмассивов этого массива и возвращающий сумму всех значений элементов этого подмассива.
+public static int sumOfSubArrayElts (int[][] ints, int n), где n -номер одного из подмассивов
+
+     */
+
+    public static int sumOfEltsSubArray(int[][] ints, int n) {
+        int sum = 0;
+
+        for (int i = 0; i < ints[n].length; i++) {
+            sum += ints[n][i];
+        }
+        return sum;
+    }
+
+    //Написать метод, выводящий на экран номер подмассива сумма всех элементов которого равна нулю
+
+    public static void printZeroSubArrayIndex(int[][] array) {
+        for (int i = 0; i < array.length; i++)  //считаем сумму элементов каждого подмассива и если она равно нулю,
+        // выодим  номер этого подмассива
+        {
+            int sumSubArray = 0;
+            for (int j = 0; j < array[i].length; j++)
+                sumSubArray += array[i][j];
+            if (sumSubArray == 0)
+                System.out.println(i + "\t");
+        }
+    }
+}
+code/our_enum/src/Directions.java
+public enum Directions {
+    EAST,
+    WEST,
+    NORTH,
+    SOUTH
+}
+code/our_enum/src/Main.java
+public class Main {
+    // Enum ( от слова Enumeration - перечисление)
+    /*
+    В самой простой форме Enum  это список поименованных констант, который определяет свой тип данных
+    Обьект типа Enum  может содержать значения только из списка , определенного в Enum.
+     */
+    public static void main(String[] args) {
+        // переменная типа enum  может принять только одно из значений перечисленных в данном энуме
+
+        Directions dir = Directions.EAST;
+        System.out.println(dir);
+
+        Transport tr =Transport.TRUCK;
+        if(tr == Transport.TRAIN)
+            System.out.println("Train");
+        else System.out.println("tr is not Train");
+        tr=Transport.BOAT;
+        // использование энума в switch
+        switch (tr){
+            case CAR:
+                System.out.println("A car can drive");
+                break;
+            case TRUCK:
+                System.out.println("A track can carry freight");
+                break;
+            case PLANE:
+                System.out.println("a plane can fly");
+                break;
+            case TRAIN:
+                System.out.println("A train is long");
+                break;
+            case BOAT:
+                System.out.println("a boat can sail");
+                break;
+        }
+
+        //  методы Enum
+        /*
+        values() - возвращает массив, содержащий список констант энума
+        valueOf() - возвращает константу энума, чье значение соответствует строке переданной в качестве параметра
+         */
+
+
+        //  вывод на экран списка констант, полученного с помощью метода values()
+     //   Transport[] allTransport = Transport.values();
+     //   for(Transport t: allTransport)
+     //       System.out.println(t);
+
+        for (Transport t:Transport.values())
+            System.out.println(t);
+
+
+        // использование valueOf()
+        Transport tp;
+        tp = Transport.valueOf("PLANE"); //  получаем константу с именем PLANE
+        System.out.println("Constanta PLANE "+tp);
+
+
+
+
+
+
+    }
+}
+code/our_enum/src/Transport.java
+public enum Transport {
+    CAR,
+    TRUCK,
+    PLANE,
+    TRAIN,
+    BOAT
+
+}

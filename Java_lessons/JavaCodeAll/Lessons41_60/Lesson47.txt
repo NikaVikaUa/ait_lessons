@@ -1,0 +1,345 @@
+Задачи на урок:
+Разбор домашнего задания
+Map, HashMap
+методы HashMap
+Практика, решение задач
+HashMap
+
+HashMap<K, V> представляет отображение или иначе говоря словарь, где каждый элемент представляет пару "ключ-значение". При этом все ключи уникальные в рамках объекта Map. Такие коллекции облегчают поиск элемента, если нам известен ключ - уникальный идентификатор объекта.
+
+Среди методов HashMap можно выделить следующие:
+
+clear(): очищает коллекцию
+
+containsKey(): возвращает true, если коллекция содержит ключ k
+
+containsValue(Object v): возвращает true, если коллекция содержит значение v
+
+equals(Object obj): возвращает true, если коллекция идентична коллекции, передаваемой через параметр obj
+
+isEmpty: возвращает true, если коллекция пуста
+
+get(Object k): возвращает значение объекта, ключ которого равен k. Если такого элемента не окажется, то возвращается значение null
+
+getOrDefault(Object k, V defaultValue): возвращает значение объекта, ключ которого равен k. Если такого элемента не окажется, то возвращается значение defaultVlue
+
+put(K k, V v): помещает в коллекцию новый объект с ключом k и значением v. Если в коллекции уже есть объект с подобным ключом, то он перезаписывается. После добавления возвращает предыдущее значение для ключа k, если он уже был в коллекции. Если же ключа еще не было в коллекции, то возвращается значение null
+
+putIfAbsent(K k, V v): помещает в коллекцию новый объект с ключом k и значением v, если в коллекции еще нет элемента с подобным ключом.
+
+Set keySet(): возвращает набор всех ключей отображения
+
+values(): возвращает набор всех значений отображения
+
+putAll(map): добавляет в коллекцию все объекты из map
+
+remove(Object k): удаляет объект с ключом k
+
+size(): возвращает количество элементов коллекции
+
+Чтобы положить объект в коллекцию, используется метод put, а чтобы получить по ключу - метод get.
+
+HashMap также позволяет получить наборы как ключей, так и значений.
+
+Задача1
+Создать мапу с именами в качестве ключей и возрастом в качестве значений. Добавить несколько пар ключ-значение в нее и вывести на экран в таком виде : имя : возраст
+
+Задача2
+Дана Map<String, String> map. Написать метод, который вернет Мап, такую, что если в исходной map есть ключи ‘a’ и ‘b’, то нужно создать новый ключ ‘ab’ с суммой значений от ключей a и b. Если нет, ничего не менять Примеры: mapAB({"a": "Hi", "b": "There"}) → {"a": "Hi", "ab": "HiThere", "b": "There"} mapAB({"a": "Hi"}) → {"a": "Hi"} mapAB({"b": "There"}) → {"b": "There"}
+
+code/homework47/src/AnotherDequeTask.java
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+
+public class AnotherDequeTask {
+
+    /*
+    Написать метод, принимающий упорядоченный лист интов и целое число n  и проверяющий
+    есть ли такие 2 числа в листе, что их произведение равно n/
+    [1,2,3,4,5 ], 6  ->  true
+    [1,2,3,4,5 ], 7  ->  false
+     */
+
+    public boolean multiplyTwo (List<Integer> list, int n){
+        if( list.get(0) > n) return false;
+
+        for ( int i = 0; i < list.size(); i++){
+            for ( int j = i +1 ; j < list.size();j++){
+                if( list.get(j)*list.get(i)==n)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /*
+    1. Создать новую деку.
+    1. Пройти по листу и отфильтровать числа делением N  на это число. Если остаток равен нулю, значит
+        потенциально  это один из множителей и мы его добавляем в созданную деку
+    2.
+
+      1 , 3 ,6, 9     n = 18
+     */
+
+    public boolean multiplyTwoDeque( List<Integer> nums, int n){
+        Deque<Integer> result = new ArrayDeque<>();
+
+        for( int num: nums){
+            if( n % num == 0)
+                result.add(num);
+        }
+
+        while ( result.size()>1){
+            if( result.getFirst() * result.getLast() < n)
+                result.removeFirst();
+            else if ( result.getFirst() * result.getLast() > n)
+                result.removeLast();
+            else
+                return true;
+        }
+        return false;
+    }
+}
+code/homework47/src/AnotherDequeTaskTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AnotherDequeTaskTest {
+
+    public AnotherDequeTask anotherDequeTask;
+    List<Integer> test;
+
+    @BeforeEach
+    public void init(){
+        anotherDequeTask = new AnotherDequeTask();
+        test = Arrays.asList(1,2,3,5);
+    }
+
+    @Test
+    public void test_true(){
+        assertTrue(anotherDequeTask.multiplyTwoDeque(test,6));
+    }
+
+
+    @Test
+    public void test_false(){
+        assertFalse(anotherDequeTask.multiplyTwoDeque(test,7));
+    }
+
+
+    @Test
+    public void test_oneElt(){
+        assertFalse(anotherDequeTask.multiplyTwoDeque(Arrays.asList(3),7));
+    }
+
+}
+code/homework47/src/DequeTask.java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class DequeTask {
+
+    /*
+    Есть массив, состоящий из трех видов скобок: (), {}, [] .
+    Нужно написать метод, определяющий является ли порядок скобок в массиве корректным
+     {}([]) - корректный порядок
+     {}([]{()})- корректный порядок
+      stack :
+
+
+     {(] - некорректный порядок
+     {}([])} -  некорректный порядок
+     {}([])( -  некорректный порядок
+     {(})- некорректный порядок
+
+     char[] brackets = {'{', '}'}
+
+     */
+    public boolean areBracketsCorrect( char[] brackets){
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for( char bracket : brackets){
+            if ( bracket == '{' || bracket == '(' || bracket == '['){
+                stack.addLast(bracket);
+            } else if ( stack.size() > 0){
+                char lastOpenBracket = stack.getLast();
+
+                if ( bracket == '}' && lastOpenBracket == '{' ||
+                     bracket == ')' && lastOpenBracket == '(' ||
+                     bracket == ']' && lastOpenBracket == '[' )
+                    stack.removeLast();
+                else
+                    return false;
+
+            }else {
+                return false;
+            }
+
+        }
+
+        return stack.size() == 0;
+    }
+}
+code/homework47/src/DequeTaskTest.java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DequeTaskTest {
+
+    /*
+    {}([]) - корректный порядок
+     {}([]{()})
+     */
+
+    DequeTask d = new DequeTask();
+
+
+    @Test
+    public void test1(){
+        char[] brackets = {'{', '}' , '(', '[',']', ')' };
+        assertTrue(d.areBracketsCorrect(brackets));
+
+    }
+
+//   {}([]{()})
+    @Test
+    public void test2(){
+        char[] brackets = {'{', '}' , '(', '[',']','{','(', ')','}',')' };
+        assertTrue(d.areBracketsCorrect(brackets));
+    }
+
+
+    @Test
+    public void test3(){
+        char[] brackets = {'{', '(', ']'};
+        assertFalse(d.areBracketsCorrect(brackets));
+    }
+
+   /* {}([])} -  некорректный порядок
+        {}([])( -  некорректный порядок
+        {(})- некорректный порядок */
+
+    @Test
+    public void test4(){
+        char[] brackets = {'{','}','(','[',']',')','}'};
+        assertFalse(d.areBracketsCorrect(brackets));
+    }
+
+
+    @Test
+    public void test5(){
+        char[] brackets = {'{','}','(','[',']',')','('};
+        assertFalse(d.areBracketsCorrect(brackets));
+    }
+
+    @Test
+    public void test6(){
+        char[] brackets = {'{','(','}',')'};
+        assertFalse(d.areBracketsCorrect(brackets));
+    }
+
+
+    @Test
+    public void test7(){
+        char[] brackets = {'}','}'};
+        assertFalse(d.areBracketsCorrect(brackets));
+    }
+
+
+}
+code/our_map/src/Main.java
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+
+    /*
+    Map - это интерфейс. В мапе есть ключи (keys) и есть значения ( values)
+    Каждому ключу соответствует определенное значение.  В качестве ключей могут быть
+    различные типы данных, не только целые числа. Ключи в мапе уникальны, значения
+    могут повторяться.
+    Основные классы, реализующие интерфейс Мап это :
+    -HashMap
+    - TreeMap
+    - LinkedHashMap
+
+    HashMap
+
+     */
+
+    public static void main(String[] args) {
+
+      //  HashMap<K,V>
+      // K - тип ключа в паре ключ-значение
+      // V - тип значения
+      HashMap<Integer,String> countries = new HashMap<>() ;
+        Map<String,Integer>example1 = new HashMap<>();
+
+
+        // добавление элемента в мапу - метод put()
+        countries.put(109,"France");
+        countries.put(54,"USA");
+        countries.put(189,"Belgium");
+        countries.put(153,"France");
+        countries.put(53,"Poland");
+        countries.put(109,"Hungary");
+
+        System.out.println(countries);
+
+        // получение элемента - метод get()
+
+      String country =  countries.get(53);
+        System.out.println(country);
+
+
+        // удаление элемента - remove()
+
+        countries.remove(53);
+        System.out.println(countries);
+
+        // размер мапы  size()
+        System.out.println(countries.size());
+
+        // isEmpty() - проверяет пустая ли мапа
+        // clear() -  удаляет все элементы
+
+        System.out.println(countries.isEmpty());
+      //  countries.clear();
+        System.out.println(countries.isEmpty());
+
+        //containsKey() -  содержится ли элемент с таким ключом
+
+        System.out.println(countries.containsKey(54));
+
+        // containsValue() -  содержится ли значение
+        System.out.println(countries.containsValue("France"));
+
+        //  перебор элементов мапы.
+        // 1. с помощью набора ключей (keySet)
+
+        System.out.println("====get values  by keySet");
+        for( int key : countries.keySet()){
+            System.out.println(key +" : "+countries.get(key));
+        }
+
+        //2. с помощью набора ключ-значение
+        System.out.println("====get values  by entrySet");
+        for (Map.Entry<Integer,String>entry: countries.entrySet()){
+            int key = entry.getKey();
+            String countryValue = entry.getValue();
+
+            System.out.println(key+" : "+ countryValue);
+        }
+
+        // перебор по значениям. Получение значений с помощью метода values()
+        System.out.println(countries.values());
+
+    }
+}

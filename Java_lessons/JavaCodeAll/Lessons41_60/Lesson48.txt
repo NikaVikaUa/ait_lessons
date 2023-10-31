@@ -1,0 +1,320 @@
+Задачи на урок:
+Разбор домашнего задания
+HashMap, TreeMap
+напишем свою HashMap
+HashMap
+
+HashMap<K, V> представляет отображение или иначе говоря словарь, где каждый элемент представляет пару "ключ-значение". При этом все ключи уникальные в рамках объекта Map. Такие коллекции облегчают поиск элемента, если нам известен ключ - уникальный идентификатор объекта.
+
+Среди методов HashMap можно выделить следующие:
+
+clear(): очищает коллекцию
+
+containsKey(): возвращает true, если коллекция содержит ключ k
+
+containsValue(Object v): возвращает true, если коллекция содержит значение v
+
+equals(Object obj): возвращает true, если коллекция идентична коллекции, передаваемой через параметр obj
+
+isEmpty: возвращает true, если коллекция пуста
+
+get(Object k): возвращает значение объекта, ключ которого равен k. Если такого элемента не окажется, то возвращается значение null
+
+getOrDefault(Object k, V defaultValue): возвращает значение объекта, ключ которого равен k. Если такого элемента не окажется, то возвращается значение defaultVlue
+
+put(K k, V v): помещает в коллекцию новый объект с ключом k и значением v. Если в коллекции уже есть объект с подобным ключом, то он перезаписывается. После добавления возвращает предыдущее значение для ключа k, если он уже был в коллекции. Если же ключа еще не было в коллекции, то возвращается значение null
+
+putIfAbsent(K k, V v): помещает в коллекцию новый объект с ключом k и значением v, если в коллекции еще нет элемента с подобным ключом.
+
+Set keySet(): возвращает набор всех ключей отображения
+
+values(): возвращает набор всех значений отображения
+
+putAll(map): добавляет в коллекцию все объекты из map
+
+remove(Object k): удаляет объект с ключом k
+
+size(): возвращает количество элементов коллекции
+
+Чтобы положить объект в коллекцию, используется метод put, а чтобы получить по ключу - метод get.
+
+HashMap также позволяет получить наборы как ключей, так и значений.
+
+cм. код занятия - Tasks.
+Задача 1 - написать тесты
+Задача 2 - решить и написать тесты
+
+code/homework48/src/Main.java
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+
+    /*
+    Задача1
+Создать мапу с именами в качестве ключей и возрастом в качестве значений.
+Добавить несколько пар ключ-значение в нее и вывести на экран в таком виде : имя : возраст
+*/
+    public static void main(String[] args) {
+        Map<String,Integer> namesByAge = new HashMap<>();
+        namesByAge.put("John",25);
+        namesByAge.put("Bill",37);
+        namesByAge.put("Ann",20);
+
+        for ( Map.Entry<String,Integer>entry: namesByAge.entrySet()){
+
+            System.out.println(entry.getKey()+":"+entry.getValue());
+        }
+    }
+
+
+
+    /*
+Задача2
+Дана Map<String, String> map. Написать метод, который вернет Мап, такую, что если в исходной
+map есть ключи ‘a’ и ‘b’, то нужно создать новый ключ ‘ab’ с суммой значений от ключей a и b.
+Если нет, ничего не менять Примеры: mapAB({"a": "Hi", "b": "There"}) →
+{"a": "Hi", "ab": "HiThere", "b": "There"} mapAB({"a": "Hi"}) → {"a": "Hi"} mapAB({"b": "There"}) → {"b": "There"}
+     */
+
+    public Map<String,String> ab( Map<String,String>mapAB){
+
+        if ( mapAB.containsKey("a") && mapAB.containsKey("b"))
+            mapAB.put("ab",mapAB.get("a").concat(mapAB.get("b")));
+
+        return mapAB;
+    }
+}
+code/homework48/src/MainTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MainTest {
+
+    private Main m;
+
+    @BeforeEach
+    public void  init(){
+        m = new Main();
+    }
+
+    @Test
+    public void abTest_true(){
+        Map<String,String> actual = new HashMap<>();
+        actual.put("a","Hi");
+        actual.put("b","There");
+
+        Map<String,String>expected = new HashMap<>();
+        expected.put("a","Hi");
+        expected.put("b","There");
+        expected.put("ab","HiThere");
+
+        assertEquals(expected,m.ab(actual));
+    }
+
+    @Test
+    public void abTest_noA(){
+        Map<String,String>actual = new HashMap<>();
+        actual.put("c","Hi");
+        actual.put("b","There");
+
+        assertEquals(actual,m.ab(actual));
+    }
+
+    @Test
+    public void abTest_noB(){
+        Map<String,String>actual = new HashMap<>();
+        actual.put("a","Hi");
+
+        assertEquals(actual,m.ab(actual));
+    }
+
+    @Test
+    public  void abTest_empty(){
+        Map<String,String> actual = new HashMap<>();
+
+        assertEquals(actual,m.ab(actual));
+    }
+
+}
+code/maps/src/HashMapInternal.java
+public class HashMapInternal {
+    /*
+
+    equals() - проверяет равенство двух обьектов. Этот метод является методом класса
+    Object  может быть переопределен. Если переопределяется equals(), то необходимо также
+    переопределить метод hashcode().
+
+    hashCode() -  является методом класса Object. Он возвращает целое число и это число используется
+    при индексировании обьекта.
+
+    Buckets - массив элементов ( нод) ключ-значение называется buckets. Ноды хранятся в т.н. бакетах
+
+
+
+    1. Если hashCode()  вызывается на одном обьекте несколько раз во время работы приложения, он должен
+        возвращать одно и тоже значение, при условии что информацмм об обьекте используемая также в equals
+         не менялась.  Это значение не обязательно должно оставаться таким же при следующих запусках
+         приложения
+    2. Если два обьекта равны в соответствии с equals(),  то и вызов метода hashCode()  на этих обьектах
+        должен давать одно и тоже значение
+
+    3. Если два обьекта не равны в соответствии с методом equals(), то их хешкод не обязательно должен
+            быть разным
+     */
+    public static void main(String[] args) {
+        Object object = new Object();
+
+    }
+
+
+}
+code/maps/src/Main.java
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+
+public class Main {
+
+    //TreeMap -   в основе TreeMap - красно-черные  деревья
+    //  В отличие от HashMap  элементы упорядочены в соответствии с естественным порядком ключей мапы.
+
+    public static void main(String[] args) {
+
+
+        TreeMap<Integer, String> treeMap = new TreeMap<>();
+        treeMap.put(45,"Orange");
+        treeMap.put(25,"Apple");
+        treeMap.put(450,"Banana");
+        treeMap.put(32,"Plum");
+        treeMap.put(67,"Kiwi");
+
+        System.out.println(treeMap);
+
+
+        //LinkedHasMap - сохраняет порядок который был при добавлении элементов
+
+        System.out.println("LinkedHashMap");
+
+        LinkedHashMap<Integer, String> lhMap = new LinkedHashMap<>();
+        lhMap.put(45,"Orange");
+        lhMap.put(25,"Apple");
+        lhMap.put(450,"Banana");
+        lhMap.put(32,"Plum");
+        lhMap.put(67,"Kiwi");
+
+        System.out.println(lhMap);
+
+        Order o1 = new Order (1,"order1");
+        Order o2 = new Order(1,"order1");
+        Order o3 = new Order(1456,"order2");
+
+        System.out.println(o1 == o2);
+        System.out.println(o1.equals(o2));
+
+        System.out.println(o1.hashCode());
+        System.out.println(o2.hashCode());
+        System.out.println(o3.hashCode());
+    }
+}
+code/maps/src/Order.java
+public class Order {
+
+    private int id;
+    private String name;
+
+    public Order(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+ /*   @Override
+    public boolean equals(Object o) {
+       if ( this == o) return true;
+       if (!(o instanceof Order))
+           return false;
+       Order order =(Order) o;
+       return  id == order.id && name.equals(order.name);
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (id != order.id) return false;
+        return name.equals(order.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+}
+code/maps/src/Tasks.java
+import java.util.HashMap;
+import java.util.Map;
+
+public class Tasks {
+
+    /*
+    Дан маасив строк ( не пустой). Написать метод, принимающий этот массив и возвращающий
+    мапу Map<String,Boolean> , где каждая строка является ключом, а значением является
+    true  если строка в массиве встречается больше одного раза и false если только один раз.
+
+    Примеры:
+    ["a","b","a","c","b"] -> { "a": true, "b":true, "c":false}
+    ["a","b","c"] -> { "a": false, "b":false, "c":false}
+    ["c","c","c","c"] -> { "c":true}
+
+     */
+   public  Map<String,Boolean> countWords( String[] strings){
+        Map<String,Boolean> moreThanOne = new HashMap<>();
+
+        for ( String s : strings){
+            if ( moreThanOne.containsKey(s)) {
+                moreThanOne.put(s, true);
+            }
+            else {
+                moreThanOne.put(s,false);
+            }
+        }
+        return moreThanOne;
+    }
+
+    // Есть лист имен, где некоторые имена повторяются. Написать метод, который по имени вернет
+    // количество вхождений этого имени в лист.
+    // public nameToNumberOccurence ( List<String> list, String name)   -> 3
+}

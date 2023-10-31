@@ -1,0 +1,392 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Multithreading, method interrupt.
+Multithreading, synchronizing, AtomicInteger
+Multithreading, deadLock problem.
+
+*************************************************************************************************************
+
+Метод interrupt вызванный у треда, меняет его флаг(поле) interrupted на true. В соответствии с контрактом принято реагировать на изменение флага эксепшеном InterruptedException.
+В процессе работы аппликации, бывает необходимо обеспечить эксклюзивный доступ к методу, или части кода. Т. е. единомоментно с этой частью кода должен работать только один тред. Сделать это можно указав ключевое слово synchronized в сигнатуре метода, или обернув нужную часть кода в synchronized блок.
+Существуют простейшие операции типа test-and-set, которые можно реализовать за одно действие. В пакете java.util.concurrent.atomic есть классы вида AtomicXXX, объекты которых позволяют производить такие простейшие операции атомарно не используя блокировки.
+Deadlock (взаимная блокировка), это проблема вызванная ошибкой в проектировании синхронизации многопоточных аппликаций. Суть проблемы, когда один из конкурирующий потоков захватил монитор, и чтобы его освободить, он должен пройти в synchronized блок, монитор которого захвачен вторым потоком. При этом второй поток, не может освободить монитор, т. к. для этого ему надо пройти в synchronized блок, монитор которого захвачен первым потоком.
+
+*************************************************************************************************************
+
+см.код занятия Practice
+
+*************************************************************************************************************
+
+code/homework63/src/CharThread.java
+public class CharThread extends Thread{
+
+    /*
+    Написать метод 100 раз печатающий char и вывести на экран результат его работы для двух потоков ( например,
+     один поток печатает # , второй *). В конце должно выводиться " end of main"
+     */
+    private final char symbol;
+
+    public CharThread( char symbol){
+        this.symbol = symbol;
+    }
+
+    public void run(){
+
+        for( int i = 0; i < 100; i++){
+            System.out.println(symbol);
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
+
+*************************************************************************************************************
+
+code/homework63/src/Main.java
+public class Main {
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main thread starting");
+
+        Thread hashThread = new CharThread('#');
+        Thread starThread = new CharThread('*');
+
+        hashThread.start();
+        starThread.start();
+
+        do{
+            System.out.print(".");
+                Thread.sleep(100);
+
+
+        }while(hashThread.isAlive()||starThread.isAlive());
+
+      //  hashThread.join();
+      //  starThread.join();
+
+        System.out.println("end of main");
+    }
+}
+
+*************************************************************************************************************
+
+code/our_threads/src/AThread.java
+public class AThread implements Runnable{
+
+    private boolean flag;
+
+    void flagFalse(){
+        flag = false;
+    }
+
+   public AThread(){
+        flag = true;
+   }
+
+   public  void run (){
+        int count = 1;
+
+        while (flag){
+            System.out.println("Pass#"+count);
+            count++;
+
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e){}
+        }
+
+   }
+}
+
+*************************************************************************************************************
+
+code/our_threads/src/BThread.java
+public class BThread extends Thread{
+
+    public BThread( String name){
+        super(name);
+    }
+
+    public void run(){
+        int count = 1;
+
+        while(!isInterrupted()) {
+            System.out.println("Pass#" + count);
+            count++;
+        }
+    }
+}
+
+*************************************************************************************************************
+
+code/our_threads/src/Main.java
+public class Main {
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main started");
+
+    //    AThread aThread = new AThread();
+     //   new Thread(aThread,"AThread").start();
+
+
+     //   Thread.sleep(1500);
+
+     //   aThread.flagFalse();
+
+     //   Thread.sleep(1500);
+     //   System.out.println("main finished");
+
+        BThread bThread = new BThread("BThread1");
+        bThread.start();
+
+        Thread.sleep(500);
+        bThread.interrupt();
+
+    //    Thread.sleep(500);
+
+
+        System.out.println("main finished");
+    }
+
+}
+
+*************************************************************************************************************
+
+code/our_threads/src/OurAtomicInteger.java
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class OurAtomicInteger {
+
+    public static void main(String[] args) {
+        //создание
+        AtomicInteger atomicInteger = new AtomicInteger();
+        System.out.println(atomicInteger);
+
+        AtomicInteger atomicInteger1 = new AtomicInteger(345);
+        System.out.println(atomicInteger1);
+
+        // получить значение
+
+      int value =  atomicInteger1.get();
+        System.out.println(value);
+
+        //  установить значение
+        atomicInteger1.set(765);
+        System.out.println(atomicInteger1);
+
+        // добавить значение
+
+        AtomicInteger atomicInteger2 = new AtomicInteger();
+        System.out.println( atomicInteger2.getAndAdd(10));
+        System.out.println(atomicInteger.addAndGet(10));
+
+        atomicInteger.incrementAndGet();
+        atomicInteger.getAndIncrement();
+
+    }
+
+
+}
+
+*************************************************************************************************************
+
+code/our_threads/src/Person.java
+public class Person {
+
+    public String name;
+
+    public Person( String name){
+        this.name = name;
+    }
+
+    public synchronized void howAreYouDoing( Person person) throws  InterruptedException{
+        System.out.println("How are you doing, " + person.name + "?");
+
+        Thread.sleep(1000);
+
+        person.iAmFineThanksAndYou(this);
+    }
+
+    public synchronized void iAmFineThanksAndYou(Person person){
+
+        System.out.println("I am fine, "+ person.name + ", thanks, and you?");
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Person john = new Person("John");
+        Person peter = new Person("Peter");
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    john.howAreYouDoing(peter);
+                } catch (InterruptedException ex){
+                    ex.getMessage();
+                }
+
+            }
+        });
+        thread.start();
+        thread.join();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    peter.howAreYouDoing(john);
+                } catch (InterruptedException ex){
+                    ex.getMessage();
+                }
+            }
+        }).start();
+    }
+}
+
+*************************************************************************************************************
+
+code/our_threads/src/TestCounter.java
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class TestCounter {
+
+    public static void main(String[] args)throws InterruptedException {
+       final  Counter counter = new Counter();
+
+       for( int i = 0; i < 1000; i++){
+
+           new Thread(new Runnable() {
+               @Override
+               public void run() {
+                   counter.increment();
+               }
+           }).start();
+
+       }
+       Thread.sleep(6000);
+        System.out.println(counter.value());
+    }
+
+
+
+    static class Counter{
+        private AtomicInteger count = new AtomicInteger(0);
+
+        public void increment(){
+            count.getAndIncrement();
+        }
+
+        public int value(){
+            return count.get();
+        }
+    }
+}
+
+*************************************************************************************************************
+
+code/practice63/src/Practice.java
+public class Practice {
+
+    //  Сотрудники банка выдают кредиты. Причем каждый выдает в опреденном диапазоне времени - минимальное время и макс.
+    /*
+    время нужное ему для выдачи кредита. minTime  and maxTime
+    При этом есть один сотрудник, у которого неожиданно возрастает работоспособность и он начинает выдавать кредиты быстрее.
+    А затем скорость опять может снизиться до обычной.
+    Посчитать время , за которое каждый сотрудник выдаст n  кредитов.
+     */
+}
+
+*************************************************************************************************************
+
+code/thread_sync/src/CommonResource.java
+public class CommonResource {
+
+    int v;
+
+ public  synchronized void increment(){
+        v = 1;
+        for (int i = 0; i < 5; i++) {
+            System.out.println(Thread.currentThread().getName() + " , resource = " + v);
+            v++;
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+
+            }
+        }
+    }
+
+}
+
+*************************************************************************************************************
+
+code/thread_sync/src/Main.java
+public class Main {
+    //  Синхронизация потоков
+    // Чтобы избежать ситуации когда один поток не закончил работу с общим ресурсом, а другой
+    // уже начал, надо синхронизировать потоки. Это можно сделать с помощью ключевого слова synchronized.
+    // оно ставится перед блоком кода или методом, который нужно синхронизировать.
+
+    public static void main(String[] args) {
+
+        CommonResource commonResource = new CommonResource();
+
+        for( int i = 1; i <= 5; i++){
+            Thread ourThread = new Thread( new OurNewThread1(commonResource));
+            ourThread.setName("Thread"+i);
+            ourThread.start();
+        }
+    }
+}
+
+*************************************************************************************************************
+
+code/thread_sync/src/OurNewThread.java
+public class OurNewThread implements Runnable {
+
+    CommonResource resource;
+
+    public OurNewThread( CommonResource resource){
+        this.resource = resource;
+    }
+
+    public void run() {
+        // при создании синхронизированного болока кода после synchronized  в скобках указывается обьект,
+        //монитор которого блокируется и на это время доступ к  блоку кода имеет только поток, заблокировавший его.
+        // После окончания работы блока кода, монитор разблокируется
+        synchronized (resource) {
+            resource.v = 1;
+            for (int i = 0; i < 5; i++) {
+                System.out.println(Thread.currentThread().getName() + " , resource = " + resource.v);
+                resource.v++;
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        }
+    }
+}
+
+*************************************************************************************************************
+
+code/thread_sync/src/OurNewThread1.java
+public class OurNewThread1 implements Runnable{
+    CommonResource resource;
+
+    OurNewThread1( CommonResource resource){
+        this.resource = resource;
+    }
+    @Override
+    public void run() {
+        resource.increment();
+    }
+}

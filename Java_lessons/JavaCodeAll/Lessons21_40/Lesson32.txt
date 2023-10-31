@@ -1,0 +1,350 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Многомерные массивы
+класс Enum
+Многомерные массивы
+
+Ранее мы рассматривали одномерные массивы, которые можно представить как цепочку или строку однотипных значений. Но кроме одномерных массивов также бывают и многомерными. Наиболее известный многомерный массив - таблица, представляющая двухмерный массив:
+
+int[][] nums2 = { { 0, 1, 2 }, { 3, 4, 5 } };
+
+Поскольку массив nums2 двухмерный, он представляет собой простую таблицу. Его также можно было создать следующим образом: int[][] nums2 = new int[2][3];. Количество квадратных скобок указывает на размерность массива. А числа в скобках - на количество строк и столбцов. И также, используя индексы, мы можем использовать элементы массива в программе:
+
+// установим элемент первого столбца второй строки
+nums2[1][0]=44;
+System.out.println(nums2[1][0]);
+
+Перечисления enum
+
+Кроме отдельных примитивных типов данных и классов в Java есть такой тип как enum или перечисление. Перечисления представляют набор логически связанных констант. Объявление перечисления происходит с помощью оператора enum, после которого идет название перечисления. Затем идет список элементов перечисления через запятую:
+
+enum Day{
+
+MONDAY,
+TUESDAY,
+WEDNESDAY,
+THURSDAY,
+FRIDAY,
+SATURDAY,
+SUNDAY
+}
+
+Задача1
+Обьявить и инициализировать двумерный массив целых чисел с количеством элементов по своему усмотрению. Вывести все элементы массива в цикле на печать
+
+Задача2*
+Пусть есть двумерный массив целых чисел. Написать метод, принимающий этот массив и номер одного из подмассивов этого массива и возвращающий сумму всех значений элементов этого подмассива.
+public static int sumOfSubArrayElts (int[][] ints, int n), где n -номер одного из подмассивов
+
+code/employees/src/AgeComparator.java
+import java.util.Comparator;
+
+public class AgeComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee o1, Employee o2) {
+        return o1.getAge()-o2.getAge();
+    }
+}
+code/employees/src/AgeNameComparator.java
+import java.util.Comparator;
+
+public class AgeNameComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee o1, Employee o2) {
+        int res = Integer.compare(o1.getAge(),o2.getAge());
+        if( res == 0)
+            res = o1.getName().compareTo(o2.getName());
+        return res;
+    }
+}
+code/employees/src/Employee.java
+public class Employee implements Comparable<Employee> {
+    private int id;
+    private String name;
+    private int age;
+    private double salary;
+
+    public Employee(int id, String name, int age, double salary) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", salary=" + salary +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Employee employee) {
+        return this.id - employee.id ;
+    }
+}
+code/employees/src/Main.java
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class Main {
+
+    /*
+    Создать класс Employee c полями id, name, age, salary.
+    Задать естественный порядок его сортировки по id. Сделать дополнительные возможности сортировки по зарплате, возрасту, имени а
+    также сортировку по возрасту и затем имени если возраст одинаковый. Протестировать.
+     */
+    public static void main(String[] args) {
+        Employee[] employees = {new Employee(10,"Debora",75,10000),
+                                new Employee(5,"Boris",29,20000),
+                                new Employee(15,"Ann",32,5000),
+                                new Employee(3,"John",32,5000)
+                                                                                    };
+
+        Arrays.sort(employees);
+        System.out.println("by id");
+        System.out.println(Arrays.toString(employees));
+
+
+        Arrays.sort(employees,new SalaryComparator());
+        System.out.println("by salary");
+        System.out.println(Arrays.toString(employees));
+
+
+        Arrays.sort(employees,new AgeComparator());
+        System.out.println("by age");
+        System.out.println(Arrays.toString(employees));
+
+
+        Arrays.sort(employees,new NameComparator());
+        System.out.println("by name");
+        System.out.println(Arrays.toString(employees));
+
+
+
+        Arrays.sort(employees,new AgeNameComparator());
+        System.out.println("by age and then name");
+        System.out.println(Arrays.toString(employees));
+
+        System.out.println();
+        System.out.println("with Lambda");
+        System.out.println();
+
+        Comparator<Employee> salComparator = (e1,e2)->Double.compare(e1.getSalary(),e2.getSalary());
+        Arrays.sort(employees,salComparator);
+        System.out.println("by salary");
+        System.out.println(Arrays.toString(employees));
+
+        Comparator<Employee> nameComparator = (e1,e2)-> e1.getName().compareTo(e2.getName());
+        Arrays.sort(employees,nameComparator);
+        System.out.println("by name");
+        System.out.println(Arrays.toString(employees));
+
+
+        Comparator<Employee> ageNameComparator =(e1,e2) ->{
+            int res = Integer.compare(e1.getAge(),e2.getAge());
+            if( res == 0)
+                res = e1.getName().compareTo(e2.getName());
+            return res;
+        };
+        Arrays.sort(employees,new AgeNameComparator());
+        System.out.println("by age and then name");
+        System.out.println(Arrays.toString(employees));
+
+
+    }
+}
+code/employees/src/NameComparator.java
+import java.util.Comparator;
+
+public class NameComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee o1, Employee o2) {
+        return o1.getName().compareTo(o2.getName());
+    }
+}
+code/employees/src/SalaryComparator.java
+import java.util.Comparator;
+
+public class SalaryComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee e1, Employee e2) {
+        return Double.compare(e1.getSalary(),e2.getSalary());
+    }
+}
+code/main32/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+      //  int i = 10;
+     //   float f;
+      //  f = i;
+      //  System.out.println(f);
+
+        // casting -  приведение несовместимых типов данных.
+
+      //  (int) (x /y)   в скобках перед переменной или выражением пишем тип в  который мы хотим преобразовать эту
+      //  переменную
+        double x,y;
+        byte b;
+        int i;
+        char ch;
+
+        x = 10.0;
+        y = 3.0;
+        i =(int) (x/y);
+        System.out.println("integer result of double division "+i);
+
+        i = 100;
+        b = (byte) i;
+        System.out.println("Value of b ="+b);
+
+        i = 250;
+        b = (byte) i; //  будет потеря данных, т.к. 250 в byte  не поместится
+        System.out.println("Value of b ="+b);
+
+        b= 88; // ASCII code X
+        ch =(char) b; //  число преобразуется в символ в соответствии с таблицей ASCII
+        System.out.println("ch: "+ch);
+    }
+
+
+
+}
+code/multidimensional_arrays/src/Main.java
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        // Two-dimensional arrays
+        int[] numbers = new int[10];
+        int[][] table = new int[10][20];
+        table[0][0]=123;
+        table[0][1]=124;
+
+        // элементами двумерного массива являются массивы
+        int arr[][]= {
+              // 0   1  2
+                {11,22,33},//0  arr[0]
+                {44,55,66},//1  arr[1]
+                {77,88,99},// 2  arr[2]
+
+        };
+        System.out.println(arr[0][0]);
+        System.out.println(arr[0][1]);
+        System.out.println("zero elt of arr "+ Arrays.toString(arr[0]));
+        System.out.println("first elt of arr "+ Arrays.toString(arr[1]));
+        System.out.println("second elt of arr "+ Arrays.toString(arr[2]));
+        System.out.println(arr[1][0]);
+
+        //  вывести элементы массива в цикле на экран
+
+        /*
+        {11,22,33},//0  arr[0]
+        {44,55,66},//1  arr[1]
+        {77,88,99}
+         */
+
+        // внешний цикл от 0 до количества строк/ массивов двумерного массива
+        for (int i = 0;i<3;i++){
+
+        // внутренний цикл от 0 до количества столбцов/элементов массива
+            for(int j = 0;j<3;j++ ){
+                System.out.print( arr[i][j]+" ");
+            }
+            //с новой строки после каждого массива
+            System.out.println();
+        }
+
+        int [][] num = new int [3][];
+        num[0] = new int[4];
+        num[1] = new int[3];
+        num[2] = new int[67];
+
+    }
+}
+code/multidimensional_arrays/src/Shuttle.java
+public class Shuttle {
+    //  написать программу, которая хранит количество пассажиров автобуса идущего от терминала
+    //к самолету. Пусть  автобус ходит по рабочим дням 10 раз в день а в выходные 2 раза.
+    public static void main(String[] args) {
+        /*
+        создадим двумерный массив, где количество строк (первый индекс) соответствует количеству дней недели когда
+        курсирует автобус, а второй индекс,т.е. количество элементов каждого массива соответствует
+        количеству поездок в день. В будние дни - 10, в выходные -2
+
+         */
+      int[][] riders = new int[7][];
+      riders[0] = new int[10];
+      riders[1] = new int[10];
+      riders[2] = new int[10];
+      riders[3] = new int[10];
+      riders[4] = new int[10];
+      riders[5] = new int[2];
+      riders[6] = new int[2];
+
+        System.out.println("riders length is "+riders.length);
+        System.out.println("riders[1] length is "+riders[1].length);
+        System.out.println("riders[5] length is "+riders[5].length);
+
+
+      // заполняем массив данными. Т.е. количеством пассажиров на каждом рейсе
+        for(int i=0;i<5;i++){
+            for(int j =0;j<10;j++){
+                riders[i][j] = i+j+10; // количество пассажиров на каждом рейсе, заданное случайным образом
+            }
+        }
+
+        for (int i = 5;i<7;i++){
+            for(int j = 0;j<2;j++){
+                riders[i][j] = i+j+10;
+            }
+        }
+
+        System.out.println("Passengers per trip during the weekdays");
+        for(int i=0;i<5;i++){
+            for(int j =0;j<10;j++){
+                System.out.print(riders[i][j]+" ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        System.out.println("Passengers per trip on weekends");
+
+        for (int i = 5;i<7;i++){
+            for(int j = 0;j<2;j++){
+                System.out.print(riders[i][j]+" ");
+            }
+            System.out.println();
+        }
+        // альтернативное обьявление двумерного массива
+        int[][]num1;
+        int [][] num2;
+        int num3[][];
+        int []num4[];
+
+    }
+
+
+
+}

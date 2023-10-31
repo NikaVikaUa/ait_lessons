@@ -1,0 +1,714 @@
+Задачи на урок:
+Разбор домашнего задания
+Напишем свой LinkedList
+Performance Tester
+Set in Java
+LinkedList
+
+Обобщенный класс LinkedList представляет структуру данных в виде связанного списка.
+
+Вот некоторые из методов LinkedList:
+
+addFirst() / offerFirst(): добавляет элемент в начало списка
+
+addLast() / offerLast(): добавляет элемент в конец списка
+
+removeFirst() / pollFirst(): удаляет первый элемент из начала списка
+
+removeLast() / pollLast(): удаляет последний элемент из конца списка
+
+getFirst() / peekFirst(): получает первый элемент
+
+getLast() / peekLast(): получает последний элемент
+
+Разобраться с кодом ( OurLinkedList)
+Написать тесты к OurLinkedList
+code/homework43/src/Address.java
+public class Address {
+    private  String street;
+    private int number;
+
+    public Address(String street, int number) {
+        this.street = street;
+        this.number = number;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", number=" + number +
+                '}';
+    }
+}
+code/homework43/src/Homework.java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Homework {
+    public static void main(String[] args) {
+        List<Integer> ints = new ArrayList<>();
+        ints.add(1);
+        ints.add(2);
+        ints.add(3);
+        Homework homework = new Homework();
+        homework.reversed(ints);
+        System.out.println(ints);
+    }
+
+    /*
+   1. Есть два класса: Address  с полями street and houseNumber  и второй класс
+    Person  с полями  name and Address.
+    Нужно написать метод, который по списку persons  возвращает список их адресов
+    1. создать эти два класса с полями, конструкторами, геттерами  и методом toString.
+    2. Сигнатура  метода :  public List<Address> getAddresses (List<Person> persons)
+    3. Создать лист, в который будут записываться адреса.
+    4. С помощью цикла for each  пройти по листу персонов и для каждого персона получить адрес и записать его в
+        лист адресов
+    5. Вернуть этот лист адресов после окончания цикла for each
+    6. Протестировать
+    */
+
+    public List<Address> getAddresses (List<Person> persons){
+        List<Address> addresses = new ArrayList<>();
+
+        for(Person p: persons){
+            addresses.add(p.getAddress());
+        }
+
+        return addresses;
+    }
+
+
+
+
+    /*
+    2.Есть лист целых чисел. Написать метод, который этот лист реверсирует,
+    т.е. возвращает лист элементов в обратном порядке
+    [1,2,3,4,5] -> [5,4,3,2,1]. Можно использовать методы класса Collections
+
+
+
+
+     */
+    public List<Integer> reversed ( List<Integer>list){
+        Collections.reverse(list);
+        return list;
+    }
+}
+code/homework43/src/HomeworkTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HomeworkTest {
+    private Homework homework;
+
+    @BeforeEach
+    public void init(){
+        homework = new Homework();
+    }
+
+    @Test
+    public void getAddressesTestEmpty(){
+        assertEquals(Arrays.asList(),homework.getAddresses(Arrays.asList()));
+    }
+
+
+    @Test
+    public void getAddressesTestOne(){
+        Address address = new Address("Street1",1);
+        Person person = new Person("Person1",address);
+
+        List<Address> expected = Arrays.asList(address);
+        List<Person> actual = Arrays.asList(person);
+
+        assertEquals(expected,homework.getAddresses(actual));
+    }
+
+
+    @Test
+    public void getAddressesTestSeveral(){
+        Address address1 = new Address("Street1",1);
+        Address address2 = new Address("Street2",2);
+        Person person1 = new Person("Person1",address1);
+        Person person2 = new Person("Person2",address2);
+
+        List<Address> expected = Arrays.asList(address1,address2);
+        List<Person> actual = Arrays.asList(person1,person2);
+
+        assertEquals(expected,homework.getAddresses(actual));
+    }
+
+   // 1,2,3,4,5 ->  5,1,2,3,4 ->  5,4,1,2,3 -> 5,4,3,1,2 -> 5,4,3,2,1
+    public static void reverseList( List<Integer> list){
+        for (int i = 0, j = list.size()-1; i < j;i++){
+            list.add(i,list.remove(j));
+            System.out.println(list);
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+        reverseList(list);
+      //  System.out.println(list);
+    }
+
+}
+code/homework43/src/Person.java
+public class Person {
+
+    private  String name;
+    private Address address;
+
+    public Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", address=" + address +
+                '}';
+    }
+}
+code/our_collection43/src/Human.java
+public class Human {
+    String name;
+    int age;
+
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Human{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+code/our_collection43/src/Main.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Jack");
+        String jack = list.get(0);
+
+        OurList<String> ourList = new OurArrayList<>();
+        ourList.ourAdd("Jack");
+        String ourJack = ourList.ourGet(0);
+    //    System.out.println(ourJack);
+        ourList.ourRemove("Jack");
+        ourList.ourAdd("John");
+
+        for(int i = 0; i<ourList.ourSize();i++){
+            System.out.println(ourList.ourGet(i));
+        }
+       // Arrays.toString(ourList);
+        Human john = new Human("John",20);
+        Human bill = new Human("Bill",24);
+        Human ann = new Human("Ann",24);
+        Human bill1 = new Human("Bill",24);
+        System.out.println("Bill equals Bill1 ? "+bill.equals(bill1));
+
+        OurArrayList<Human> humans = new OurArrayList();
+        humans.ourAdd(john);
+        humans.ourAdd(bill);
+        humans.ourAdd(ann);
+
+        for( int i = 0;i<humans.ourSize();i++){
+            System.out.println(humans.ourGet(i));
+        }
+
+        humans.ourRemove(bill);
+
+        System.out.println("After removing Bill");
+        for( int i = 0;i<humans.ourSize();i++){
+            System.out.println(humans.ourGet(i));
+        }
+
+
+
+    }
+}
+code/our_collection43/src/OurArrayList.java
+public class OurArrayList<E> implements OurList<E>{
+
+    private Object[] source;  // исходный массив
+    private static final int INITIAL_CAPACITY = 16; // начальный размер нашего массива
+
+    private int size; //  размер нашего листа
+
+
+    public OurArrayList(){
+        source = new Object[INITIAL_CAPACITY]; // инициализируем наш массив  в конструкторе при
+                                                // создании нового листа
+    }
+
+
+
+    public void ourAdd( E value){
+        if ( source.length == size){     // если массив полностью заполнен , то создается новый
+            E[] newSource = (E[])new Object[source.length * 2];
+            System.arraycopy(source,0,newSource,0,source.length);
+            source = newSource;
+        }
+        source[size] = value;
+        size++;
+    }
+
+    @Override
+    public E ourGet(int index) {
+        if( index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        return (E) source[index];
+    }
+
+    @Override
+    public void ourSet(E value, int index) {
+        if( index >= size || index < 0)             // проверка находится ли индекс в разрешенных границах
+            throw new IndexOutOfBoundsException();
+        source[index] = value;
+    }
+
+    @Override
+    public int ourSize() {
+        return size;
+    }
+
+
+    public boolean ourContains( E o){
+        return false;
+    }
+
+    @Override
+    public boolean ourRemove(E value) {
+        for ( int i = 0; i < source.length; i++){
+            if( source[i].equals(value)){
+                ourRemoveById(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public E ourRemoveById(int index) {
+        if( index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        E result =(E) source[index];
+
+        System.arraycopy(source,index +1,source,index,source.length-(index + 1));
+        size--;
+        return result;
+    }
+}
+code/our_collection43/src/OurArrayListTest.java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class OurArrayListTest {
+
+    @Test
+    public void testOurAddOurGet_emptyObject_addsOneElement(){
+        OurArrayList list = new OurArrayList();
+
+        list.ourAdd(5); //5 добавлено на нулевую позицию
+
+        assertEquals(5,list.ourGet(0)); // проверяем равен ли элемент на нулевой позиции 5
+                                                            // с помощью ourGet()
+    }
+
+
+    @Test
+    public void testOurAddOurGet_emptyObject_addsSeveralElement(){
+        OurArrayList list = new OurArrayList();
+
+       Integer[] expected = {1,3,-5,18,7,89,34,2,50,24,-4,60,70,22,-101};
+       for ( int i = 0;i<expected.length;i++) {
+           list.ourAdd(expected[i]);  //  в цикле добавляем все элементы массива к нашему листу по очереди
+       }
+       //    assertEquals(1, list.ourGet(0));
+       //    assertEquals(3, list.ourGet(1));
+       //    assertEquals(-5, list.ourGet(2));
+
+        //  в цикле сравниваем соответствующие значения массива и результат работы метода ourGet для каждого элемента
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+    }
+
+    @Test
+    public void testSize_emptyList_addsOneElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+
+        assertEquals(1,list.ourSize());
+    }
+
+    @Test
+    public void testSize_emptyList_addsSeveralElements(){
+        OurArrayList list = new OurArrayList();
+
+        Integer[] expected = {1,3,-5,18,7,89,34,2,50,24,-4,60,70,22,-101};
+        for ( int i = 0;i<expected.length;i++) {
+            list.ourAdd(expected[i]);  //  в цикле добавляем все элементы массива к нашему листу по очереди
+        }
+        // проверяем работу метода ourSize с несколькими элементами
+        assertEquals(expected.length,list.ourSize());
+
+    }
+
+    @Test
+    public void  testSet_oneElment_changesElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(3);
+        list.ourSet(10,0);// меняем значение по индексу 0
+
+        assertEquals(10,list.ourGet(0));
+    }
+
+
+    @Test
+    public void testSet_severalElements_setsFirstLastMiddleElements(){
+        OurArrayList list = new OurArrayList();
+
+        Integer[] source = {1,3,-10,18,4};
+        for( int i = 0;i < source.length; i++){
+            list.ourAdd(source[i]);
+        }
+        list.ourSet(10,0);
+        list.ourSet(5,4);
+        list.ourSet(-5,2);
+
+        Integer[] expected = {10,3,-5,18,5};
+
+        for( int i = 0;i < source.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+        assertEquals(5,list.ourSize());
+    }
+
+    // хотим получить элемент по несуществующему индексу. При правильной работе метода должны получить exception
+    @Test
+    public void testGet_nonEmptyList_getOuterElement(){
+        OurArrayList<Integer> list = new OurArrayList<>();
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+       // Проверка бросает ли метод нужное нам исключение.
+       // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourGet(4));
+    }
+
+    @Test
+    public void testOurSet_nonEmptyList_putOuterElement(){
+        OurArrayList<Integer> list = new OurArrayList<>();
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourSet(76,4));
+    }
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesWrongElement(){
+        OurArrayList<Integer> list = new OurArrayList<>();
+
+        list.ourAdd(4);
+        list.ourAdd(8);
+        list.ourAdd(1);
+        list.ourAdd(43);
+
+
+        // Проверка бросает ли метод нужное нам исключение.
+        // Слева пишется ожидаемый тип исключения.class
+        assertThrows(IndexOutOfBoundsException.class,()->list.ourRemoveById(4));
+
+    }
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesFirstElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(0); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(5,object);
+
+        Integer[] expected = {15,2,13,7,57};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesMiddleElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(24);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(2); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(24,object);
+
+        Integer[] expected = {5,15,13,7,57};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+
+    @Test
+    public void testRemoveById_nonEmptyList_removesLastElement(){
+        OurArrayList list = new OurArrayList();
+        list.ourAdd(5);
+        list.ourAdd(15);
+        list.ourAdd(2);
+        list.ourAdd(13);
+        list.ourAdd(7);
+        list.ourAdd(57);
+
+        Object object = list.ourRemoveById(5); // значение удаленного элемента возвращается методом
+        // и присваивается переменной object
+        assertEquals(57,object);
+
+        Integer[] expected = {5,15,2,13,7};
+
+        // проверяем остались ли элементы, которые не надо было удалять
+        for( int i = 0; i < expected.length; i++){
+            assertEquals(expected[i],list.ourGet(i));
+        }
+
+        assertEquals(5,list.ourSize());
+    }
+
+
+
+
+
+
+
+
+}
+code/our_collection43/src/OurLinkedList.java
+public class OurLinkedList<E> implements OurList<E> {
+
+    private int size;
+    private Node<E> first;
+    private Node<E> last;
+
+    public OurLinkedList(){
+
+    }
+
+
+    public void ourAdd(E value){ //  добавить значение в лист
+        if(size > 0){ // если уже есть хотя бы один элемент
+            Node<E> newNode = new Node<>(null,last,value);
+            last.next =newNode;
+            last = newNode;
+
+        } else { // если лист пустой
+            Node<E> newNode = new Node<>(null, null, value);
+            first = newNode;
+            last = newNode;
+        }
+        size++;
+    }
+
+
+    public E ourGet( int index){ // получает значение из листа
+        if( index >=size || index < 0) // находится ли индекс в границах листа
+            throw new IndexOutOfBoundsException();
+
+        Node<E> needle = getNode( index );
+
+        return needle.value; // возвращает значение, записанное в ноде
+    }
+
+
+    private Node<E> getNode( int index){ // поиск ноды по индексц
+        Node<E> needle = first; // присваиваем значение самого первого элемента
+        for(int i = 0; i < index; i++){
+            needle = needle.next; // в цикле проходим последовательно по всем элементам пока i не равно index
+        }
+        return needle;
+    }
+
+    public void ourSet( E o, int index){ // заменить значение по индексу
+        if( index >=size || index < 0) // находится ли индекс в границах листа
+            throw new IndexOutOfBoundsException();
+
+        Node needle = getNode(index); // находим нужный элемент
+        needle.value = o;  // меняем значение
+    }
+
+    public int ourSize(){
+        return size;
+    }
+
+    public boolean ourContains( E o){ //  проверяет есть ли искомый элемент в листе
+        Node needle = first;
+
+        for( int i = 0; i < size; i++){
+            if ( needle.value.equals(o)) // если находится значение элемента равное о, то возвращаем true
+                return true;
+
+            needle = needle.next; //  переход к следующей ноде
+        }
+        return false;
+    }
+
+
+    public boolean ourRemove ( E o){ //  удаоить элемент из листа по значению
+        Node needle = first;
+
+        for( int i = 0; i < size; i++){
+            if ( needle.value.equals(o)) { // если находится значение элемента равное о, то удвляем его и возвращаем true
+                ourRemoveById(i);
+                return true;
+            }
+            needle = needle.next; //  переход к следующей ноде
+        }
+        return false;
+
+    }
+
+
+    public E ourRemoveById( int index){
+        if( index >=size || index < 0) // находится ли индекс в границах листа
+            throw new IndexOutOfBoundsException();
+
+        Node<E> nodeToRemove = getNode(index); //  находим элемент, который нужно удалить
+        Node<E> left = nodeToRemove.prev;
+        Node<E> right = nodeToRemove.next;
+
+        if( index > 0 && index < size -1){ //случай, когда элемент не первый и не последний
+                nodeToRemove.next = null;
+                nodeToRemove.prev = null;
+
+                left.next = right;
+                right.prev = left;
+
+        } else if (index == 0){ // если нужно удалить самую первую ноду
+            right.prev = null;
+            first = right;
+
+        } else {  //если нужно удалить последнюю ноду
+            left.next = null;
+            last = left;
+        }
+
+        size--;
+
+        return  nodeToRemove.value;
+
+
+    }
+
+
+
+
+    private static class Node<E>{
+        E value;
+      Node<E> next; //ссылка на след.элт
+      Node<E> prev; // ссылка на предыдущий
+
+      Node(){}
+
+      Node( Node<E>next, Node<E> prev, E value)  {
+          this.next = next;
+          this.prev = prev;
+          this.value = value;
+      }
+
+
+    }
+}
+code/our_collection43/src/OurList.java
+public interface OurList<E>{
+
+    void ourAdd(E o); //  добавить значение
+
+    E ourGet( int index); // получить значение ро индексу
+
+    void ourSet(E o, int index ); // заменить значение по индексу
+
+    int ourSize(); // возвращает размер нашего листа
+
+    boolean ourContains( E o);
+
+    boolean ourRemove(E o); //  удаляет элемент по значению
+
+    E ourRemoveById( int index);//  удаление по индексу
+
+
+}

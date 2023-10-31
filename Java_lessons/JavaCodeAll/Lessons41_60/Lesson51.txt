@@ -1,0 +1,155 @@
+Задачи на урок:
+Разбор дз
+Практика, решение задач
+
+*************************************************************************************************************
+
+дз см. код - practice->Main
+
+**************************************************************************************************************
+
+code/homework51/src/Homework.java
+import java.util.*;
+
+public class Homework {
+
+    public static void main(String[] args) {
+
+        Homework h = new Homework();
+        List<String> names = List.of("John","Ann","Jnoh");
+
+        System.out.println(h.findAnagrams("John",names));
+        System.out.println(h.anagramsList("John",names));
+
+
+    }
+
+
+    public  List<String> findAnagrams(String name, List<String> names){
+        Map<String,List<String>> anagrams = new HashMap<>();
+        List<String> namesAndAnagrams = new ArrayList<>();
+      //  String nameToUpperCase =name.toUpperCase();
+        char[] nameToChar = name.toCharArray();
+        char[] nToChar;
+        Arrays.sort(nameToChar);
+        for(String n:names){
+            nToChar = n.toCharArray();
+            Arrays.sort(nToChar);
+            if(Arrays.equals(nToChar, nameToChar)){
+                namesAndAnagrams.add(n);
+            }
+        }
+        return namesAndAnagrams;
+    }
+
+
+    public List<String> anagramsList ( String str, List<String>strings){
+        Map<String,List<String>> anagrams = new HashMap<>();
+
+        for ( String s : strings){
+
+            String sortedKey = sortAnagram(s);
+
+            if ( anagrams.containsKey(sortedKey)){
+                List<String> value = anagrams.get(sortedKey);
+                value.add(s);
+                anagrams.put(sortedKey,value);
+            }else{
+                List<String> value = new ArrayList<>();
+                value.add(s);
+                anagrams.put(sortedKey,value);
+            }
+        }
+       return  anagrams.getOrDefault(sortAnagram(str),List.of());
+    }
+
+    private String sortAnagram(String str){
+        char[] chars = str.toCharArray();
+        Arrays.sort(chars);
+
+        return new String(chars);
+    }
+}
+
+*********************************************************************************************************
+
+code/homework51/src/HomeworkTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HomeworkTest {
+
+    Homework homework = new Homework();
+    List<String> actual;
+
+    @BeforeEach
+    public void init(){
+        actual = new ArrayList<>();
+        actual.add("ymar");
+        actual.add("john");
+        actual.add("jhon");
+        actual.add("njho");
+        actual.add("amry");
+        actual.add("evg");
+
+    }
+
+    @Test
+    public void no_such_anagram(){
+
+        assertEquals(List.of(),homework.findAnagrams("rob",actual));
+        assertEquals(List.of(),homework.anagramsList("rob",actual));
+    }
+
+
+    @Test
+    public void john_anagram(){
+        List<String> expected = new ArrayList<>();
+        expected.add("john");
+        expected.add("jhon");
+        expected.add("njho");
+
+        assertEquals(expected,homework.findAnagrams("john",actual));
+        assertEquals(expected,homework.anagramsList("john",actual));
+    }
+
+
+    @Test
+    public void one_name_test(){
+        List<String>expected = new ArrayList<>();
+        expected.add("evg");
+
+        assertEquals(expected,homework.findAnagrams("evg",actual));
+        assertEquals(expected,homework.anagramsList("evg",actual));
+    }
+
+
+
+
+
+}
+
+***************************************************************************************************
+
+code/practice51/src/Main.java
+public class Main {
+
+    /*
+   1.Есть класс автомобиль, в котором есть три поля: марка (make), модель (model) , цена (price). Написать метод, который принимает
+    лист автомобилей, а возвращает TreeMap, ключами которой являются марки автомобилей, а значениями будут
+    Treeset автомобилей,  в которых автомобили расположены в лексикографическом порядке относительно модели,
+    причем дешевые вперед если модели одинаковые ( необходимо сделать Auto comparable,
+    чтобы складывать автомобили в TreeSet  в правильном порядке) Написать тесты.
+
+    2.Написать метод, принимающий лист слов , а возвращающий TreeMap, ключами которого являются буквы,
+    а значениями - листы слов, начинающихся с данной буквы и расположенных в алфавитном (лексикографическом)
+     порядке
+     [hello, world, hell] -> { h: [hell,hello], w:[world]}
+     Протестировать
+     */
+}

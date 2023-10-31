@@ -1,0 +1,407 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Практика, решение задач
+Задача 1
+В проекте accounting ( см. код урока) написать дочерний класс SalesManager
+
+Задача 2
+Задача1 + в проекте accounting ( см. код урока) реализовать в дочерних классах абстрактный метод родительского класса calculateSalary
+
+Задача 3*
+задача1 + задача2 + написать класс Company в соответствии с условием задачи.
+
+code/accounting/src/Employee.java
+public abstract class Employee implements Comparable<Employee> {
+
+    private int id;
+    private String firstName;
+    private String lastName;
+    private int yearOfBirth;
+    private double hour;
+
+    public Employee(int id, String firstName, String lastName, int yearOfBirth, double hour) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.yearOfBirth = yearOfBirth;
+        this.hour = hour;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public double getHour() {
+        return hour;
+    }
+
+    public void setHour(double hour) {
+        this.hour = hour;
+    }
+
+
+    public abstract double calculateSalary();
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", yearOfBirth=" + yearOfBirth +
+                ", hour=" + hour +
+                '}';
+    }
+
+    public int compareTo(Employee e){
+        return getLastName().compareTo(e.getLastName());
+    }
+}
+code/accounting/src/Main.java
+public class Main {
+  /*
+    Создать программу для бухгалтерии, которая будет уметь следующее:
+    - добавлять сотрудников в штат
+    - удалять сотрудников из штата
+    - рассчитывать зарплату для двух категорий сотрудников
+                -сотрудник с почасовой оплатой
+                -менеджер по продажам
+
+     У программы должны быть следующие классы :
+      классы сотрудников : абстрактный родительский класс Employee
+                           сотрудник на зарплате WageEmployee
+                           менеджер по продажам  SalesManager
+        У сотрудников должны быть такие поля :
+            id, имя, фамилия ,год рождения, количество проработанных часов
+            и метод для расчета зарплаты ( calculateSalary)
+        У сотрудника на почасовой оплате должно быть поле ставка за час. Метод расчета его зарплаты должен
+        учитывать минимальный размер оплаты труда
+        У менеджера по продажам нет фиксированной оплаты, его зарплата рассчитывается ка процент от обьема продаж.
+        Но его метод оплаты также должен учитывать минимальный размер оплаты труда
+        private double salesVolume
+        private double percent
+
+      класс Company, имеющий методы для :
+                        -добавления сотрудника ( addEmployee),
+                        -удаления сотрудника ( removeEmployee)
+                        -вывода на экран списка сотрудников ( display)
+                        -суммирования зарплат всех сотрудников (sumSalary)
+                        -сортировки сотрудников по фамилии  (sortEmployees)
+   */
+}
+code/accounting/src/WageEmployee.java
+public class WageEmployee extends Employee {
+
+    private double wage;
+
+    public WageEmployee(int id, String firstName,String lastName,int year, double hour, double wage){
+        super(id,firstName,lastName,year,hour);
+        this.wage = wage;
+    }
+
+    public double getWage() {
+        return wage;
+    }
+
+    public void setWage(double wage) {
+        this.wage = wage;
+    }
+
+    @Override
+    public double calculateSalary() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "WageEmployee{" +
+                "wage=" + wage +
+                '}';
+    }
+}
+code/animals30/src/Animal.java
+public class Animal {
+
+    private String name;
+    private int weight;
+    private String colour;
+
+    public Animal(String name, int weight, String colour) {
+        this.name = name;
+        this.weight = weight;
+        this.colour = colour;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "name='" + name + '\'' +
+                ", weight=" + weight +
+                ", colour='" + colour + '\'' +
+                '}';
+    }
+}
+code/animals30/src/AnimalMain.java
+import java.util.Arrays;
+
+public class AnimalMain {
+    /*
+   1. Создать класс Animal c полями name, weight, colour
+   2. Вывести на экран список животных упорядоченный отдельно по имени,
+        по весу, по цвету. Для реализации разных видов сортировки использовать интерфейс компаратор
+   3*  Вывести на экран список ИМЕН животных, упорядоченный  по возрастанию последней буквы имени
+   4. Протестировать
+     */
+    public static void main(String[] args) {
+
+
+        Animal wolf = new Animal("Wolf", 100, "grey");
+        Animal elephant = new Animal("Elephant", 1000, "white");
+        Animal bear = new Animal("Bear", 500, "brown");
+        Animal fox = new Animal("Fox", 30, "red");
+        Animal anakonda = new Animal("Anakonda", 400, "yellow");
+
+        Animal[] zoo = {wolf, elephant, bear, fox, anakonda};
+
+        for (Animal an : zoo) {
+            System.out.println(an);
+        }
+
+        System.out.println("---------------------By Name--------------------------------");
+        Arrays.sort(zoo, new ComparatorByName());
+
+        for (Animal an : zoo) {
+            System.out.println(an);
+        }
+
+
+        System.out.println("--------------By Weight------------------");
+
+        Arrays.sort(zoo, new ComparatorByWeight());
+        for (Animal an : zoo) {
+            System.out.println(an);
+        }
+
+        System.out.println("------------Names by last letter--------------");
+
+        Arrays.sort(zoo, new ComparatorByLastLetter());
+        for (Animal an : zoo) {
+            System.out.println(an.getName());
+        }
+
+    }
+}
+
+code/animals30/src/AnimalMainTest.java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AnimalMainTest {
+
+    Animal wolf = new Animal("Wolf", 100, "grey");
+    Animal elephant = new Animal("Elephant", 1000, "white");
+    Animal bear = new Animal("Bear", 500, "brown");
+    Animal fox = new Animal("Fox", 30, "red");
+    Animal anakonda = new Animal("Anakonda", 400, "yellow");
+
+    Animal[] zoo = {wolf, elephant, bear, fox, anakonda};
+
+
+    @Test
+    void testComparatorName(){
+        ComparatorByName cbn = new ComparatorByName();
+
+        assertTrue(cbn.compare(elephant,bear)>0);
+    }
+
+    @Test
+    void testComparatorWeight(){
+        ComparatorByWeight cbw = new ComparatorByWeight();
+
+        assertFalse( cbw.compare(elephant,bear)<0);
+    }
+
+    @Test
+    void testComparatorLastLetter(){
+        ComparatorByLastLetter comparatorByLastLetter = new ComparatorByLastLetter();
+
+        assertFalse(comparatorByLastLetter.compare(wolf,fox) > 0);
+    }
+
+}
+code/animals30/src/AnimalMainTest.java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AnimalMainTest {
+
+    Animal wolf = new Animal("Wolf", 100, "grey");
+    Animal elephant = new Animal("Elephant", 1000, "white");
+    Animal bear = new Animal("Bear", 500, "brown");
+    Animal fox = new Animal("Fox", 30, "red");
+    Animal anakonda = new Animal("Anakonda", 400, "yellow");
+
+    Animal[] zoo = {wolf, elephant, bear, fox, anakonda};
+
+
+    @Test
+    void testComparatorName(){
+        ComparatorByName cbn = new ComparatorByName();
+
+        assertTrue(cbn.compare(elephant,bear)>0);
+    }
+
+    @Test
+    void testComparatorWeight(){
+        ComparatorByWeight cbw = new ComparatorByWeight();
+
+        assertFalse( cbw.compare(elephant,bear)<0);
+    }
+
+    @Test
+    void testComparatorLastLetter(){
+        ComparatorByLastLetter comparatorByLastLetter = new ComparatorByLastLetter();
+
+        assertFalse(comparatorByLastLetter.compare(wolf,fox) > 0);
+    }
+
+}
+code/animals30/src/ComparatorByLastLetter.java
+import java.util.Comparator;
+
+public class ComparatorByLastLetter implements Comparator<Animal> {
+    @Override
+    public int compare(Animal an1, Animal an2) {
+        String animalName1 = an1.getName();
+        String animalName2 = an2.getName();
+
+        return animalName1.charAt(animalName1.length()-1) - animalName2.charAt(animalName2.length()-1);
+
+      // "a".
+    }
+}
+code/animals30/src/ComparatorByName.java
+import java.util.Comparator;
+
+public class ComparatorByName implements Comparator<Animal> {
+
+    public int compare( Animal animal1, Animal animal2){
+        return animal1.getName().compareTo(animal2.getName());
+    }
+}
+code/animals30/src/ComparatorByWeight.java
+import java.util.Comparator;
+
+public class ComparatorByWeight implements Comparator<Animal> {
+
+    public int compare( Animal animal1, Animal animal2){
+        return  animal1.getWeight() - animal2.getWeight();
+    }
+}
+code/has_a/src/Brother.java
+public class Brother {
+
+    String name;
+    int age;
+
+    //Sister sister;
+
+    public Brother(String name,int age) {
+        this.name = name;
+        this.age  = age;
+      //  this.sister = sister;
+    }
+
+    @Override
+    public String toString() {
+        return "Brother{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+code/has_a/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+
+
+        Brother brother = new Brother("John", 29);
+        Brother brother1 = new Brother("Michael", 29);
+        Brother brother2 = new Brother("Benn", 29);
+        Brother[] brothers ={brother,brother1,brother2};
+
+        Sister sister = new Sister("Mary", 23, brother,brothers);
+
+        System.out.println(sister);
+    }
+
+}
+code/has_a/src/Sister.java
+public class Sister {
+
+    String name;
+    int age;
+
+    Brother brother; // ссылка на обьект одного класса может являться полем другого класса. Тако тип отношений
+    // называется has a
+
+    Brother[] brothers;
+
+    public Sister(String name, int age, Brother brother,Brother[] brothers) {
+        this.name = name;
+        this.age = age;
+        this.brother = brother;
+        this.brothers = brothers;
+    }
+
+    @Override
+    public String toString() {
+        return "Sister{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", brother=" + brother +
+                '}';
+    }
+}

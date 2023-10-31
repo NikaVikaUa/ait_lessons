@@ -1,0 +1,235 @@
+Разбор домашнего задание
+Повторение методов indexOf, substring
+lastIndexOf()
+Character.isUpperCase, Character.isDigit, Character.isAlphabetic
+equalsIgnoreCase
+Повторение методов строк
+Метод indexOf
+public int indexOf(int char) - возвращает индекс указанного символа, идет по строке слева направо. 
+Поэтому если в строке несколько одинаковых символов - будет возвращен индекс самого левого.
+Метод работает как со строками, так и с char.
+lastIndexOf - это такой же метод, но он ищет справа налево.
+
+public int lastIndexOf(String str)
+Задача 1
+Пользователь вводит информацию об автомобиле в консоль в следующем виде: bmw@2019@black
+
+Используя substring получите элементы этой строки и выведите информацию в консоль в следующем виде:
+
+Автомобиль bmw Год выпуска: 2019 Цвет: black
+
+Пример ввода и вывода:
+
+kia@2022@grey
+Автомобиль kia Год выпуска: 2022 Цвет: 
+./code/d2023_06_02/src/HW2023_06_02.java
+import java.util.Scanner;
+
+public class HW2023_06_02 {
+  public static void main(String[] args) {
+//        Считать четыре числа.
+//        Вывести максимальное из них.
+//        Гарантируется, что все числа разные.
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Введите число");
+    int number1 = scanner.nextInt();
+    System.out.println("Введите число");
+    int number2 = scanner.nextInt();
+    System.out.println("Введите число");
+    int number3 = scanner.nextInt();
+    System.out.println("Введите число");
+    int number4 = scanner.nextInt();
+    // сделали временную переменную max - это самое большое встретившееся число
+    // если встречаем число больше нашего max - то обновляем значение max
+    int max = number1;
+    if(max < number2){
+      max = number2;
+    }
+    if(max < number3){
+      max = number3;
+    }
+    if(max < number4){
+      max = number4;
+    }
+    System.out.println(max);
+    // student ver 3
+//    int a = scanner.nextInt();
+//    int b = scanner.nextInt();
+//    int c = scanner.nextInt();
+//    int d = scanner.nextInt();
+//    if (a >= b & a >= c & a >= d) {        // a - самое большое
+//      System.out.println(a);
+//    } else if (b >= a & b >= c & b >= d) { // b -cамое большое
+//      System.out.println(b);
+//    } else if (c >= a & c >= b & c >= d) { // с -cамое большое
+//      System.out.println(c);
+//    } else  { // d -cамое большое
+//      System.out.println(d);
+//    }
+
+
+
+  }
+}
+./code/d2023_06_02/src/HWver2.java
+import java.util.Scanner;
+ // версия студента
+public class HWver2 {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Please write different numbers");
+    System.out.println("Write number one:");
+    int num1 = scanner.nextInt();
+    System.out.println("Write number two:");
+    int num2 = scanner.nextInt();
+    if(num1 != num2) {
+      System.out.println("Write number three:");
+      int num3 = scanner.nextInt();
+      if(num3 != num1 && num3 != num2){
+        System.out.println("Write number four:");
+        int num4 = scanner.nextInt();
+        if(num4 != num1 && num4 != num2 && num4 != num3) {
+          if (num1 > num2 && num1 > num3 && num1 > num4) {
+            System.out.println("Maximum number is num1");
+          } else if (num2 > num3 && num2 > num4) {
+            System.out.println("Maximum number is num2");
+          } else if (num3 > num4) {
+            System.out.println("Maximum number is num3");
+          } else {
+            System.out.println("Maximum number is num4");
+          }
+        }else{
+          System.out.println("Please write different numbers");
+        }
+      }else{
+        System.out.println("Please write different numbers");
+      }
+    }else{
+      System.out.println("Please write different numbers");
+    }
+  }
+}
+./code/d2023_06_02/src/Main.java
+public class Main {
+  public static void main(String[] args) {
+    String trex = "T-rex19";
+    char firstSymbol = trex.charAt(0);
+    // как проверить что он является буквой?
+    // Character.isAlphabetic() - проверяет является буквенным
+    boolean isLetter = Character.isAlphabetic(firstSymbol);
+    boolean secondIsLetter = Character.isAlphabetic(trex.charAt(1));
+    System.out.println(isLetter);
+    System.out.println(secondIsLetter);
+    // определяет является ли числовым
+    boolean isDigit = Character.isDigit(trex.charAt(trex.length() - 1));
+    System.out.println(isDigit);
+    // substring
+    // если один параметр - то пойдет с указанного индекса включительно
+    // до конца строки
+    String sub1 = "notification".substring(1);
+    System.out.println(sub1); // "otification"
+    // если два параметра - первый включительно, а второй нет
+    String sub2 = "notification".substring(2, 4);
+    System.out.println(sub2);
+    // метод indexOf() возвращает индекс указанного символа "w" или 'w'
+    String text = "In code we trust";
+    int indexOfW = text.indexOf('w');
+    System.out.println(indexOfW);
+
+    String text2 = "We Want To Sleep on Friday";
+    // метод возвращает первый попавшийся - и ищет слева направо
+    int index = text2.indexOf("W");
+    System.out.println(index);
+    // если в строке нет такого символа - то возвращается -1
+    int index2 = text2.indexOf("z");
+    System.out.println(index2);
+    // как эти методы можно использовать вместе
+    String text3 = "key=yellow&name=John";
+    // как вырезать правую часть от &
+    int index3 = text3.indexOf("&");
+    System.out.println(index3);
+    String rightPart = text3.substring(index3 + 1); // "name=John"
+    System.out.println(rightPart);
+
+    String leftPart = text3.substring(0, text3.indexOf("&"));
+    System.out.println(leftPart); // "key=yellow"
+    //
+  }
+}
+./code/d2023_06_02/src/Main2.java
+import java.util.Scanner;
+
+public class Main2 {
+  public static void main(String[] args) {
+    // Пользователь вводит email
+    // нужно проверить оканчивается ли email "de"
+    // нужно проверить - является ли email от "gmail"
+    // в строке обязательно есть . и @
+    // Примеры для задания:
+    // demina@gmail.de - "super"
+    // demin@gmail.us - "not valid"
+    // demin@yandex.de - "not valid"
+    // yandex@de.de    - "not valid"
+    // gmailivan@yandex.ru - "not valid"
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Введите email");
+    String email = scanner.nextLine();
+    // lastIndexOf - так же работает -
+    // но ищет начиная с правой стороны, а не с левой
+    int indexOfDot = email.lastIndexOf(".");
+    int indexOfAt = email.indexOf("@");
+    String middlePart =
+        email.substring(indexOfAt + 1, indexOfDot);
+    System.out.println(middlePart);
+    String lastPart =
+        email.substring(indexOfDot + 1);
+    System.out.println(lastPart);
+    // "Gmail".equalsIgnoreCase("gmail");  -> true сравнивает
+    if(middlePart.equalsIgnoreCase("gmail")
+        && lastPart.equals("de")){
+      System.out.println("super");
+    } else {
+      System.out.println("not valid");
+    }
+
+  }
+}
+./code/d2023_06_02/src/Main3.java
+import java.util.Scanner;
+
+public class Main3 {
+  public static void main(String[] args) {
+    // Пользователь вводит информацию о себе в консоль
+    // информация в виде строки: "Alisher*Khamidov#170@brown"
+    // вывести информацию в консоль по образцу:
+    // Alisher Khamidov is 170 and has brown hair
+    // lattice# asterisk*
+    // Задание со звездочкой:
+    // Если и имя, и фамилия начинаются с больших букв
+    // нужно вывести в консоль "Super!"
+    // Character.isUpperCase("Adsd");
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Введите информацию о себе");
+    String text = scanner.nextLine(); // "Alisher*Khamidov#170@brown"
+    int indexOfAsterisk = text.indexOf("*");
+    int indexOfLattice = text.indexOf("#");
+    int indexOfAt = text.indexOf("@");
+    String name = text.substring(0, indexOfAsterisk);
+    String secondName =
+        text.substring(indexOfAsterisk + 1, indexOfLattice);
+    String height =
+        text.substring(indexOfLattice + 1, indexOfAt);
+    String colorOfHair =
+        text.substring(indexOfAt + 1);
+    // Alisher Khamidov is 170 and has brown hair
+    System.out.println(
+        name + " " + secondName + " is " +
+            height + " and has " + colorOfHair + " hair"
+    );
+    // Задание со звездочкой
+    if (Character.isUpperCase(name.charAt(0))
+        && Character.isUpperCase(secondName.charAt(0))) {
+      System.out.println("Super");
+    }
+  }
+}

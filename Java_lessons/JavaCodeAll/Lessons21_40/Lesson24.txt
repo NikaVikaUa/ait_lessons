@@ -1,0 +1,351 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Юнит тестирование - JUnit5
+StringBuilder class
+JUnit5
+
+JUnit 5 состоит из нескольких разных модулей из трех разных подпроектов:
+
+JUnit 5 = Платформа JUnit + JUnit Jupiter + JUnit Vintage
+
+JUnit Jupiter: включает новые модели программирования и расширения для написания тестов. В нем есть все новые аннотации junit и TestEngine реализация для запуска тестов, написанных с этими аннотациями.
+
+Платформа JUnit: чтобы иметь возможность запускать тесты junit, IDE, инструменты сборки или плагины должны включать и расширять API платформы. Он определяет TestEngine API для разработки новых фреймворков тестирования, работающих на платформе. Он также предоставляет средство запуска консоли для запуска платформы из командной строки и создания подключаемых модулей для Gradle и Maven.
+
+JUnit Vintage: его основная цель - поддерживать выполнение на платформе JUnit 5 тестов, написанных для JUnit 3 и JUnit 4. Это есть обратная совместимость.
+
+Аннотации JUnit 5
+JUnit 5 предлагает следующие аннотации для написания тестов.
+
+@BeforeEach
+
+Аннотированный метод будет запускаться перед каждым тестовым методом в тестовом классе.
+
+@AfterEach
+
+Аннотированный метод будет запускаться после каждого тестового метода в тестовом классе.
+
+@BeforeAll
+
+Аннотированный метод будет запущен перед всеми тестовыми методами в тестовом классе. Этот метод должен быть статическим.
+
+@AfterAll
+
+Аннотированный метод будет запущен после всех тестовых методов в тестовом классе. Этот метод должен быть статическим.
+
+@Test
+
+Он используется, чтобы пометить метод как тест junit.
+
+@DisplayName
+
+Используется для предоставления любого настраиваемого отображаемого имени для тестового класса или тестового метода
+
+@Disable
+
+Он используется для отключения или игнорирования тестового класса или тестового метода из набора тестов.
+
+@Nested
+
+Используется для создания вложенных тестовых классов
+
+@Tag
+
+Пометьте методы тестирования или классы тестов тегами для обнаружения и фильтрации тестов.
+
+@TestFactory
+
+Отметить метод - это тестовая фабрика для динамических тестов.
+
+String Builder
+Неизменяемость объектов класса String, может повлиять на производительность нашей аппликации, если в ней требуется произвести большое колличество изменений строковой переменной. Для таких случаев в Java создан класс StringBuilder. Объекты этого класса обладают такой же функциональность как и у объектов класса String, но только объекты класса StrinBuilder являются изменяемыми (mutable).
+
+Задача1
+Написать тесты для задачи 3 из 16 урока : Дан массив целых чисел. Написать метод, возвращающий разность между наибольшим и наименьшим элементами массива. public static int countDif(int[] ints) пример: {4,2,5,8} -> результат 6, т.к. 8 (максимальный)- 2(минимальный)=6
+
+Решение задачи см. 17 урок
+
+code/our_strin_builder/src/Main.java
+public class Main {
+
+    // В Джава существует три класса работающие со строками:
+  /*
+    1.String
+    2.StringBuilder
+    3.StringBuffer - практически тоже что и StringBuilder, но синхронизирован
+    и его целесообразнее использовать в многопоточном программировании.
+
+    Обьекты класса StrinBuilder  изменяемы в отдичие от обьектов класса String
+
+    конструкторы класса StringBuilder:
+    1. StringBuilder() - создает пустой обьект
+    2. StringBuilder( String str) - создает обьект с такой строкой
+    3. StringBuilder( int length ) - создает пустой обьект с определенной длиной
+
+
+    Методы StringBuilder:
+
+    append(String s) - используется для добавления строки в скобках к строке-обьекту StringBuilder
+    append(char)
+    append(boolean)
+    append(float)
+    append(int )   и т.д.
+
+   */
+    public static void main(String[] args) {
+        StringBuilder sb = new StringBuilder();// создали пустой StringBuilder
+        StringBuilder stringBuilder = new StringBuilder("Hello");// создали СтрингБилдер со словом Hello
+        stringBuilder.append(" World"); // присоедигяем слово World  и первоначальная строка меняется
+        System.out.println(stringBuilder);
+
+        stringBuilder.append(" ").append("Hurra!");
+        System.out.println(stringBuilder);
+
+    }
+}
+code/shapes24/src/Circle.java
+public class Circle extends Shape{
+
+  //  private static double PI = 3.14;
+
+    private double radius;
+
+
+    public Circle ( String name, double radius){
+        super(name);
+        this.radius = radius;
+    }
+
+    public double getArea(){
+        return Math.PI*radius*radius;
+    }
+}
+code/shapes24/src/Main.java
+public class Main {
+    /*
+    Создать классы, содержащие методы для подсчета площади прямоугольника, квадрата и круга.
+    Кроме результата работы методов должно выводиться также название соответствующей фигуры. В методе main
+    создать массив таких обьектов и вывести его на экран
+
+    подробнее:
+    1. Должны быть созданы классы Rectangle, Square, Circle, переопределяющие метод getArea родительского класса
+       Shape , который содержит также общее для всех классов поле name.
+    2. В методе main создаем массив, содержащий обьекты этих классов ( по одному от каждого) и затем
+        в цикле выводим на экран площади фигур элементов этого массива. Кроме площади фигуры должно также
+        выводиться ее название
+
+        площадь круга pi * radius * raduis
+        площадь прямоугольника со сторонами a  и b   a*b
+        площадь квадрата со стороной a     a*a
+
+        Rectangle has area of 50
+        Circle has area of 20
+        Square has area of 10
+        Shape has area of 0
+
+
+
+     */
+
+    public static void main(String[] args) {
+        Shape circle = new Circle("Circle",10);
+        Shape rectangle = new Rectangle("Rectangle",5,10);
+        Shape square = new Square("Square",7);
+        Shape shape = new Shape("Shape");
+
+        Shape[] shapes = {circle,rectangle,square,shape};
+
+        System.out.println("shapes:");
+
+        for( Shape s: shapes) {
+            System.out.println(s.getName()+" has area of "+s.getArea());
+        }
+
+    //    for( int i = 0;i < shapes.length;i++){
+    //        System.out.println(shapes[i].getName()+" has area of "+shapes[i].getArea());
+        }
+
+
+    }
+
+
+code/shapes24/src/Rectangle.java
+public class Rectangle extends Shape {
+
+    private double a;
+    private double b;
+
+    public Rectangle (String name, double a, double b){
+        super(name);
+        this.a = a;
+        this.b = b;
+    }
+
+    public double getArea(){
+        return a*b;
+    }
+}
+code/shapes24/src/Shape.java
+public class Shape {
+
+    private String name;
+
+    public Shape( String name){
+        this.name = name;
+    }
+
+    public double getArea(){
+        return 0;
+    }
+
+    public String getName(){
+        return name;
+    }
+}
+code/shapes24/src/Square.java
+public class Square extends Shape{
+
+    private double a;
+
+    public Square( String name, double a){
+        super(name);
+        this.a = a;
+    }
+
+    public double getArea(){
+        return a*a;
+    }
+}
+code/testing/src/Calculator.java
+public class Calculator {
+
+    public static void main(String[] args) {
+        Calculator calculator;
+        calculator = new Calculator();
+        System.out.println(calculator.multiply(2,2));
+        System.out.println(calculator.multiply(0,2));
+    }
+
+    public int multiply( int a, int b){
+
+        return a*b;
+    }
+}
+code/testing/src/CalculatorTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculatorTest {
+
+    Calculator calculator; // создаем обьект для вызова тестируемого метода
+
+    @BeforeEach     // аннотация @BeforeEach означает, что метод будет выполняться перед каждым тестом
+    void init(){
+        calculator = new Calculator();
+    }
+
+    // given[explainInput]When[what is done]Then[ExpectedResult]
+    // givenBothArgumentsAreZeroWhenTheyAreMultipliedThenExpectZero  - один из вариантов названия метода
+    @Test // метод помеченный такой аннотацией является тестовым и его можно запускать самостоятельно
+    @DisplayName(" Check simple multiplication")
+    void testMultiply(){
+        assertEquals(4,calculator.multiply(2,2)); // с помощью этой команды происходит сравнение на
+                                                                    // равенство ожидаемого результата с фактическим
+    }
+
+    @Test
+    @DisplayName("Check correct work with zero")
+    void testMultiplyWithZero(){
+        assertEquals(0,calculator.multiply(0,4));
+    }
+
+
+}
+code/testing/src/Main.java
+public class Main {
+
+  /*
+    Виды тестов :
+
+    1.Unit tests - тестирование отдельных методов
+
+    2. Integation tests - интеграционные тесты - тестируется взаимодействие компонентов, система
+
+    3. Perfomance tests  -тестируют работу программы при высоких нагрузках
+      JUnit5 - содержит специальные методы и возможности для тестирования кода написанного на Джаве
+   */
+}
+code/testing/src/MaxElementInArray.java
+public class MaxElementInArray {
+
+    public int findMax ( int[] ints){
+        if(ints.length == 0) return -1;
+
+        int max = ints[0];
+
+        for(int i = 1; i<ints.length; i++){
+            if( ints[i] > max){
+                max = ints[i];
+            }
+        }
+        return max;
+    }
+}
+code/testing/src/MaxElementInArrayTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MaxElementInArrayTest {
+
+    MaxElementInArray m;
+
+    @BeforeEach
+    void init(){
+        m = new MaxElementInArray();
+    }
+
+    @Test
+    public void  zeroElt_test(){
+        int[] ints ={};
+
+        assertEquals(-1,m.findMax(ints));
+    }
+
+    @Test
+    public void oneElt_test(){
+        int[] ints = {45};
+
+        assertEquals(45,m.findMax(ints));
+    }
+    @Test
+    public void twoElt_test(){
+        int[] ints ={2,5};
+
+        assertEquals(5,m.findMax(ints));
+    }
+
+    @Test
+    public void severalEltMaxInTheMiddle_test(){
+        int[]ints = {2,1,5,0,9,6,8,2,7};
+
+        assertEquals(9,m.findMax(ints));
+    }
+    @Test
+    public void severalEltMaxFirst_test(){
+        int[]ints = {10,2,1,5,0,9,6,8,2,7};
+
+        assertEquals(10,m.findMax(ints));
+    }
+
+    @Test
+    public void severalEltMaxLast_test(){
+        int[]ints = {10,2,1,5,0,9,6,8,2,7,25};
+
+        assertEquals(25,m.findMax(ints));
+    }
+}

@@ -1,0 +1,337 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Generics
+Лямбда-выражения
+Функциональные интерфейсы
+Лямбда выражения
+
+Среди новшеств, которые были привнесены в язык Java с выходом JDK 8, особняком стоят лямбда-выражения. Лямбда представляет набор инструкций, которые можно выделить в отдельную переменную и затем многократно вызвать в различных местах программы.
+
+Основу лямбда-выражения составляет лямбда-оператор, который представляет стрелку ->. Этот оператор разделяет лямбда-выражение на две части: левая часть содержит список параметров выражения, а правая собственно представляет тело лямбда-выражения, где выполняются все действия.
+
+Лямбда-выражение не выполняется само по себе, а образует реализацию метода, определенного в функциональном интерфейсе. При этом важно, что функциональный интерфейс должен содержать только один единственный метод без реализации.
+
+Задача 1
+Используя интерфейс Printable (см. код урока) , написать лямбда выражение,реализующее метод print() таким образом, что принимаемая в качестве параметра строка
+выводится на экран
+
+Задача 2*
+Используя один из интерфейсов Checkable,Printable, StringConcat (см. код урока) написать лямбда выражение, реализующее соответствующий метод таким образом, что если длина строки на входе равна 3, то метод возвращает true, иначе false
+
+code/homework27/src/Circle.java
+public class Circle implements Shape{
+
+    double radius;
+
+    public Circle( double radius){
+        this.radius = radius;
+    }
+
+    public double getPerimeter(){
+        return 2* 3.14*radius;
+    }
+
+    public double getArea(){
+        return 3.14 * radius*radius;
+    }
+}
+code/homework27/src/Main.java
+public class Main {
+
+    /*
+    Создать классы, содержащие методы для подсчета площади и периметра прямоугольника и круга,
+    реализующие интерфейс Shape с методами getArea и getPerimeter. В классе Main создать несколько
+    обьектов этих классов и
+    вывести на печать значения площади и периметра каждого.
+
+     */
+    public static void main(String[] args) {
+        Shape circle = new Circle(10);
+        System.out.println(circle.getArea());
+        System.out.println(circle.getPerimeter());
+
+        Circle circle1 = new Circle(15);
+
+
+        Shape rect = new Rectangler(10,10);
+        System.out.println(rect.getArea());
+        System.out.println(rect.getPerimeter());
+
+        Shape[] shapes = {circle,rect,circle1};
+         ShapeCalculator shapeCalculator = new ShapeCalculator();
+        System.out.println("total shape is "+shapeCalculator.totalSquare(shapes));
+
+
+        /*
+        Дополнительно к классам и интерфейсу из задачи 1 создать класс ShapeCalculator,
+        содержащий метод для вычисления общей площади фигур. Протестировать этот метод
+         */
+
+
+    }
+}
+code/homework27/src/Rectangler.java
+public class Rectangler implements Shape{
+
+    double length;
+    double width;
+
+    public Rectangler( double length, double width){
+        this.length = length;
+        this.width = width;
+    }
+    @Override
+    public double getPerimeter(){
+        return 2*(length+width);
+    }
+
+    public double getArea(){
+        return length*width;
+    }
+
+
+}
+code/homework27/src/Shape.java
+public interface Shape {
+
+    double getPerimeter();
+    double getArea();
+}
+code/homework27/src/ShapeCalculator.java
+public class ShapeCalculator {
+
+    public double totalSquare(Shape[] shapes){
+        double res = 0;
+
+        for(Shape s: shapes){
+            res += s.getArea();
+        }
+     //   for(int i = 0;i<shapes.length;i++)
+     //       res += shapes[i].getArea();
+        return res;
+    }
+}
+code/homework27/src/ShapeCalculatorTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ShapeCalculatorTest {
+
+    ShapeCalculator shapeCalculator;
+
+    @BeforeEach
+    void init(){
+        shapeCalculator = new ShapeCalculator();
+    }
+
+    @Test
+    public void test_two_shapes(){
+
+   //     Circle circle = new Circle(10);
+   //     Rectangler rectangler = new Rectangler(5,10);
+   //     Shape[] shapes = {circle,rectangler};
+        Shape[] shapes = {new Circle(10),new Rectangler(5,10)};
+        assertEquals(364.0,shapeCalculator.totalSquare(shapes));
+    }
+
+    @Test
+    public void test_one_shape(){
+
+        Shape[] shapes = {new Rectangler(5,10)};
+        assertEquals(50.0,shapeCalculator.totalSquare(shapes));
+    }
+
+
+    @Test
+    public void test_zero_shape(){
+
+        Shape[] shapes = {};
+        assertEquals(0.0,shapeCalculator.totalSquare(shapes));
+    }
+
+
+
+}
+code/homework_new/src/Checkable.java
+public interface Checkable {
+    boolean check(String str);
+}
+code/homework_new/src/Printable.java
+public interface Printable {
+    void print(String s);
+}
+code/homework_new/src/StringConcat.java
+public interface StringConcat {
+    String concat( int a,int b);
+}
+code/lambda_expressions/src/Addable.java
+public interface Addable {
+    int add( int a,int b);
+}
+code/lambda_expressions/src/Drawable.java
+public interface Drawable {
+    void draw();
+}
+code/lambda_expressions/src/Drawing.java
+public class Drawing implements Drawable{
+    String string = "Picture";
+
+
+
+    @Override
+    public void draw() {
+        System.out.println("I can draw a "+string);
+    }
+}
+code/lambda_expressions/src/Greetable.java
+public interface Greetable {
+    String sayHello (String name);
+}
+code/lambda_expressions/src/Main.java
+public class Main {
+    /*
+     так называемое лямбда выражение ( lambda expression )  используется для реализации
+     интерфейса без создания класса и метода. С помощью  лямбда выражения можно реализовать  интерфейс,
+     содержащий только один абстрактный метод. Такие интерфейсы называеются функциональными
+
+     лямбда выражение в общем виде выглядит так:
+     (argument-list) -> {body}
+     (p)->{}
+     (p1,p2)->{}
+     */
+    public static void main(String[] args) {
+        Drawable d = new Drawing();
+    //    d.draw();
+
+        String picture = "Picture";
+
+        // с лямбда выражением
+        Drawable d2 = () ->{
+            System.out.println("I can draw a "+picture);
+        };
+        d2.draw();
+
+        d2 = ()->{
+            System.out.println("I cannot draw animals");
+        };
+        d2.draw();
+
+        //  с одним параметром
+        Greetable g1 = (name )->{
+            return "Hello, "+name;
+        };
+
+        System.out.println(g1.sayHello("John"));
+
+        // c несколькими параметрами
+        Addable addable = (a,b)->{ return a+b;};
+        System.out.println(addable.add(10,20));
+
+        // когда лямбда выражение состоит из одной команды в правой части, использовать
+        // фигурные скобки и слово return  не обязательно
+        Addable addable1 = (a,b)->(a-b);
+        System.out.println(addable1.add(30,20));
+
+
+
+    }
+}
+code/our_generics/src/Example.java
+// <>  угловые скобки используются для определения типа параметра
+public class Example<T> {
+
+    T obj;
+
+    public Example( T obj){
+        this.obj = obj;
+    }
+
+    public T getObject(){
+        return this.obj;
+    }
+
+}
+code/our_generics/src/Example1.java
+public class Example1 <T,U>{
+    T obj1;
+    U obj2;
+
+    public Example1(T obj1,U obj2){
+        this.obj1 = obj1;
+        this.obj2 = obj2;
+
+    }
+    public void print(){
+        System.out.println(obj1);
+        System.out.println(obj2);
+    }
+}
+code/our_generics/src/ExampleMethod.java
+public class ExampleMethod {
+
+    static <T> void display( T elt){
+        System.out.println("our element is "+  elt);
+    }
+}
+code/our_generics/src/Main.java
+import java.util.ArrayList;
+
+public class Main {
+
+    // Generics
+   // <> -  тип параметра задается в таких скобках
+
+    //1. Параметризованный классы
+    // Обьект параметризованного класса создается с указанием типа в <>  скобках
+    // BaseClass<Type> object = new BaseClass <Type>()
+    //  В качестве параметров не могут использоваться примитивные типы
+
+    public static void main(String[] args) {
+        // создаем обьект целого типа нашего класса Example
+        Example<Integer> intObject = new Example<>(5);
+        System.out.println(intObject.getObject());
+       // Example<int> - дженерики не работают с примитивными типами
+
+        //  создаем обьект типа String
+        Example<String> strObject = new Example<>("hello");
+        System.out.println(strObject.getObject());
+
+        // таких параметров может быть несколько
+
+        Example1<String,Integer>example1 = new Example1<>("Hello",25);
+        example1.print();
+
+        //2. дженерики в методах
+        //  вызов метода с аргументом целого типа
+        ExampleMethod.display(25);
+
+        //  вызов метода с аргументом  типа String
+        ExampleMethod.display("hello");
+
+        // принятые обозначения :
+        /*
+        T - тип
+        E - Элемент
+        К - ключ
+        V - value ( значение )
+         */
+
+        ArrayList al = new ArrayList();
+        al.add("Hello");
+        al.add("Java");
+      //  al.add(10);
+
+        String s1 =(String) al.get(0);
+        String s2 =(String) al.get(1);
+        System.out.println(s1);
+        System.out.println(s2);
+
+
+
+    }
+
+
+
+}

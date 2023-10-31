@@ -1,0 +1,196 @@
+Задачи на урок:
+Wrapper classes. Автоупаковка (autoboxing), и автораспаковка (autounboxing)
+Методы и константы wrapper классов. Парсинг текста в число
+Приведение типов
+Практика, решение задач
+Классы-обертки
+В Java существуют структуры, которые могут работать только с объектами, но не с примитивами. Для решения этой проблемы в Java созданы "классы обертки", для каждого примитивного типа: Byte, Short, Character, Integer, Long, Float, Double, Boolean. Каждый такой класс инкапсулирует соответствующий примитивный тип. Для удобства работы с wrapper classes, в Java реализован механизм автоупаковки (autoboxing) и автораспаковки (autounboxing). Это означает, что мы можем использовать в математических действиях объекты "классов оберток" наравне с примитивными типами. Java, при необходимости, автоматически преобразует объект "класса обертки" в соответствующий ему примитивный тип (autounboxing), или наоборот - примитивный тип упакует в объект wrapper класса (autoboxing). Wrapper classes также имеют полезные константы и методы. Например Integer.MAX_VALUE хранит максимально возможное число целого типа, а статические методы Double.isNaN(double a) и Double.isInfinite(double a), могут проверить хранит ли передаваемый аргумент специальные значения NaN и Infinite соответственно. Wrapper classes при помощи методов парсинга (начинаются со слова parse...), могут преобразовать стринги в соответсвующий данному wrapper классу примитивный тип. Если строка содержит текст который можно интерпретировать как число, то парсинг пройдет успешно. Если нет, то будет ошибка.
+
+Доделать задачу Shape
+
+code/shapes/src/Circle.java
+public class Circle extends Shape{
+}
+code/shapes/src/Main.java
+public class Main {
+    /*
+    Создать классы, содержащие методы для подсчета площади прямоугольника, квадрата и круга.
+    Кроме результата работы методов должно выводиться также название соответствующей фигуры. В методе main
+    создать массив таких обьектов и вывести его на экран
+
+    подробнее:
+    1. Должны быть созданы классы Rectangle, Square, Circle, переопределяющие метод getArea родительского класса
+       Shape , который содержит также общее для всех классов поле name.
+    2. В методе main создаем массив, содержащий обьекты этих классов ( по одному от каждого) и затем
+        в цикле выводим на экран площади фигур элементов этого массива. Кроме площади фигуры должно также
+        выводиться ее название
+
+        площадь круга pi * radius * raduis
+        площадь прямоугольника со сторонами a  и b   a*b
+        площадь квадрата со стороной a     a*a
+
+        Rectangle has area of 50
+        Circle has area of 20
+        Square has area of 10
+        Shape has area of 0
+
+
+
+     */
+    Shape[] shapes;
+}
+code/shapes/src/Rectangle.java
+public class Rectangle extends Shape {
+
+    private double a;
+    private double b;
+
+    public Rectangle (String name, double a, double b){
+        super(name);
+        this.a = a;
+        this.b = b;
+    }
+
+    public double getArea(){
+        return a*b;
+    }
+}
+code/shapes/src/Shape.java
+public class Shape {
+
+    private String name;
+
+    public Shape( String name){
+        this.name = name;
+    }
+
+    public double getArea(){
+        return 0;
+    }
+
+    public String getName(){
+        return name;
+    }
+}
+code/shapes/src/Square.java
+public class Square extends Shape{
+}
+code/wrapper_classes/src/ArgsArray.java
+import java.util.Arrays;
+
+public class ArgsArray {
+    public static void main(String[] args) { // через массив args   в программу передаются извне  аргументы
+     //   System.out.println(args.length);
+        System.out.println(Arrays.toString(args));
+
+        // записать элементы в массив args:
+        /*
+         меню Run -> Edit Configurations -> Application в поле Program Arguments  указать аргументы через пробел
+         */
+
+        double x = Double.parseDouble(args[0]);
+        double y = Double.parseDouble(args[1]);
+        String operation = args[2];
+
+        System.out.println(calculator(x,y,operation));
+
+    }
+    public static double calculator(double x, double y, String operation){
+        switch (operation){
+            case "sum":
+                return x+y;
+
+            case "sub":
+                return x-y;
+
+            case "div":
+                return x/y;
+
+            case "mul":
+                return x*y;
+
+            default:
+                return Double.NaN;
+        }
+
+    }
+}
+code/wrapper_classes/src/Main.java
+public class Main {
+ //   byte, short, int, long, float, double, char, boolean
+ //   Byte, Short, Integer,Long,Float,Double,Character,Boolean
+ public static void main(String[] args) {
+     int a = 1;
+     Integer b = new Integer(1);
+     Integer c = Integer.valueOf(1);
+
+     Integer strToInt = Integer.parseInt("1234");// превращает строку, состоящую из цифр в число
+     System.out.println(strToInt+1);
+    // System.out.println(Integer.parseInt("abcd"));
+
+     // Autoboxing and Unboxing
+     /*
+     Autoboxing -  автоматическое превращение примитивного значения в соответствующий обьект-обертку
+     Unboxing  - наоборот
+      */
+     int x = 1;
+     Integer value = 1;
+     for( Integer i=0;i<10;i++){ // использовать классы-обертки таким образом в циклах не желательно.
+         System.out.println(i);
+     }
+     System.out.println("Max int = "+Integer.MAX_VALUE);
+     System.out.println("Min int = "+Integer.MIN_VALUE);
+     System.out.println("Long max= "+Long.MAX_VALUE);
+     System.out.println("Long max= "+Long.MIN_VALUE);
+     System.out.println(Byte.MAX_VALUE);
+     String str = "17";
+     int y = Integer.parseInt("17");
+     System.out.println(y-7);
+     String str1 = "3.141";
+     double pi = Double.parseDouble(str1);
+     str1 = "true";
+     Boolean.parseBoolean(str1);
+
+     //int num1 = 0/0;
+     double num2 = 0.0/0;
+     System.out.println("num2 = "+num2);
+     double num3 = 10.0/0; // положительная бесконечность
+     System.out.println("num3 = "+num3);
+     double num4 = -10.0/0; // отрицательная бесконечность
+     System.out.println("num4= "+num4);
+
+     // NaN - Not a Number (не число ) - это специальное  числовое значение для обозначения ошибок в вычеслении для
+    // типов double  и float
+     System.out.println(0.0/0.0); // ноль делим на ноль
+     System.out.println(Math.sqrt(-1));// корень из отрицатнльного числа
+     System.out.println(5.0 % 0); // остаток от деления на ноль
+
+     // Nan() - метод, проверяющий является ли значение Nan и возвращает в этом случае true
+     // isInfinite() - метод, проверяющий является ли значение бесконечностью
+
+     Double infinityPositive = +5.0/0.0;
+     Double infinityNegative = -5.0/0.0;
+     Double nan = 0.0/0.0;
+
+     System.out.println("infinityPositive is "+ infinityPositive.isNaN());
+     System.out.println("infinityNegative is "+ infinityNegative.isNaN());
+     System.out.println("nan is "+ nan.isNaN());
+
+     double number = 40.0/0.0;
+     if(Double.isNaN(number) || Double.isInfinite(number)){
+         System.out.println("the result is wrong");
+     }else {
+         System.out.println(number);
+     }
+
+
+
+
+
+
+
+
+
+ }
+
+}

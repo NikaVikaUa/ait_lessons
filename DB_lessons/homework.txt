@@ -1,0 +1,27 @@
+1.Вывести имена незаблокированных юзеров не из France
+
+db.users.find(
+{country: {$ne: 'France'}},
+{fullname: 1, _id: 0}
+)
+
+2.Разблокировать всех юзеров не из Germany
+
+db.users.updateMany(
+{country: {$ne: 'Germany'}},
+{$unset: {is_blocked: null}}
+)
+
+3.Вывести названия треков продолжительностью от 1 до 10 мин
+
+db.users.find(
+{duration_sec: {$gte: 1*60, $lte: 10*60}},
+{fullname: 1, _id: 0}
+)
+
+4.Заблокировать юзеров из France
+
+db.users.updateMany(
+{country: 'France'},
+{$set: {is_blocked: true}}
+)

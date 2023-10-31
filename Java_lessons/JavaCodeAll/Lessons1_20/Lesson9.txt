@@ -1,0 +1,237 @@
+Задачи на урок:
+
+Разбор домашнего задания, повторение пройденного
+Логические операторы
+Условная конструкция if else
+equals
+Викторина
+Презентация
+Сравнение строк (и любых других объектов) осуществляется с помощью метода equals()
+Использование == для сравнения строк не надежно и не правильно.
+
+str1.equals(str2)
+Если нужно сравнить строки без учета регистра , используем equalsIgnoreCase()
+
+str.equalsIgnoreCase(str2)
+Операторы & (И) и |(ИЛИ)
+Презентация Булева алгебра
+
+Операторы и условные конструкции
+Операторы сравнения
+    Пример     Возвращает значение "истинно", если... 
+>   a > b       а больше b
+>=  a >= b      а больше или равно b
+<   a < b       а меньше b
+<=  a <= b      а меньше или равно b
+==  a == b      а равно b
+!=  a != b      а не равно b
+Логические операторы
+&&  a && b      а и b истинны, b оценивается условно (если а ложно, b не вычисляется)
+||  a || b      а или b истинно, b оценивается условно (если а истинно, b не вычисляется)
+!   !a          а ложно 
+Условная конструкция if else
+if (x < 20) {
+    System.out.print("Это оператор if");
+} else {
+    System.out.print("Это оператор else");
+} 
+if (//условие) {
+    // этот код выполняется,если условие истинно;
+} else {
+    // этот код выполняется,если условие ложно;
+}
+equals
+Для сравнения строк используется метод equals(String) (строки должны полностью совпадать). Некорректно сравнивать строки при помощи "==".
+
+Задача 1
+Напишите программу, в которой пользователь вводит с клавиатуры целое число, а программа ему рассказывает, отрицательное это число, положительное или ноль, и делится ли оно на три.
+
+Использовать if ... else и из трёх вариантов (отрицательное, положительное или ноль) вывести только один.
+
+./code/h2023_05_31/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+//
+//    Необходимо прочитать строку и два числа.
+//    Для входных данных определить:
+//
+//    Либо строка содержит слово "Hello" и сумма чисел - четное число
+//    ИЛИ строка не содержит слово "Bye" и сумма чисел - нечетное
+//
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Введите ваше сообщение");
+    String message = scanner.nextLine();
+    System.out.println("Введите первое число");
+    int number1 = scanner.nextInt();
+    System.out.println("Введите второе число");
+    int number2 = scanner.nextInt();
+//    System.out.println(message);
+//    System.out.println(number1);
+//    System.out.println(number2);
+    // isHappy, hasDog
+    boolean hasHello = message.contains("Hello");
+    System.out.println(hasHello);
+    // even - четный, odd - нечетный
+    boolean isEven = (number1 + number2) % 2 == 0;
+    boolean hasBuy = message.contains("Buy");
+//    System.out.println(!hasBuy);
+//    System.out.println(!isEven);
+    // строка содержит слово "Hello" и сумма чисел - четное число
+    boolean condition = (hasHello & isEven) | (!hasBuy & !isEven);
+    System.out.println(condition);
+
+    // И      AND
+    // true & true   -> true
+    // true & false  -> false
+    // false & true  -> false
+    // false & false -> false
+
+    // ИЛИ    OR
+    // true | true   -> true
+    // true | false  -> true
+    // false | true  -> true
+    // false | false -> false
+
+    // Отрицание Negate - отрицать Negation - отрицание
+    // !
+    // ! true -> false
+    // ! false -> true
+    // boolean isHealthy = true;
+    // !isHealthy -> false
+
+    // Конвенция именования - договоренность в сообществе
+    // программистов о том, как называть что-либо.
+
+    // Переменные типа boolean принято называть со словами is или has
+    // isAdmin - является админом - если true - то является - если false - не является админом
+    // hasCar - есть машина
+    // isAdult, isMature - является взрослым
+
+
+
+  }
+}
+./code/h2023_05_31/src/Main2.java
+import java.util.Scanner;
+
+public class Main2 {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Укажите свой возраст");
+    int age = scanner.nextInt();
+    boolean isAdult = (age >= 21);
+    System.out.println(isAdult);
+    // conditional statement
+    if (isAdult) {
+      System.out.println("Вот ваше вино");
+    }
+    if (age <= 10){
+      System.out.println("Вот ваша жвачка");
+    }
+
+  }
+}
+./code/h2023_05_31/src/Main3.java
+import java.util.Scanner;
+
+public class Main3 {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Хорошо ли вам спалось? да/нет");
+    String answer = scanner.nextLine();
+    // if else
+    // сравнивали примитивные типы через ==
+    // для String, чтобы сравнить равна ли одна строка другой
+    // .equals()
+    String a = "hey";
+    String b = "hey";
+    boolean condition = a.equals(b);  // смысл такой a == b
+
+    if (answer.equals("нет")){
+      System.out.println(
+          "Попробуйте подушки и матрасы нашей фирмы");
+    } else {
+      System.out.println("Видимо, вы уже пользуетесь нашими продуктами");
+    }
+    // if(условие) {
+    //   выполнится если условие истинное
+    // } else {
+    //   этот блок выполнится, если условие ложное
+    //}
+  }
+}
+./code/h2023_05_31/src/MedicalAdviser.java
+import java.util.Scanner;
+
+public class MedicalAdviser {
+  public static void main(String[] args) {
+    // Узнайте у пользователя его температуру
+
+    // Если температура от 35 до 37 не включительно,
+    // то нужно сообщить пользователю:
+    // "Вы совершенно здоровы, голубчик".
+
+    // Если температура >=37 и меньше 40:
+    // "Вам следует выпить ибупрофен и воды".
+
+    // Если температура >= 40:
+    // "У меня есть хороший контакт бюро ритуальных услуг, вам нужен?".
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Введите вашу температуру");
+    int temperature = scanner.nextInt();
+    if(temperature > 35 & temperature < 37){
+      System.out.println("Вы совершенно здоровы, голубчик");
+    }
+    if(temperature >= 37 & temperature < 40){
+      System.out.println("Вам следует выпить ибупрофен и воды");
+    }
+    if (temperature >= 40){
+      System.out.println(
+          "У меня есть хороший контакт бюро ритуальных услуг, вам нужен?");
+    }
+
+  }
+}
+./code/h2023_05_31/src/Quiz.java
+import java.util.Scanner;
+
+public class Quiz {
+  public static void main(String[] args) {
+    // Викторина на пять вопросов
+
+    // easy version
+    // Выберите тему для викторины,
+    // (смешное, забавное или интересное)
+    // Спрашиваете вопрос у пользователя:
+    // Например: "Сколько зубов у панды?"
+    // Если пользователь отвечает 22 -
+    // "Неправильный ответ"
+    // Если бы пользователь бы ввел 38
+    // "Правильный ответ"
+    // scanner.nextLine();
+
+    // medium version
+    // "Это неправильный ответ, правильный ответ <ответ>"
+
+    // hard version
+    // После викторины выводите сообщение:
+    // "Правильно отвечено на 3 вопроса из 5"
+
+    int count = 20;
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("В какой стране находится пантеон?");
+    String correctAnswer1 = "Италия";
+    String answer1 = scanner.nextLine();
+    if (correctAnswer1.equals(answer1)) {
+      System.out.println("Правильный ответ");
+      count++; //      count = count + 1;
+    } else {
+      System.out.println("Неправильно. Правильный ответ: "+ correctAnswer1);
+    }
+    // после всех вопросов выведем итоговый результат
+    System.out.println("Количество правильных ответов: " + count);
+
+  }
+}

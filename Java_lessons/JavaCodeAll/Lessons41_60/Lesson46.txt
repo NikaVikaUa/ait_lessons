@@ -1,0 +1,278 @@
+Задачи на урок:
+Разбор дз
+Stack, Queue, Deque in Java
+Практика, решение задач
+Очереди и класс ArrayDeque
+
+Очереди представляют структуру данных, работающую по принципу FIFO (first in - first out). То есть чем раньше был добавлен элемент в коллекцию, тем раньше он из нее удаляется. Это стандартная модель однонаправленной очереди. Однако бывают и двунаправленные - то есть такие, в которых мы можем добавить элемент не только в начала, но и в конец. И соответственно удалить элемент не только из конца, но и из начала.
+
+Особенностью классов очередей является то, что они реализуют специальные интерфейсы Queue или Deque.
+
+Интерфейс Queue
+Обобщенный интерфейс Queue расширяет базовый интерфейс Collection и определяет поведение класса в качестве однонаправленной очереди. Свою функциональность он раскрывает через следующие методы:
+
+E element(): возвращает, но не удаляет, элемент из начала очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+boolean offer(E obj): добавляет элемент obj в конец очереди. Если элемент удачно добавлен, возвращает true, иначе - false
+
+E peek(): возвращает без удаления элемент из начала очереди. Если очередь пуста, возвращает значение null
+
+E poll(): возвращает с удалением элемент из начала очереди. Если очередь пуста, возвращает значение null
+
+E remove(): возвращает с удалением элемент из начала очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+Таким образом, у всех классов, которые реализуют данный интерфейс, будет метод offer для добавления в очередь, метод poll для извлечения элемента из головы очереди, и методы peek и element, позволяющие просто получить элемент из головы очереди.
+
+Интерфейс Deque
+Интерфейс Deque расширяет вышеописанный интерфейс Queue и определяет поведение двунаправленной очереди, которая работает как обычная однонаправленная очередь, либо как стек, действующий по принципу LIFO (последний вошел - первый вышел).
+
+Интерфейс Deque определяет следующие методы:
+
+void addFirst(E obj): добавляет элемент в начало очереди
+
+void addLast(E obj): добавляет элемент obj в конец очереди
+
+E getFirst(): возвращает без удаления элемент из головы очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+E getLast(): возвращает без удаления последний элемент очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+boolean offerFirst(E obj): добавляет элемент obj в самое начало очереди. Если элемент удачно добавлен, возвращает true, иначе - false
+
+boolean offerLast(E obj): добавляет элемент obj в конец очереди. Если элемент удачно добавлен, возвращает true, иначе - false
+
+E peekFirst(): возвращает без удаления элемент из начала очереди. Если очередь пуста, возвращает значение null
+
+E peekLast(): возвращает без удаления последний элемент очереди. Если очередь пуста, возвращает значение null
+
+E pollFirst(): возвращает с удалением элемент из начала очереди. Если очередь пуста, возвращает значение null
+
+E pollLast(): возвращает с удалением последний элемент очереди. Если очередь пуста, возвращает значение null
+
+E pop(): возвращает с удалением элемент из начала очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+void push(E element): добавляет элемент в самое начало очереди
+
+E removeFirst(): возвращает с удалением элемент из начала очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+E removeLast(): возвращает с удалением элемент из конца очереди. Если очередь пуста, генерирует исключение NoSuchElementException
+
+boolean removeFirstOccurrence(Object obj): удаляет первый встреченный элемент obj из очереди. Если удаление произшло, то возвращает true, иначе возвращает false.
+
+boolean removeLastOccurrence(Object obj): удаляет последний встреченный элемент obj из очереди. Если удаление произшло, то возвращает true, иначе возвращает false.
+
+Таким образом, наличие методов pop и push позволяет классам, реализующим этот элемент, действовать в качестве стека. В тоже время имеющийся функционал также позволяет создавать двунаправленные очереди, что делает классы, применяющие данный интерфейс, довольно гибкими.
+
+Класс ArrayDeque
+В Java очереди представлены рядом классов. Одни из низ - класс ArrayDeque. Этот класс представляют обобщенную двунаправленную очередь, наследуя функционал от класса AbstractCollection и применяя интерфейс Deque.
+
+В классе ArrayDeque определены следующие конструкторы:
+
+ArrayDeque(): создает пустую очередь
+
+ArrayDeque(Collection<? extends E> col): создает очередь, наполненную элементами из коллекции col
+
+ArrayDeque(int capacity): создает очередь с начальной емкостью capacity. Если мы явно не указываем начальную емкость, то емкость по умолчанию будет равна 16
+
+Задача со * - см. код занятия DequeTask.
+
+code/homework46/src/DayOfWeek.java
+public enum DayOfWeek {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
+}
+code/homework46/src/DayOfWeekResolver.java
+import java.util.Scanner;
+
+public class DayOfWeekResolver {
+
+    private static Scanner scanner = new Scanner(System.in);
+
+    public void start(){
+        DayOfWeek dayOfWeek = readDayOfWeek();
+        System.out.println("It is "+isDayOff(dayOfWeek));
+        scanner.close();
+
+    }
+
+
+    private DayOfWeek readDayOfWeek(){
+        DayOfWeek enumDay = null;
+        boolean flag;
+        do {
+            flag = false;
+            System.out.println("Enter day of the week");
+            String day = scanner.next();
+            try {
+                 enumDay = DayOfWeek.valueOf(day.toUpperCase());
+            } catch (IllegalArgumentException e){
+                System.out.println("Please enter valid day of week");
+                flag = true;
+            }
+
+        }while(flag);
+
+        return enumDay;
+    }
+
+
+
+
+//    private boolean isDayOf(String day){
+ //       DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
+ //       return isDayOff(dayOfWeek);
+ //   }
+
+
+
+    private boolean isDayOff( DayOfWeek day){
+        switch (day){
+            case SATURDAY:
+            case SUNDAY: return true;
+            default: return false;
+
+        }
+    }
+}
+code/homework46/src/Main.java
+public class Main {
+
+    /*
+    /*
+    Написать метод, который при вводе с клавиатуры дня недели отвечает на вопрос является ли этот день выходным.
+     ( для выходного it is true , для рабочего it is false.  Использовать ENUM. День недели вводится со сканера.
+
+     1. Создпть Enum, содержащий дни недели.
+     2. Создать обьект сканера
+     3. В методе используя константы энума сделать switch, который будет возвращать результат true  или false  в зависимости
+        от введенного со сканера дня недели
+
+     Вариант со звездочкой :
+      -разделить решение на отдельные методы, каждый из которых решает свою задачу
+     ( например, ввод значения с клавиатуры).
+     - проверить что произойдет в случае неверного ввода с клавиатуры и подумать как решить проблему если она возникнет
+
+
+     */
+    public static void main(String[] args) {
+        DayOfWeekResolver resolver = new DayOfWeekResolver();
+        resolver.start();
+    }
+
+}
+code/other_collections/src/DequeTask.java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class DequeTask {
+
+    /*
+    Есть массив, состоящий из трех видов скобок: (), {}, [] .
+    Нужно написать метод, определяющий является ли порядок скобок в массиве корректным
+     {}([]) - корректный порядок
+     {}([]{()})- корректный порядок
+     {(] - некорректный порядок
+     {}([])} -  некорректный порядок
+     {}([])( -  некорректный порядок
+     {(})- некорректный порядок
+
+     char[] brackets = {'{', '}'}
+
+     */
+    public boolean areBracketsCorrect( char[] brackets){
+        Deque<Character> stack = new ArrayDeque<>();
+        return false;
+    }
+}
+code/other_collections/src/Main.java
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.PriorityQueue;
+import java.util.Stack;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Stack -  работает по принципу последний пришел - первый ушел
+        /*
+        LIFO ( Last in First Out)
+        метод push() - добавляет элемент в конец стека
+        метод pop() -  удаляеи элемент, который был добавлен последним
+         */
+
+        Stack<String> names = new Stack<>();
+        names.push("John"); // [John]
+        names.push("Jack"); // [John, Jack]
+        names.push("Steeve"); // [John, Jack,Steeve]
+        System.out.println(names);
+        System.out.println("result of peek method is "+names.peek());
+        System.out.println("names after peek method "+names);
+        names.pop(); // удаляет последний элемент
+        System.out.println(names);
+        names.pop();
+        System.out.println(names);
+        names.pop();
+        System.out.println(names);
+
+        System.out.println("--------QUEUE----------");
+        // Queue
+
+        /*
+        Очередь реализована таким образом, что элементы добавляются в конец,
+        а удаляются из начала очереди.
+        FIFO - First In First Out
+
+        Методы очереди :
+
+        E element() - возвращает первый элемент
+        boolean offer() -  аналогично add
+        E remove() -  удаляет первый элемент и возвращает его значение
+        E poll() - как и remove, но возвращает null  если очередь пустая
+        E peek() - как и element, но возвращает null  если очередь пустая
+         */
+
+        // Priority Queue
+
+        PriorityQueue<String> queue = new PriorityQueue<>(15,(a,b)->a.length() - b.length());
+                //new PriorityQueue<>(15,new MyComparator());
+
+        queue.add("John");
+        queue.add("John Deer");
+        queue.add("Ann");
+        queue.add("Benjamin");
+
+        while ( queue.size() != 0){
+            System.out.println(queue.poll());
+        }
+        System.out.println("--Deque--");
+        // Deque -  это двусторонняя очередь, т.е. добавлять и удалять элементы  можно с обеих сторон.
+
+        Deque<String> deque = new ArrayDeque<>();
+        deque.add("Maggie");
+        System.out.println(deque);
+        deque.add("Bill");
+        System.out.println(deque);
+        deque.addLast("Rick");
+        System.out.println(deque);
+        deque.addFirst("John");
+        System.out.println(deque);
+        deque.add("Ann");
+        System.out.println(deque);
+
+
+
+    }
+}
+code/other_collections/src/MyComparator.java
+import java.util.Comparator;
+
+public class MyComparator implements Comparator<String> {
+    @Override
+    public int compare(String a, String b) {
+        return a.length() - b.length();
+    }
+}

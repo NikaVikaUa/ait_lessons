@@ -1,0 +1,394 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Stream API, продолжение
+Потоки (Stream) в Java
+
+
+*****************************************************************************************************************
+
+Поток - способ работать с данными, не меняя их источник. Поток, как и в реальном мире, не возможно повернуть назад или обойти повторно.
+
+Потоки описаны в пакете java.util.stream, полное имя класса - java.util.stream.Stream.
+
+Документация класса Stream
+
+Создание потоков
+Пустой поток
+Stream<String> streamEmpty = Stream.empty();
+Может пригодиться нам там, где мы не хотим передавать null и вызывать NullPointerException, например:
+
+public Stream<String> streamOf(List<String> list) {
+  if (list == null || list.isEmpty()) {
+    return Stream.empty();
+  }
+  return list.stream();
+}
+Поток на основе коллекции
+Все коллекции (Collection и его наследники) могут создать поток на основе имеющихся данных при помощи метода .stream():
+
+Collection<String> collection = Arrays.asList("a", "b", "c");
+Stream<String> streamOfCollection = collection.stream();
+Поток на основе массива
+Поток модно создавать как на основе перечисленных в аргументах данных
+
+Stream<String> stream = Stream.of("a", "b", "c");
+Так и с использованием метода Arrays.stream:
+
+String[] arr = {"a", "b", "c"};
+Stream<String> streamOfArrayFull = Arrays.stream(arr);
+Stream<String> streamOfArrayPart = Arrays.stream(arr, 1, 3);
+Потоки объектов примитивных типов
+Для потоков, содержащих в себе int, long и double, существуют классы IntStream, LongStream и DoubleStream соответственно.
+
+Работа с потоками
+Работа с потоками обычно выглядит следующим образом:
+
+Создание из источника данных
+Обработка при помощи промежуточных (intermediate) операторов.
+Вызов терминального (terminal) оператора.
+Промежуточные операторы (ещё называют "lazy" - ленивые) обрабатывают поступающие элементы и возвращают стрим. Промежуточных операторов в цепочке обработки элементов может быть много.
+
+Терминальные (ещё называют "eager" - жаждущие) — обрабатывают элементы и завершают работу стрима. Терминальный оператор в цепочке может быть только один.
+
+Промежуточные операторы
+Общая идея промежуточных операторов "в цепочке" вам уже слегка знакома. Именно так может быть устроена работа со строками.
+
+filter(Predicate predicate) фильтрует стрим, пропуская только те элементы, что проходят по условию
+
+Predicate - встроенный функциональный интерфейс. "Что-то", возвращающее true или false - например, лямбда-функция);
+
+map(Function mapper) даёт возможность создать функцию, с помощью которой мы будем превращать каждый элемент в какой-то другой
+
+Функциональный интерфейс Function<T,R> представляет функцию перехода от объекта типа T к объекту типа R.
+
+limit(long maxSize) ограничивает стрим по количеству элементов
+
+skip(long n) пропускает n элементов
+
+sorted() или sorted(Comparator comparator) сортирует стрим
+
+distinct() возвращает только уникальные элементы
+
+Терминальные операторы
+forEach(Consumer action)
+
+Consumer - "Потребитель" - функциональный интерфейс, описывающий действие с каждым элементом.
+
+count() возвращает количество элементов стрима
+
+collect(Collector collector) собирает итог в список, множество или другую коллекцию, объединяет в строку...
+
+findFirst() вытаскивает первый элемент стрима
+
+allMatch(Predicate predicate) возвращает true, если все элементы стрима удовлетворяют условию predicate
+
+anyMatch(Predicate predicate) возвращает true, если хотя бы один элемент стрима удовлетворяет условию predicate
+
+noneMatch(Predicate predicate) возвращает true, если ни один элемент стрима не удовлетворяет условию predicate
+
+Коллекторы
+Некоторые коллекторы уже описаны в классе Collectors (документация).
+
+toList() собирает элементы в List
+toSet() cобирает элементы в множество
+counting() подсчитывает количество элементов
+joining() собирает элементы в одну строку
+joining(CharSequence delimiter)
+joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix)
+Пример
+Возьмём числа 50, 60, 70, 80, 90, 100, 110, 120.
+
+Отберём те из них, которые меньше 90.
+
+Добавим к каждому отобранному по 10.
+
+Распечатаем первые три получившихся числа.
+
+Без потоков:
+
+int[] arr = {50, 60, 70, 80, 90, 100, 110, 120};
+int count = 0;
+for (int x : arr) {
+  if (x >= 90) {
+    continue;
+  }
+  x += 10;
+  count++;
+  if (count > 3) {
+    break;
+  }
+  System.out.println(x);
+}
+С потоками (и красивыми переносами для большей понятности):
+
+int[] arr = {50, 60, 70, 80, 90, 100, 110, 120};
+Arrays.stream(arr)
+    .filter(x -> x < 90)
+    .map(x -> x + 10)
+    .limit(3)
+    .forEach(System.out::println);
+С потоками, но без красивых переносов:
+
+IntStream.of(50, 60, 70, 80, 90, 100, 110, 120).filter(x -> x < 90).map(x -> x + 10).limit(3)
+    .forEach(System.out::print);
+
+**************************************************************************************************
+
+Задача1
+Написать метод, принимающий список имен, где некоторые имена повторяются, и возвращающий список без повторений.
+
+Задача2
+Есть класс Address с полями String street и int houseNumber и класс Person с полями String name, int age, Address address.
+Написать метод, возвращающий адреса тех, кто старше 17 лет.
+List < Address > findAddresses( List< Person > input )
+
+В обоих задачах для решения использовать стримы
+
+*****************************************************************************************************
+
+code/homework57/src/Homework.java
+import java.util.stream.Stream;
+
+public class Homework {
+    public static void main(String[] args) {
+        System.out.println(countWords(" aaaaaaaaaa adfr gggg brtz a","a"));
+
+        System.out.println(isDig(""));
+    }
+
+
+    /*
+    Задача 1
+Используя стримы написать метод, принимающий предложение (строку) и букву и возвращающий количество слов, начинающихся с этой буквы. Слова в предложении разделены пробелами
+Пример: " aaaaaaaaaa adfr gggg brtz a" -> 3
+     */
+
+    public static long countWords( String input, String w){
+        return Stream.of(input.split(" "))
+                .filter(s ->s.startsWith(w))
+                .count();
+    }
+
+    /*
+    Задача 2
+Используя стримы написать метод, проверяющий является ли строка числом ( строковым представлением числа).
+Метод принимает строку и возвращает boolean.
+Пример: "1 2 3 4 5" - true
+"abc14" - false
+     */
+    public static boolean isDig( String input){
+        return input.chars().allMatch(Character :: isDigit);
+    }
+}
+
+*****************************************************************************************************
+
+code/streams57/src/Car.java
+public class Car {
+
+    private  String brand;
+    private  int price;
+
+    private String colour;
+
+    public Car(String brand, int price) {
+        this.brand = brand;
+        this.price = price;
+
+    }
+
+    public Car(String brand, int price,String colour) {
+        this.brand = brand;
+        this.price = price;
+        this.colour = colour;
+
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+}
+
+***************************************************************************************************
+
+code/streams57/src/Main.java
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Car car1 = new Car("mercedes",100000);
+        Car car2 = new Car("volvo",70000);
+        Car car3 = new Car("Opel",30000);
+        Car car4 = new Car("bmw",150000);
+        Car car5 = new Car("acura",150000);
+        List<Car> cars = new ArrayList<>();
+        cars.add(car1);
+        cars.add(car2);
+        cars.add(car3);
+        cars.add(car4);
+        cars.add(car5);
+
+        cars.stream()
+                .map(Car::getBrand)
+                .forEach(System.out::println);
+
+
+        //flatMap - плоское отображение
+
+        String[] strings = {"Hello","Jaaaaaaava"};
+        Arrays.stream(strings)
+                .map(s->s.split(""))
+                .flatMap(Arrays :: stream).distinct()
+                .forEach(System.out::println);
+
+        System.out.println("IntStream.range");
+        //  метод range() -  создает стрим целых чисел от 1 до 2
+        IntStream.range(1,3).forEach(System.out::print);
+        LongStream.rangeClosed(1,3).forEach(System.out::print);//  включает также индекс окончания
+
+
+        System.out.println("\nAnother example for flatMap");
+        Stream.of(2,1,3)
+                .flatMapToInt(i ->IntStream.range(0,i))
+                .forEach(System.out::print);
+
+        // [0 1 2][0][0,1,2]
+
+        System.out.println("\n with map");
+
+        Stream.of(2,1,3)
+                .map(i ->IntStream.range(0,i))
+                .forEach(System.out::println);
+
+
+        // takeWhile() - выбирает элементы, пока они соответствуют условию. Если встречается элемент не соответствующий
+        // условию, метод заканчивает работу
+        Stream.of(-6,-9,-2,1,3,-4)
+                .sorted()
+                .takeWhile(n -> n < 0)
+                .forEach(System.out::println);
+
+        System.out.println("drop while");
+        //dropWhile() -  обратное действие
+        Stream.of(-6,-9,-2,1,3,-4)
+                .dropWhile(n -> n<0)
+                .forEach(System.out::println);
+
+
+        // concat() -  обьединяет элементы двух потоков
+
+        Stream<String> names1 = Stream.of("John","Jack");
+        Stream<String> names2 = Stream.of("Jane","Kate");
+        Stream.concat(names1,names2).forEach(System.out::println);
+
+
+        System.out.println("skip/limit methods");
+        // метод skip(long n)  - пропускает первые  n элементов
+        // limit(long n) - ограничивает поток n элеменами
+        Stream<String> names = Stream.of("John","Jack","Jane","Kate");
+        names.skip(0).limit(5).forEach(System.out::println);
+
+        // min() , max() - возвращают мин или макс элемент соответственно. Принимают компаратор.
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5,6,7);
+       Optional<Integer> min = numbers.stream().min(Integer::compare);
+       Optional<Integer> max = numbers.stream().max(Integer::compare);
+        System.out.println(min.get());
+        System.out.println(max.get());
+
+        //  метод reduce - терминальная операция, возвращает значение - результат операции.
+        //  Optional<T> reduce (BinaryOperator<T>
+
+       Optional<Integer> number = Stream.of(1,2,3,4,5).reduce((num1,num2)->num1*num2);
+        System.out.println(number.get());
+        // n1 *n2*n3*n4*n5
+
+        Stream<String> words = Stream.of("java","is","simple");
+        Optional<String> sentence = words.reduce((str1,str2)->str1+" "+str2);
+        System.out.println(sentence.get());
+
+        // T reduce ( T identity, BinaryOperator<T>
+        // identity - начальное значение
+        int result = Stream.of(1,2,3,4,5).reduce(2,(num1,num2)->num1 +num2);
+        System.out.println(result);
+
+
+        // collect -  собирает поток в коллекцию
+        // collect(Collector collector)
+        //  класс Collectors  предоставляет ряд встроенных функций  для сборки потока:
+        // toList, toSet, toMap
+
+        List<String> namesList = Arrays.asList("Jack","Ann","Bill","Benjamin","Bill");
+       List<String>listStream = namesList.stream().filter(s->s.length()>3).collect(Collectors.toList());
+        System.out.println(listStream);
+
+        Set<String> setStream = namesList.stream().filter(s->s.length()>3)
+                                            .collect(Collectors.toSet());
+        System.out.println(setStream);
+
+        //toMap
+
+        Map<String, Integer> carMap = cars.stream()
+                .collect(Collectors.toMap(Car::getBrand, Car::getPrice));
+
+        carMap.forEach((k,v)-> System.out.println(k +" "+v));
+
+
+        // Группировка
+        // Collectors.groupingBy()
+
+        Car car11 = new Car("mercedes",100000,"red");
+        Car car12 = new Car("mercedes",100000,"red");
+        Car car22 = new Car("volvo",70000,"blue");
+        Car car33 = new Car("Opel",30000,"black");
+        Car car44 = new Car("bmw",150000,"green");
+        Car car55 = new Car("acura",150000,"yellow");
+        List<Car> cars1 = new ArrayList<>();
+        cars1.add(car11);
+        cars1.add(car12);
+        cars1.add(car22);
+        cars1.add(car33);
+        cars1.add(car44);
+        cars1.add(car55);
+
+        Map<String,List<Car>>carsByBrand = cars1.stream()
+                .collect(Collectors.groupingBy(Car ::getBrand));
+
+        for(Map.Entry<String,List<Car>>item:carsByBrand.entrySet()){
+
+            System.out.println(item.getKey());
+
+            for(Car car: item.getValue()) {
+                System.out.println(car.getBrand());
+                System.out.println(car.getColour());
+                System.out.println(car.getPrice());
+            }
+            System.out.println();
+
+        }
+
+
+
+    }
+}

@@ -1,0 +1,405 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Методы Arrays.binarySearch, copyOf, copyOfRange
+Практика, решение задач
+Статический метод Arrays.binarySearch
+искать элемент в массиве, используя алгоритм бинарного поиска. При этом массив обязательно должен быть отсортирован. Arrays.binarySearch должен использовать тот же компаратор, при помощи которого массив был отсортирован. Бинарный поиск возвращает индекс искомого элемента в массиве. Если элемент не найден, то возвращается индекс ожидаемой позиции для этого элемента со знаком минус, уменьшенный на еденицу (- expectedPosition - 1). Результаты бинарного поиска в неотсортированном массиве не подлежат интерпретации.
+
+Задача1
+Создать класс Employee c полями id, name, age, salary. Задать естественный порядок его сортировки по id. Сделать дополнительные возможности сортировки по зарплате, возрасту, имени а также сортировку по возрасту и затем имени если возраст одинаковый. Протестировать.
+
+code/accounting31/src/Company.java
+import java.util.Arrays;
+
+public class Company {
+
+    private Employee[] employees;// массив сотрудников
+    private int companySize;
+
+    public Company(int capacity) { // через конструктор будем передавать количество сотрудников,
+                                    // которое компания может нанять на работу ( переменная capacity)
+        employees = new Employee[capacity];
+        companySize = 0; // начальный размер компании
+    }
+
+    public boolean addEmployee(Employee employee){              // метод, добавляющий сотрудника
+        if( companySize < employees.length){
+            employees[companySize] = employee; //  добавляем сотрудника
+            companySize++;
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean removeEmployee (Employee employee){ //  метод для удаления сотрудника
+        for (int i = 0;i < companySize;i++){ // проходим по всем элементам массива и сравниваем их с
+                                            // искомым
+            if(employees[i].equals(employee)){
+                employees[i] = employees[companySize-1];
+                companySize--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public void display(){ // метод, выводящий на экран спсиок сотрудников
+        for (int i = 0; i<companySize;i++){
+            System.out.println(employees[i]);
+        }
+    }
+
+    public double sumSalary(){ // метод, суммирующий зарплаты всех сотрудников
+        double sum = 0;
+        for ( int i = 0; i<companySize;i++){
+            sum = sum + employees[i].calculateSalary();
+        }
+        return sum;
+    }
+
+    public void sortEmployees(){ // сортировка и вывод на экран
+        Arrays.sort(employees,0,companySize);// сортировка не всего массива, а
+                                                            // его части от элемента с индексом 0 до
+                                                            // элемента с индексом compsnzSize
+
+        display();
+
+    }
+
+
+
+}
+code/accounting31/src/Employee.java
+public abstract class Employee implements Comparable<Employee> {
+
+    private int id;
+    private String firstName;
+    private String lastName;
+    private int yearOfBirth;
+    private double hour;
+
+    public Employee(int id, String firstName, String lastName, int yearOfBirth, double hour) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.yearOfBirth = yearOfBirth;
+        this.hour = hour;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public double getHour() {
+        return hour;
+    }
+
+    public void setHour(double hour) {
+        this.hour = hour;
+    }
+
+
+    public abstract double calculateSalary();
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", yearOfBirth=" + yearOfBirth +
+                ", hour=" + hour +
+                '}';
+    }
+
+//    public void printClassName(){
+//        System.out.println(" I am Employee class");
+//    }
+
+    public int compareTo(Employee e){
+        return getLastName().compareTo(e.getLastName());
+    }
+}
+code/accounting31/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+        Employee sm1 = new SalesManager(567,
+                                                "John",
+                                                "Doe",
+                                                2000,
+                                                    40,
+                                                10000,
+                                                0.02 );
+
+        Employee wm1 = new WageEmployee(444,
+                "Jack",
+                "Nicolson",
+                1945,
+                30,
+                15.5);
+
+
+
+        Employee sm2 = new SalesManager(124,
+                "Ann",
+                "Anderson",
+                2000,
+                80,
+                10000,
+                0.05 );
+
+        Employee wm2 = new WageEmployee(654,
+                "Jack",
+                "Berg",
+                1965,
+                30,
+                16.5);
+
+
+        Employee sm3 = new SalesManager(333,
+                "Kerk",
+                "Douglas",
+                2000,
+                80,
+                5000,
+                0.1 );
+
+        Employee wm3 = new WageEmployee(446,
+                "Clint",
+                "Eastwood",
+                1945,
+                30,
+                15.5);
+
+        System.out.println(sm1.calculateSalary());
+        System.out.println(wm1.calculateSalary());
+
+        Company company = new Company(10);
+
+        System.out.println(" Empty Employees list");
+        company.display();
+
+        company.addEmployee(sm1);
+        company.addEmployee(wm1);
+        company.addEmployee(sm2);
+        company.addEmployee(wm2);
+        company.addEmployee(sm3);
+        company.addEmployee(wm3);
+
+        System.out.println(" Employees list, 6 employees");
+        company.display();
+
+        System.out.println("Remove sm1");
+        company.removeEmployee(sm1);
+        company.display();
+
+        System.out.println();
+        System.out.println();
+        System.out.println("Everybody's salary"+company.sumSalary());
+
+        System.out.println("Employees sorted");
+        company.sortEmployees();
+
+
+      //  salesManager.printParentClassName();
+    }
+
+
+  /*
+    Создать программу для бухгалтерии, которая будет уметь следующее:
+    - добавлять сотрудников в штат
+    - удалять сотрудников из штата
+    - рассчитывать зарплату для двух категорий сотрудников
+                -сотрудник с почасовой оплатой
+                -менеджер по продажам
+
+     У программы должны быть следующие классы :
+      классы сотрудников : абстрактный родительский класс Employee
+                           сотрудник на зарплате WageEmployee
+                           менеджер по продажам  SalesManager
+        У сотрудников должны быть такие поля :
+            id, имя, фамилия ,год рождения, количество проработанных часов
+            и метод для расчета зарплаты ( calculateSalary)
+        У сотрудника на почасовой оплате должно быть поле ставка за час. Метод расчета его зарплаты должен
+        учитывать минимальный размер оплаты труда
+        У менеджера по продажам нет фиксированной оплаты, его зарплата рассчитывается ка процент от обьема продаж.
+        Но его метод оплаты также должен учитывать минимальный размер оплаты труда
+        private double salesVolume
+        private double percent
+
+      класс Company, имеющий методы для :
+                        -добавления сотрудника ( addEmployee),
+                        -удаления сотрудника ( removeEmployee)
+                        -вывода на экран списка сотрудников ( display)
+                        -суммирования зарплат всех сотрудников (sumSalary)
+                        -сортировки сотрудников по фамилии  (sortEmployees)
+   */
+}
+code/accounting31/src/SalesManager.java
+public class SalesManager extends Employee{
+
+    private double salesVolume;
+    private double percent;
+
+    public SalesManager(int id, String firstName, String lastName, int yearOfBirth, double hour, double salesVolume, double percent) {
+        super(id, firstName, lastName, yearOfBirth, hour);
+        this.salesVolume = salesVolume;
+        this.percent = percent;
+    }
+
+    public double getSalesVolume() {
+        return salesVolume;
+    }
+
+    public double getPercent() {
+        return percent;
+    }
+
+    public double calculateSalary(){
+        double salary = salesVolume*percent;
+        if ( salary < getHour()*StateConstants.MIN_WAGE){
+            salary = getHour()*StateConstants.MIN_WAGE;
+        }
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString()+"SalesManager{" +
+                "salesVolume=" + salesVolume +
+                ", percent=" + percent +
+                '}';
+    }
+
+//    public void printClassName(){
+//        System.out.println("I am SalesManager class");
+//    }
+//    public void printParentClassName(){
+//       super.printClassName();
+//    }
+}
+code/accounting31/src/StateConstants.java
+public class StateConstants {
+
+    public static final double MIN_WAGE = 12.41;
+}
+code/accounting31/src/WageEmployee.java
+public class WageEmployee extends Employee {
+
+    private double wage;
+
+    public WageEmployee(int id, String firstName,String lastName,int year, double hour, double wage){
+        super(id,firstName,lastName,year,hour);
+        this.wage = wage;
+    }
+
+    public double getWage() {
+        return wage;
+    }
+
+    public void setWage(double wage) {
+        this.wage = wage;
+    }
+
+    @Override
+    public double calculateSalary() {
+      double salary = getHour()*wage;
+      if ( salary < getHour()*StateConstants.MIN_WAGE){
+          salary = getHour()*StateConstants.MIN_WAGE;
+      }
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString()+"WageEmployee{" +
+                "wage=" + wage +
+                '}';
+    }
+}
+code/main31/src/Main.java
+import java.util.Arrays;
+
+public class Main {
+
+    //Arrays.copyOf() - копирует заданное количество элементов из старого массива в новый
+
+    public static void main(String[] args) {
+
+
+        int[] num = {100, 34, 67, 12, -5, 70}; // массив, откуда копируем
+                                                 //сколько копируем
+        int[] numCopy = Arrays.copyOf(num, num.length);
+        System.out.println(Arrays.toString(numCopy));
+
+        int[] numCopyPart = Arrays.copyOf(num,3); // копирует три элемента из старого массива
+        System.out.println(Arrays.toString(numCopyPart));
+
+        // копирование части массива  не с нулевого элемента
+        int[] numCopyMiddle = Arrays.copyOfRange(num,2,6); // копирует со второго индекса вкл
+                                                                         // по 6  искл.
+        System.out.println(Arrays.toString(numCopyMiddle));
+    }
+
+}
+code/type_conversion/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+        int i = 10;
+        float f;
+        f = i; // присваиваем int to  float
+        System.out.println(f);
+        // при присвоении совместимых типов значение справа превращается  в тип слева выражения
+
+        /*
+        Автоматическое превращение типов возможно при соблюдении двух условий:
+        1. Типы совместимы
+        2. Тип слева больше чем справа от знака присваивания
+
+         */
+        int y;
+        byte x = 7;
+        y=x;
+       // byte b = y;
+        long l;
+        double d;
+        l = 100012345L;
+        d = l;
+
+        // автоматическая конверсия  числовых типов в char и boolean не возможна. Char и boolean
+        // также не совместимы
+
+
+    }
+}

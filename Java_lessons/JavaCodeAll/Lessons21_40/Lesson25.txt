@@ -1,0 +1,288 @@
+Задачи на урок:
+Обсуждение и разбор дз
+Абстрактные классы и абстрактные методы
+Практика, решение задач
+Абстрактные классы
+Кроме обычных классов в Java есть абстрактные классы. Абстрактный класс похож на обычный класс. В абстрактном классе также можно определить поля и методы, но в то же время нельзя создать объект или экземпляр абстрактного класса. Абстрактные классы призваны предоставлять базовый функционал для классов-наследников. А производные классы уже реализуют этот функционал.
+
+При определении абстрактных классов используется ключевое слово abstract.
+Но главное отличие состоит в том, что мы не можем использовать конструктор абстрактного класса для создания его объекта.
+Кроме обычных методов абстрактный класс может содержать абстрактные методы. Такие методы определяются с помощью ключевого слова abstract и не имеют никакой реализации.
+Производный класс обязан переопределить и реализовать все абстрактные методы, которые имеются в базовом абстрактном классе. Также следует учитывать, что если класс имеет хотя бы один абстрактный метод, то данный класс должен быть определен как абстрактный.
+
+Продолжить проект по созданию фабрики пиццы
+
+code/abstract_classes/src/Animal.java
+public abstract class Animal { //  класс должен быть обьявлен абстрактным если в нем есть хотя бы
+                                // один  абстрактный метод
+
+    //
+
+    public abstract void sound(); // при обьявлении метода абстарктным с помощью слова abstract
+    // мы не пишем тело метода. Но в этом случае класс должен также быть обьявлен абстрактным
+
+    public void run(){ //  в абстрактном классе могут быть и конкретные методы
+        System.out.println("Runs");
+    }
+}
+code/abstract_classes/src/Dog.java
+public class Dog extends Animal{
+
+    public void sound(){ // в дочернем классе обязательно должен быть реализован абстрактный метод родительского класса
+        System.out.println("Woof");
+    }
+}
+code/abstract_classes/src/Lion.java
+public class Lion extends Animal{
+
+    public void sound(){
+        System.out.println("Lion roars");
+    }
+}
+code/abstract_classes/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        Animal lion = new Lion();
+      //  Animal animal = new Animal();  обьект абстрактного класса создать нельзя !
+        dog.sound();
+        lion.sound();
+        dog.run();
+        lion.run();
+
+        }
+    }
+
+code/homework25/src/FindMaxMinDiff.java
+public class FindMaxMinDiff {
+
+    public static void main(String[] args) {
+        int[] numbers = {4,2,5,8};
+     //   System.out.println("difference between max and min is "+countDifference(numbers));
+
+    }
+
+
+  public  int countDifference (int[] numbers){
+        if(numbers.length == 0 || numbers.length == 1)
+        {return -1; }
+        int max = numbers[0]; //  Создаем переменную max  и присваиваем ей начальное значение.
+        // в переменную макс будем записывать найденное макс. значение.
+        int min = numbers[0]; //  Создаем переменную min  и присваиваем ей начальное значение.
+        // в переменную min будем записывать найденное наименьшее  значение.
+
+        for ( int i = 1; i<numbers.length; i++){
+            if ( numbers[i] > max) { // 5 > 4 ?
+                max = numbers[i];  // max = 8      присавиваем переменной max  значение numbers[i] если оно больше max
+            }
+            else if (numbers[i] < min){ //  присавиваем переменной min  значение numbers[i] если оно меньше min
+                min = numbers[i]; //min = 2
+            }
+        }
+        return max - min;
+    }
+}
+code/homework25/src/FindMaxMinDiffTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FindMaxMinDiffTest {
+
+    FindMaxMinDiff diff;
+
+    @BeforeEach
+   public void init(){
+        diff = new FindMaxMinDiff();
+    }
+
+    @Test
+    @DisplayName("test with empty array")
+    public void testEmpty(){
+        int[] actual = {};
+        assertEquals(-1,diff.countDifference(actual));
+
+    }
+
+    @Test
+    @DisplayName("test with one element in array")
+    public void testOne(){
+        int[] actual = {5};
+        assertEquals(-1,diff.countDifference(actual));
+
+    }
+
+    @Test
+    @DisplayName("test with two elements in array")
+    public void testTwo(){
+        int[] actual = {1,2};
+        assertEquals(1,diff.countDifference(actual));
+    }
+
+    @Test
+    @DisplayName("test with several elements in array and max as leftmost and min rightmost")
+    public void testSeveralMaxMin(){
+        int[] actual = {10,4,5,1};
+        assertEquals(9,diff.countDifference(actual));
+    }
+
+    @Test
+    @DisplayName("test with several elements in array and max as rightmost and min leftmost")
+    public void testSeveralMinMax(){
+        int[] actual = {10,4,5,1};
+        assertEquals(9,diff.countDifference(actual));
+    }
+
+    @Test
+    @DisplayName("test with several elements in array, max and min in the middle")
+    public void testSeveralMinMaxInTheMiddle(){
+        int[] actual = {10,1,51,10};
+        assertEquals(50,diff.countDifference(actual));
+    }
+
+
+}
+code/homework25/src/TestFindMaxMinDiff.java
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TestFindMaxMinDiff {
+
+    @BeforeEach
+    void setUp() {
+    }
+
+
+}
+code/pizza_factory/src/Main.java
+public class Main {
+
+    /*
+    Создать фабрику по производству пиццы. Фабрика должна уметь готовить следующие виды пиццы:
+    Гавайи,Моцарелла,Салями. Каждый вид пиццы должен уметь: подготавливаться ( накладывать ингредиенты и т.д.)
+    , печься и упаковываться. В каждом случае должно быть понятно о какой пицце идет речь.
+    Класс Main не должен создавать новый обьект пиццы, а из него должен поступать "заказ" на изготовление требуемого
+    вида пиццы ( создание обьекта) в класс PizzaFactory, который и должен выбрать нужную пиццу для изготовления
+     */
+}
+code/pizza_factory/src/Pizza.java
+public abstract class Pizza {
+
+    private String type; //  тип пиццы
+
+    public Pizza( String type){
+        this.type = type;
+    }
+
+  abstract void prepare();
+
+  void bake()  {
+      System.out.println("Baking "+type);
+  }
+
+  void pack(){
+      System.out.println("Packing "+type);
+  }
+
+
+}
+code/stringbuilder_class/src/Main.java
+public class Main {
+
+    public static void main(String[] args) {
+
+
+        // StringBuilder methods:
+        // append()
+        StringBuilder sb = new StringBuilder("Hello");
+        System.out.println(sb);
+        String str = "Hello";
+        str =str + "World";
+
+        sb.append(" World");
+        System.out.println(sb);
+        sb.append(" ").append(6).append(" Hurra!");
+        System.out.println(sb);
+
+
+        // insert() - вставляет строку начиная с заданной позиции текущей строки
+        StringBuilder sb1 = new StringBuilder("Hello");
+        sb1.insert(1,"World");
+        System.out.println(sb1);
+
+        //replace() - заменяет данную строку с заданного индекса начала до индекса конца
+
+        StringBuilder sb2 = new StringBuilder("Hello");
+        sb2.replace(1,3,"Java");
+        System.out.println(sb2);
+
+
+        // reverse() - выводит слово в обратной последовательности
+        StringBuilder sb3 = new StringBuilder("Hello");
+        System.out.println(sb3.reverse());
+
+        System.out.println("Java".substring(1,3));
+        System.out.println(ourSubstring("Java",1,3));
+
+    }
+
+    // написать свою собственную реализацию метода  substring , работающую как метод в джава.
+
+    public static String ourSubstring( String string, int begin, int end){
+        StringBuilder sb = new StringBuilder();
+
+        for( int i = begin; i<string.length() && i<end; i++){
+            sb = sb.append(string.charAt(i));
+        }
+        return new String(sb);
+    }
+
+
+
+
+
+
+
+}
+code/stringbuilder_class/src/StringBulderTestString.java
+public class StringBulderTestString {
+    // сравним на практике скорость работы класса String  и класса StringBuilder
+
+    public static void main(String[] args) {
+       long startTime = System.currentTimeMillis(); // показывает текущее время в милисекундах
+        concatWithString();
+        System.out.println("Time required for string method:"+(System.currentTimeMillis()-startTime)+"ms");
+
+        startTime = System.currentTimeMillis();
+        concatWithStringBuilder();
+        System.out.println("Time required for StringBuilder method:"+(System.currentTimeMillis()-startTime)+"ms");
+
+
+
+
+
+    }
+    public static String concatWithString(){ // в цикле соединяет строку 10000 раз
+        String str = "Hello";
+
+        for (int i=0;i<10000;i++){
+            str = str + "World";
+        }
+        return str;
+    }
+
+    public static String concatWithStringBuilder(){ // в цикле соединяет строку 10000 раз c помощью стрингбилдера
+        StringBuilder sb = new StringBuilder("Hello");
+
+        for (int i = 0;i<10000;i++){
+            sb.append("World");
+        }
+        return sb.toString();
+    }
+
+
+
+}

@@ -1,0 +1,173 @@
+Задачи на урок:
+Разбор дз
+Класс Optional
+Практика, решение задач
+Задача
+Дана строка, состоящая из слов, разделенных пробелом. Написать метод, позволяющий изменять слова в строке следующим образом:
+при длине слова = 3, изменять все буквы слова на заглавные
+при длине слова =4, изменять все буквы слова на строчные
+при длине слова =5, изменять все буквы слова на звездочки
+
+Сделать два варианта решения:
+
+с использованием свойств наследования классов
+с использованием интерфейсов.
+Протестировать.
+
+code/main55/src/OurOptional.java
+import java.util.Optional;
+
+public class OurOptional {
+    public static void main(String[] args) {
+
+        // ifPresent()
+
+        String name = "John";
+
+        if( name != null){
+            System.out.println(name.length());
+        }
+
+        Optional<String> optional = Optional.of("John");
+        optional.ifPresent(n -> System.out.println(n.length()));
+
+
+        //Default value with  orElse() - возвращает значение из Optional,  а если его
+        // нет, то значение по умолчанию, заданное заранее
+
+        String nullValue = null;
+        nullValue = "Ann";
+
+        String str = Optional.ofNullable(nullValue).orElse("Bill");
+        System.out.println(str);
+
+        // Значение по умолчанию с orElseGet()
+        nullValue = null;
+        str = Optional.ofNullable(nullValue).orElseGet(()->"Bill");
+        System.out.println(str);
+
+
+      //  str = Optional.ofNullable(nullValue).orElseThrow(IllegalArgumentException::new);
+      //  str = Optional.ofNullable(nullValue).orElseThrow();
+        System.out.println(str);
+
+        // get()
+        Optional<String>optional1 = Optional.of("Java");
+        String java = optional1.get();
+        System.out.println(java);
+    }
+}
+code/practice55/src/Practice.java
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public class Practice {
+    public static void main(String[] args) {
+        Practice practice = new Practice();
+        String input =  "AAA BBBB dEF CDkLw bBb";
+        Predicate<String>predicate = s -> s.length() == 3;
+        Function<String,String>function = String::toLowerCase;
+
+        System.out.println(practice.transform(input,predicate,function));
+    }
+
+    /*
+    Написать метод, принимающий строку, содержащую слова разделенные пробелом и два функциональных интерфейса
+    - function and predicate. Метод должен предоставлять возможность реализации следующих действий:
+    "AAA bbbb dEF cDkLw bBb"
+при длине слова= 3, изменить все буквы этого слова на строчные (маленькие) и вернуть измененную строку
+при длине слова= 4, изменить все буквы слова на заглавные и вернуть измененную строку
+при длине слова= 5, изменить все буквы слова на звездочки и вернуть измененную строку
+(т.е. написать лямбду для каждого случая)
+     */
+
+    public String transform(String input, Predicate<String> predicate, Function<String, String> function) {
+        String[] words = input.split(" ");
+
+        for (int i = 0; i < words.length; i++) {
+
+            if (predicate.test(words[i])) {
+                words[i] = function.apply(words[i]);
+            }
+        }
+        return String.join(" ", words);
+    }
+}
+
+
+
+code/practice55/src/PracticeTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PracticeTest {
+
+    Practice practice;
+    String input;
+    Predicate<String> predicate;
+    Function<String,String> function;
+
+    @BeforeEach
+    public void init(){
+        practice =  new Practice();
+        input = "AAA bbbb dEF CDkLw bBb";
+
+    }
+
+    @Test
+    public void testEmpty(){
+        input ="";
+        predicate = s -> s.length() == 3;
+        function = String::toLowerCase;
+
+        assertEquals("",practice.transform(input,predicate,function));
+    }
+
+
+    @Test
+    public void test_3_toLowerCase(){
+
+        predicate = s -> s.length() == 3;
+        function = String::toLowerCase;
+
+        assertEquals("aaa bbbb def CDkLw bbb",practice.transform(input,predicate,function));
+    }
+
+
+    @Test
+    public void test_4_toUpperCase(){
+        predicate = s -> s.length() == 4;
+        function = String::toUpperCase;
+
+        assertEquals("AAA BBBB dEF CDkLw bBb",practice.transform(input,predicate,function));
+    }
+
+
+    @Test
+    public void test5Stars(){
+        predicate = s -> s.length() == 5;
+        function = s -> s = "*****";
+
+        assertEquals("AAA bbbb dEF ***** bBb",practice.transform(input,predicate,function));
+    }
+
+
+    @Test
+    public void testNothingChanged(){
+        input = " aaa bbbbbbbbbbbbbbbbbb";
+        predicate = s -> s.length() == 4;
+        function = String::toUpperCase;
+
+        assertEquals(" aaa bbbbbbbbbbbbbbbbbb",practice.transform(input,predicate,function));
+    }
+
+
+
+
+
+}

@@ -1,0 +1,193 @@
+Тип boolean
+Логические выражения
+Логические операции
+Взятие остатка от деления
+String::contains()
+Lesson 8
+01. Тип boolean
+int - 4 байта
+
+String - строковый тип, содержит набор символов
+
+char - 2 байта, символьный тип
+
+boolean - 1 бит/1 байт/4 байта -> true, false
+
+Можно создать экземпляр типа (переменную типа)
+
+ТИП название;
+название = значение;
+
+int x;
+x = 10;
+
+String s;
+s = "Hello";
+
+char c;
+c = 'Q';
+
+boolean b;
+b = true;
+b = false;
+В булеву переменную можно положить результаты различных операций, среди них:
+>  - больше
+>= - больше или равно
+
+<  - меньше
+<= - меньше или равно
+
+== - равно
+!= - не равно
+02. Логические высказывания, выражения, утверждения и т.д.
+В Берлине вечер И в Берлине тепло - истина, в Берлине вечер - правда, и в Берлине тепло - правда В Берлине утро ИЛИ в Берлине тепло - истина, в Берлине утро - ложь, в Берлине тепло - правда В Берлине утро И в Берлине тепло - ложь, потому что первая часть высказывания - ложная
+
+03. Логические операции
+A * B, A - левый операнд, B - правый операнд. Каждый из операндов принимает значения true или false
+
+A = В Берлине вечер B = В Берлине тепло
+
+Конъюнкция, логические умножение, И, AND, &
+true  & true  = true
+true  & false = false
+false & true  = false
+false & false = false
+
+1 * 1 = 1
+1 * 0 = 0
+0 * 1 = 0
+0 * 0 = 0
+Дизъюнкция, логическое сложение, ИЛИ, OR, |
+true  | true  = true
+true  | false = true
+false | true  = true
+false | false = false
+
+1 + 1 = 1
+1 + 0 = 1
+0 + 1 = 1
+0 + 0 = 0
+04. Взятие остатка от деления
+Любое целое число M можно представить в виде:
+M = K * N + T
+
+17 = 2 * 7 + 3
+17 = 3 * 5 + 2
+
+17 / 2 = 7
+17 / 3 = 5
+17 / 7 = 2
+17 / 5 = 3
+
+M / K = N
+M / N = K
+M % K = T
+M & N = T
+
+17 % 2 = 3
+17 % 3 = 2
+17 % 5 = 2
+17 % 7 = 3
+
+18 = 2 * 9 + 0
+19 = 2 * 9 + 1
+
+18 % 2 = 0
+19 % 2 = 1
+05. String::contains
+a.contains(b) - возвращает true, если строка b содержится в a (false - в противном случае)
+Задача 1
+Необходимо прочитать строку и два числа.
+Для входных данных определить:
+
+Либо строка содержит слово "Hello" и сумма чисел - четное число 
+ИЛИ строка не содержит слово "Bye" и сумма чисел - нечетное
+code/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt(); // считали первое число
+        int b = scanner.nextInt(); // считали второе число
+
+        boolean isAGreaterThanB = a > b;
+        boolean isAGreaterOrEqualB = a >= b;
+        boolean isAEqualB = a == b;
+
+        System.out.println("A больше чем B? Ответ - " + isAGreaterThanB);
+        System.out.println("A больше чем B, или они равны? Ответ - " + isAGreaterOrEqualB);
+        System.out.println("A равен B? Ответ - " + isAEqualB);
+    }
+}
+code/src/Main2.java
+public class Main2 {
+    public static void main(String[] args) {
+        boolean A = true;
+        boolean B = false;
+
+        boolean C1 = A & B;
+        boolean C2 = A | B;
+
+        System.out.println("true & false = " + C1);
+        System.out.println("true | false = " + C2);
+    }
+}
+code/src/Main3.java
+import java.util.Scanner;
+
+public class Main3 {
+    public static void main(String[] args) {
+        // считать четыре числа - a, b, c, d
+        // проверить:
+
+        // A = a - четное
+        // B = b - нечетное
+        // C = c - делится на 3
+        // D = d - делится на 5
+
+        // A & B | C & D
+        Scanner scanner = new Scanner(System.in);
+        // считали четыре числа
+        // а - четное и b - нечетное, либо
+        // c - делится на 3 и d - делится на 5
+        int a = scanner.nextInt();
+        int b = scanner.nextInt();
+        int c = scanner.nextInt();
+        int d = scanner.nextInt();
+
+        // 26 27 35 43 - true
+        // 26 28 33 45 - true
+        // 26 28 45 33 - false
+        boolean A = (a % 2 == 0); // a - четное
+        boolean B = (b % 2 == 1); // b - нечетное
+        boolean C = (c % 3 == 0); // с - делится на три
+        boolean D = (d % 5 == 0); // d - делится на пять
+        boolean result = A & B | C & D;
+
+        System.out.println(result);
+
+    }
+}
+code/src/Main4.java
+import java.util.Scanner;
+
+public class Main4 {
+    public static void main(String[] args) {
+        // Проверить, а есть ли в строке слово Папа или Мама
+        // line = Привет Марсель как дела
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine(); // строка, которую вы считали
+        boolean hasMother = line.contains("Мама"); // true, если строка Мама есть в line
+        boolean hasFather = line.contains("Папа"); // true, если строка Папа есть в line
+        boolean result = hasMother | hasFather; // проверяем строку на условие
+        System.out.println(result);
+    }
+}
+code/src/Main5.java
+public class Main5 {
+    public static void main(String[] args) {
+        // substring (0, pos)
+        // substring (pos + 1, length)
+    }
+}

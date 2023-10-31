@@ -1,0 +1,422 @@
+Задачи на урок:
+Разбор дз
+Конструкторы при наследовании
+Клчевое слово super
+Практика, решение задач
+Наследование
+
+Одним из ключевых аспектов объектно-ориентированного программирования является наследование. С помощью наследования можно расширить функционал уже имеющихся классов за счет добавления нового функционала или изменения старого.
+Чтобы объявить один класс наследником от другого, надо использовать после имени класса-наследника ключевое слово extends, после которого идет имя базового класса.
+Если в базовом классе определены конструкторы, то в конструкторе производного классы необходимо вызвать один из конструкторов базового класса с помощью ключевого слова super.
+При вызове конструктора после слова super в скобках идет перечисление передаваемых аргументов. При этом вызов конструктора базового класса должен идти в самом начале в конструкторе производного класса.
+Производный класс имеет доступ ко всем методам и полям базового класса (даже если базовый класс находится в другом пакете) кроме тех, которые определены с модификатором private. При этом производный класс также может добавлять свои поля и методы
+
+Еще раз посмотреть и разобраться с задачей про машины сегодняшнего занятия.
+
+code/cars/src/Car.java
+public class Car {
+private String model;
+private String manufacturer;
+
+private int year;
+private String colour;
+
+    public Car(String model, String manufacturer, int year, String colour) {
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.year = year;
+        this.colour = colour;
+    }
+
+    public void drive(){
+       System.out.println("The car is driving");
+   }
+
+   public void stop(){
+       System.out.println("The car is stopping");
+   }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "model='" + model + '\'' +
+                "manufacturer='" + manufacturer + '\'' +
+                ", colour='" + colour + '\'' +
+                ", productionDate=" + year +
+                '}';
+    }
+}
+code/cars/src/Main.java
+public class Main {
+
+    /*
+    Использовать классы из предыдущей задачи:
+класс Car, содержащий общие характеристики машин model,manufacturer, year, color, и поведение - drive,stop
+и классы PassengerCar и Truck, расширяющие Car.
+Класс Truck должен иметь свои характеристики и поведение важное для грузовика. А именно: макс грузоподьемность,
+и обьем топливного бака. Поведение: 1.должен уметь загружаться (load) и при этом сообщать если превышена его
+грузоподьемнось, а также сообщать сколько еще можно загрузить груза
+2.разгружаться и при этом сообщать в случае если пытаются разгрузить больше чем его имеющийся груз или число
+отрицательно а также сообщать о весе остающегося на борту груза
+3.в случае отсутствия топлива или отсутствии груза на борту сообщать о невозможности ехать
+4.уметь дозаправляться
+     */
+    public static void main(String[] args) {
+
+        Truck truck = new Truck("SuperTruck",
+                            "Volvo",
+                                  2020,
+                                "black-yellow",
+                             5000,
+                                500);
+
+        System.out.println(truck);
+
+        truck.load(2000);
+        truck.drive();
+        truck.setCurrentFuel(100);
+        truck.drive();
+
+        truck.stop();
+       // truck.unload(12999);
+        truck.unload(1000);
+    }
+}
+code/cars/src/PassengerCar.java
+public class PassengerCar extends Car {
+    int numberOfSeats;
+
+    public PassengerCar(String model,
+                        String manufacturer,
+                        int year,
+                        String colour,
+                        int numberOfSeats)
+    {
+        super(model,manufacturer,year,colour);
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    @Override
+    public void drive(){
+        System.out.println("Passenger car is driving");
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Passenger car stops");
+    }
+
+}
+code/cars/src/Truck.java
+public class Truck extends Car {
+ private int currentWeight = 0;
+ private int maxWeight;
+ private int currentFuel = 0;
+ private int maxFuel;
+
+ public Truck(String model,
+              String manufacturer,
+              int year,
+              String colour,
+              int maxWeight,
+              int maxFuel){
+     super(model,manufacturer,year,colour);
+     this.maxWeight = maxWeight;
+     this.maxFuel = maxFuel;
+ }
+
+ /*
+ 1.должен уметь загружаться (load) и при этом сообщать если превышена его
+грузоподьемнось, а также сообщать сколько еще можно загрузить груза
+  */
+    public void load(int weight){
+        if( weight > getRemainingCapacity()){
+            System.out.println("This is too heavy ! Can't continue");
+            printRemainingCapacity();
+            return;
+        }
+        currentWeight +=weight;
+
+        System.out.println("Loading "+weight+" tons...");
+        System.out.println("Loaded "+weight+ " tons.");
+        printRemainingCapacity();
+    }
+
+    //2.разгружаться и при этом сообщать в случае если пытаются разгрузить больше чем его имеющийся груз или число
+    //отрицательно а также сообщать о весе остающегося на борту груза
+    public void unload( int unloadingWeight){
+        if ( unloadingWeight > currentWeight){
+            System.out.println("Not enough cargo!");
+            printRemainingCargo();
+            return;
+        }
+        if ( unloadingWeight < 0){
+            System.out.println("Can't unload negative weight");
+            return;
+        }
+        currentWeight -= unloadingWeight;
+
+        System.out.println("Unloading "+unloadingWeight +" tons...");
+        System.out.println("Unloaded "+unloadingWeight +" tons.");
+        printRemainingCargo();
+    }
+
+    private void printRemainingCargo(){
+        System.out.println("Remaining cargo weight is "+currentWeight+" tons");
+    }
+
+    @Override
+    public void drive(){
+        if(currentFuel == 0){
+            System.out.println("Not enough fuel, can't drive");
+            return;
+        }
+
+        if(currentWeight == 0){
+            System.out.println("Please load truck before driving!");
+            return;
+        }
+
+        System.out.println("Trying...");
+        System.out.println("Trying...");
+        System.out.println("Trying...");
+        System.out.println("Yeah, driving!");
+
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Stopping...");
+        System.out.println("Stopping...");
+        System.out.println("Yeah!");
+    }
+
+    //4.уметь дозаправляться
+    public void setCurrentFuel( int currentFuel){
+        this.currentFuel = currentFuel;
+    }
+
+    public String toString(){
+        return super.toString() +"\n"+  // вызов метода toString родительского класса
+                "Truck{"+ // добавляем в toString  вывод на печать переменной дочернего класса
+                "currentWeight="+currentWeight+'}';
+    }
+
+    private void printRemainingCapacity(){
+        System.out.println("Remaining capacity "+getRemainingCapacity()+" tons");
+    }
+
+    private int getRemainingCapacity(){
+      return   maxWeight - currentWeight;
+    }
+}
+code/homework22/src/Car.java
+/*
+Задача 2
+Создать класс Car, содержащий поля
+model
+colour
+productionDate
+а также методы drive и stop.
+Создать дочерние классы PassengerCar и Truck. Класс PassengerCar должен также содержать поле
+numberOfSeats(количество мест) а Класс Truck поле loadCapacity (грузоподьемность).
+В методе main класса Main создать несколько обьектов этих классов и вывести
+в консоль их характеристики и результат работы методов
+ */
+
+public class Car {
+   String model;
+   String colour;
+   int  productionDate;
+
+    public Car(String model, String manufacturer, int year, String colour) {
+    }
+
+    public void drive(){
+       System.out.println("The car is driving");
+   }
+
+   public void stop(){
+       System.out.println("The car is stopping");
+   }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "model='" + model + '\'' +
+                ", colour='" + colour + '\'' +
+                ", productionDate=" + productionDate +
+                '}';
+    }
+}
+code/homework22/src/Cat.java
+public class Cat {
+     /*
+    Задача 1
+Создать класс Cat содержащий следующие поля: name, age, colour,
+а также конструктор, геттеры и сеттеры для всех полей и метод toString.
+В том же классе создать метод main и вывести на печать несколько обьектов класса Cat.
+     */
+
+    private String name;
+    private  int age;
+    private String colour;
+
+    public Cat( String name, int age, String colour){
+        this.name = name;
+        this.age = age;
+        this.colour = colour;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getColour(){
+        return colour;
+    }
+
+    public int getAge(){
+        return age;
+    }
+
+    public void setName( String name){
+        this.name = name;
+    }
+
+    public void setColour( String colour){
+        this.colour = colour;
+    }
+
+    public void setAge( int age){
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Cat{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", colour='" + colour + '\'' +
+                '}';
+    }
+}
+code/homework22/src/Main.java
+/*package homework;
+
+import cars.PassengerCar;
+
+public class Main {
+    public static void main(String[] args) {
+        Cat cat1 = new Cat("Kathy",3,"red");
+        Cat cat2 = new Cat("Mike",7,"black");
+
+        System.out.println(cat1);
+        System.out.println(cat2);
+
+        Truck truck = new Truck();
+        truck.drive();
+        truck.stop();
+
+        Car passengerCar = new PassengerCar();
+        passengerCar.drive();
+        passengerCar.stop();
+
+    }
+}*/
+code/homework22/src/PassengerCar.java
+/*import homework.Car;
+
+public class PassengerCar extends Car {
+    int numberOfSeats;
+
+    @Override
+    public void drive(){
+        System.out.println("Passenger car is driving");
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Passenger car stops");
+    }
+
+}*/
+code/homework22/src/Truck.java
+/*package homework;
+
+public class Truck extends Car {
+    int loadCapacity;
+
+    @Override
+    public void drive(){
+        System.out.println("Truck is driving");
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Truck stops");
+    }
+}*/
+code/super_keyword/src/Main.java
+public class Main {
+    // особенности работы конструкторов при наследовании
+    /*
+    Когда мы создаем обьект дочернего класса, вызывается конструктор дочернего класса, который
+    в свою очередь вызывает конструктор родительского класса. Т.е. порядок выполнени следующий:
+    Выполняется конструктор родительского класса  и  затем конструктор дочернего класса.
+    Дело в том, что компилятор добавляет автоматически ключевое слово super()  означающее вызов контструктора
+    родительского класса в качестве первой команды в конструкторе дочернего класса.
+     */
+    public static void main(String[] args) {
+      //  SubClass obj = new SubClass();
+        SubClass objParam = new SubClass(" with param");
+        objParam.printNumber();
+        objParam.displayParentMethod();
+
+
+    }
+    // другое использование слова super:
+   /*
+    - для доступа к переменным родительского класса, когда в обоих есть переменная с одинаковым именем
+    - для доступа к методу родительского класса , переопределенному в дочернем.
+    */
+
+
+}
+code/super_keyword/src/ParentClass.java
+public class ParentClass {
+    int num = 1;
+
+    ParentClass(String param){ // конструктор родительского класса с параметрами
+        System.out.println(" I am Constructor of parent class"+param);
+    }
+
+    public void printSmth(){
+        System.out.println("I am method in Parent class");
+    }
+
+}
+code/super_keyword/src/SubClass.java
+public class SubClass extends ParentClass{
+    int num = 5;
+
+
+    public SubClass(String param){
+        super(param); //  конструктор родительского класса вызывается в явном виде с помощью слова super и выpjd
+                        // ижет первой строкой в конструкторе дочернего.
+        System.out.println("I am arg Constructor of child class: ");
+
+    }
+
+    public void printNumber(){
+        System.out.println(super.num);
+    }
+
+    public void printSmth(){
+        System.out.println("I am method in child class");
+    }
+
+    public void displayParentMethod(){
+        super.printSmth();
+    }
+}

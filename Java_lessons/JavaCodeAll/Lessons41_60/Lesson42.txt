@@ -1,0 +1,321 @@
+Задачи на урок:
+Повторение, разбор домашнего задания
+LinkedList, методы LinkedList
+List при объявлении переменных
+Практика, решение задач
+LinkedList
+
+Обобщенный класс LinkedList представляет структуру данных в виде связанного списка.
+
+Вот некоторые из методов LinkedList:
+
+addFirst() / offerFirst(): добавляет элемент в начало списка
+
+addLast() / offerLast(): добавляет элемент в конец списка
+
+removeFirst() / pollFirst(): удаляет первый элемент из начала списка
+
+removeLast() / pollLast(): удаляет последний элемент из конца списка
+
+getFirst() / peekFirst(): получает первый элемент
+
+getLast() / peekLast(): получает последний элемент
+
+см. код занятия
+
+code/homework42/src/EmptyListException.java
+public class EmptyListException extends Exception{
+}
+code/homework42/src/Main.java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args)throws EmptyListException {
+
+        List<Integer> ints1 = Arrays.asList(1,2,5000,67);
+        List<Integer> ints2 = Arrays.asList(1,3,5000,6);
+
+        Main m = new Main();
+        System.out.println(m.returnYesOrNo(ints1,ints2));
+
+
+        List<String> strings = Arrays.asList("bb","aaa","c");
+
+        System.out.println(m.findShortestOrLongest(strings));
+
+
+
+    }
+    // Homework
+    //I. Есть два листа одинаковой длины с целыми числами. Написать метод, который вернет
+    // лист  с элементами Yes или No,  где значение на i-ом месте зависит от того, равны
+    // ли элементы двух листов  под номером i.
+     // Например: [1,2,3,4] and [5,2,3,7]  вернет [No,Yes,Yes,No]
+    // Протестировать
+
+
+
+   // 1. public List<String> returnYesOrNo ( List<Integer> list1, List<Integer> list2)
+   // 2. создать новый лист стрингов resultYesNo
+   // 3. в цикле пройти по листам цедых чисел list1  и list2  сравнивая элементы. Если соотвтествующие элементы
+   //    равны, то в лист resultYesNo записывается Yes и No  в противном случае.
+   // 4.вернуть результат  , т.е. получившийся лист стрингов resultYesNo
+   public List<String> returnYesOrNo (List<Integer> list1, List<Integer> list2){
+       List<String> resultYesNo =new ArrayList<>();
+
+       for( int i = 0;i<list1.size();i++){
+            if(list1.get(i).equals(list2.get(i)))
+                resultYesNo.add("Yes");
+            else resultYesNo.add("No");
+        }
+        return resultYesNo;
+   }
+
+
+    /*
+    II*  Есть лист со строками. Написать метод, возвращающий строку, которая встречается в листе раньше -
+         самую короткую или самую длинную. Известно, что все строки в листе разные. Если лист пустой - бросить
+         бросить EmptyListException
+         пример 1: [bb, a, fff, dddd] -> a - самый короткий  элемент a  встречается раньше
+         пример 2: [bb, aaa, ff, d] -> aaa - самый длинный элемент aaa встречается раньше
+         Протестировать
+
+        1. public String findShortestOrLongest( List<string> list) throws EmptyListException
+        2. проверить не пустой ли лист и если пустой, то бросить exception
+        3. В цикле пройти по листу находя максимальный и минимальный  элементы и запомнить их индексы.
+        4. Сравнить индексы и вернуть элемент индекс которого будет меньше.
+
+     */
+    public String findShortestOrLongest( List<String> list) throws EmptyListException{
+        if ( list.isEmpty()) throw new EmptyListException();
+
+        String minSizeElement = list.get(0);
+        int indexMinElement = 0;
+        String maxSizeElement = list.get(0);
+        int indexMaxElement = 0;
+
+        for( int i = 0; i < list.size(); i++){
+            if(list.get(i).length() < minSizeElement.length()){
+                minSizeElement = list.get(i);
+                indexMinElement = i;
+            }else if (list.get(i).length() > maxSizeElement.length()){
+                maxSizeElement = list.get(i);
+                indexMaxElement = i;
+            }
+        }
+        if ( indexMinElement < indexMaxElement)
+            return minSizeElement;
+        return maxSizeElement;
+    }
+
+
+
+
+}
+code/homework42/src/MainTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MainTest {
+    private Main m;
+
+    @BeforeEach
+    public void init(){
+        m = new Main();
+    }
+
+    @Test
+    public void yesOrNoTestEmpty(){
+        assertEquals(Arrays.asList(),m.returnYesOrNo(Arrays.asList(),Arrays.asList()));
+    }
+
+
+    @Test
+    public void yesOrNoTestEmptyOneElement(){
+        List<String> expected = Arrays.asList("No");
+
+        List<Integer> actual1 = Arrays.asList(1);
+        List<Integer> actual2 = Arrays.asList(5);
+
+        assertEquals(expected,m.returnYesOrNo(actual1,actual2));
+    }
+
+    @Test
+    public void yesOrNoTestSeveral(){
+        List<String> expected =Arrays.asList("No","Yes","Yes","No");
+        List<Integer> actual1 = Arrays.asList(1,2,3,4);
+        List<Integer> actual2 = Arrays.asList(5,2,3,7);
+
+        assertEquals(expected,m.returnYesOrNo(actual1,actual2));
+    }
+
+    @Test
+    public void findShortestOrLongestTest_emptyList_throwsException(){
+        assertThrows(EmptyListException.class,()->m.findShortestOrLongest(Arrays.asList()));
+    }
+
+    @Test
+    public void findShortestOrLongestTest_oneElement() throws EmptyListException{
+        assertEquals("a",m.findShortestOrLongest(Arrays.asList("a")));
+    }
+
+
+    @Test
+    public void findShortestOrLongestTest_shortFirst() throws EmptyListException{
+        assertEquals("a",m.findShortestOrLongest(Arrays.asList("bb","a","ff","ddd")));
+    }
+
+
+    @Test
+    public void findShortestOrLongestTest_longFirst() throws EmptyListException{
+        assertEquals("aaa",m.findShortestOrLongest(Arrays.asList("bb","aaa","ff","d")));
+    }
+
+}
+code/main42/src/Address.java
+public class Address {
+    private  String street;
+    private int number;
+
+    public Address(String street, int number) {
+        this.street = street;
+        this.number = number;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", number=" + number +
+                '}';
+    }
+}
+code/main42/src/Homework.java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Homework {
+    public static void main(String[] args) {
+        List<Integer> ints = new ArrayList<>();
+        ints.add(1);
+        ints.add(2);
+        ints.add(3);
+        Homework homework = new Homework();
+        homework.reversed(ints);
+        System.out.println(ints);
+    }
+
+    /*
+   1. Есть два класса: Address  с полями street and houseNumber  и второй класс
+    Person  с полями  name and Address.
+    Нужно написать метод, который по списку persons  возвращает список их адресов
+    1. создать эти два класса с полями, конструкторами, геттерами  и методом toString.
+    2. Сигнатура  метода :  public List<Address> getAddresses (List<Person> persons)
+    3. Создать лист, в который будут записываться адреса.
+    4. С помощью цикла for each  пройти по листу персонов и для каждого персона получить адрес и записать его в
+        лист адресов
+    5. Вернуть этот лист адресов после окончания цикла for each
+    6. Протестировать
+
+
+    2.Есть лист целых чисел. Написать метод, который этот лист реверсирует,
+    т.е. возвращает лист элементов в обратном порядке
+    [1,2,3,4,5] -> [5,4,3,2,1]. Можно использовать методы класса Collections
+
+
+
+
+     */
+    public List<Integer> reversed ( List<Integer>list){
+        Collections.reverse(list);
+        return list;
+    }
+}
+code/main42/src/Person.java
+public class Person {
+
+    private  String name;
+    private  Address address;
+
+    public Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", address=" + address +
+                '}';
+    }
+}
+code/our_linkedlist/src/Main.java
+import java.util.LinkedList;
+import java.util.List;
+
+public class Main {
+
+    /*
+    LinkedList является еще одной разновидностью листа. Но в отличие от
+    ArrayList   он иначе организован внутри. Его элементы не обязательно расположены
+    рядом а соединяются указателями ( pointers). Каждый элемент такого листа это так называемая Нода (Node).
+    Она состоит из двух частей - самих данных и адреса следующего элемента. Такой лист называется Singly linked list
+    Кроме нод, линкедлист имеет указатель на адрес первого элемента, называемый Head .  В последней ноде в качестве
+    адреса указан null.  Адрес каждого следующего элемента можно получить только дойдя до предыдущего элемента.
+
+    В случае  же doubly linked list  нода состоит из трех частей: значение, адрес следующего элемента и адрес
+    элемента
+     */
+
+    public static void main(String[] args) {
+        List<Integer> list = new LinkedList<>();
+        LinkedList<String> stringLinkedList = new LinkedList<>();
+
+        // метод addLast  добавляет элемент в конец листа. Метод addFirst()  добавляет элемент в начало.
+        stringLinkedList.addLast("John"); //
+        System.out.println(stringLinkedList);
+        stringLinkedList.addLast("Jack");
+        System.out.println(stringLinkedList);
+        stringLinkedList.addFirst("Ann");
+        System.out.println(stringLinkedList);
+
+     //   System.out.println(stringLinkedList);
+
+
+        // getFirst() - получение первого элемента списка, getLast() - последнего элемента
+       String nameFirst = stringLinkedList.getFirst();
+       String nameLast = stringLinkedList.getLast();
+        System.out.println("nameFirst = "+nameFirst);
+        System.out.println("nameLast  = "+nameLast);
+
+        // удаление первого элемента - метод removeFirst() , последнего removeLast()
+        stringLinkedList.removeFirst();
+        stringLinkedList.removeLast();
+        System.out.println(stringLinkedList);
+    }
+}

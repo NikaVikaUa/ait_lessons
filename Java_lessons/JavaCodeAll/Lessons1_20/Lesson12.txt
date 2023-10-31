@@ -1,0 +1,265 @@
+Повторение, разбор домашнего задания
+Switch case
+Тернарный оператор
+Конструкция switch
+
+Конструкция switch/case аналогична конструкции if/else, так как позволяет обработать сразу несколько условий:
+
+int num = 8;
+
+switch(num){
+
+case 1: 
+    System.out.println("число равно 1");
+    break;
+case 8: 
+    System.out.println("число равно 8");
+    num++;
+    break;
+case 9: 
+    System.out.println("число равно 9");
+    break;
+default:
+    System.out.println("число не равно 1, 8, 9");
+}
+
+После ключевого слова switch в скобках идет сравниваемое выражение. Значение этого выражения последовательно сравнивается со значениями, помещенными после операторов сase. И если совпадение найдено, то будет выполняет соответствующий блок сase.
+
+В конце блока сase ставится оператор break, чтобы избежать выполнения других блоков.
+
+Задача 1
+Напишите метод калькулятор, который в зависимости от ввода пользователя выполняет сложение, вычитание, умножение или деление. Пользователь вводит оба числа, затем знак операции (+, -, * или /). В зависимости от введенного знака программа выполняет выбранное действие и выводит полученный результат на экран. При написании метода используйте Switch.
+
+Задача 2* (не обязательно)
+Написать метод, который проверяет является ли введенный пользователем символ гласной или согласной буквой латинского алфавита. В решении используйте switch и оператор if-else
+
+code/homework12/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+     //   printCarInfo();
+
+        int n, d ,q ;
+
+        n = 10;
+        d = 0;
+
+        if ( d != 0 & (n%d)==0)
+            System.out.println(d +" is factor of "+n);
+
+
+    }
+
+    /*
+    Пользователь вводит информацию об автомобиле в консоль в следующем виде: bmw@2019@black
+Используя substring получите элементы этой строки и выведите информацию в консоль в следующем виде:
+Автомобиль bmw Год выпуска: 2019 Цвет: black
+Пример ввода и вывода:
+ka@2022@grkiey
+Автомобиль kia Год выпуска: 2022 Цвет:
+     */
+
+    public  static void printCarInfo () {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter car info: ");
+        String auto = scanner.nextLine();
+        int indexFirst = auto.indexOf('@');
+        int indexLast = auto.lastIndexOf('@');
+       // auto.indexOf('k')
+       // auto.indexOf("ki")
+
+        String make = auto.substring(0,indexFirst);
+        String year = auto.substring(indexFirst+1,indexLast);
+        String colour = auto.substring( indexLast+1);
+        int y = Integer.parseInt(year);
+        String intToStr = String.valueOf(1000);
+
+        System.out.println("Car is "+make+" ,production year is "+year+ " ,colour is "+colour);
+    }
+     /*                AND       OR     XOR    !a
+     a        b       a&b       a||b    a^b
+     false false      false     false   false   true
+     true  false      false     true    true    false
+     false true       false     true    true
+     true  true       true      true    false
+
+     XOR - true  когда операнды разные
+         - false  когда они одинаковые
+
+         &   &&
+         |   ||
+      */
+
+
+}
+code/our_switch/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        int number = 7;
+        switch (number){
+
+            case 1:
+                System.out.println("Case1: value is "+number);
+
+
+            case 2:
+                System.out.println("Case2: value is:"+ number);
+                break;
+            case 3:
+                System.out.println("Case3: value is " + number);
+                break;
+
+            default:
+                System.out.println("Default: value is " + number);
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter number from 1 to 7");
+        int dayOfWeekNumber = scanner.nextInt();
+        switch (dayOfWeekNumber){
+            case 1:
+                int sum = 1+3;
+                System.out.println("Monday");
+                break;
+            case 2:
+                System.out.println("Tuesday");
+                break;
+
+            case 3:
+                System.out.println("Wednesday");
+                break;
+
+            case 4:
+                System.out.println("Thursday");
+                break;
+
+            case 5:
+                System.out.println("Friday");
+                break;
+
+            case 6:
+                System.out.println("Saturday");
+
+
+            case 7:
+                System.out.println("Sunday");
+                break;
+
+            default:
+               System.out.println("There is no day of week with such number");
+        }
+
+
+        char ch = 'x';
+
+        switch(ch){
+
+            case 'd':
+                System.out.println("Case d");
+                break;
+
+            case 'b':
+                System.out.println("Case b");
+                break;
+
+            case 'a':
+                System.out.println("Case a");
+                break;
+
+            default:
+                System.out.println("We do not have this letter");
+        }
+
+
+
+
+    }
+    /*
+    switch (variable or expression)
+    {
+    case constant:
+        // Java code ;
+    case constant:
+    // Java code ;
+    -
+    -
+    -
+    default:
+    // Java code
+
+    }
+
+     */
+
+
+
+}
+code/ternary_operator/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+
+    /*
+    variable = Condition ? Expression1 : Expression2
+     */
+    public static void main(String[] args) {
+
+
+        int age = 16;
+
+        boolean isAdult = age >= 18 ? true : false;
+
+        System.out.println("Can this person vote ?"+ isAdult);
+
+
+        if(age >= 18) {
+            System.out.println("Can this person vote ? true");
+        }
+        else{
+            System.out.println("Can this person vote ? false");
+        }
+
+
+        int x = 100;
+
+        String numberSign = (x > 0)? "Positive" : "Negative";
+
+        System.out.println(x+ " is a "+numberSign+ " number");
+
+        int y = 7;
+
+        String evenOrOdd = (y % 2 == 0)? "even number":"odd number";
+
+        System.out.println(evenOrOdd);
+
+        int num1 = 100;
+        int num2 = 30;
+
+        int max = num1 >= num2 ? num1 : num2 ;
+        System.out.println(max);
+
+       // Math.abs()
+
+        int num3 = -5;
+        int abs = num3 >=0 ? num3 : -num3;
+        System.out.println(abs);
+
+        //  Написать метод, который проверяет является ли символ гласной или согласной буквой латинского
+        //  алфавита. В решении нужно использовать switch  и  оператор if-else
+
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a character");
+        char ch1 = scanner.next().charAt(0);
+
+    }
+
+
+
+
+
+
+}

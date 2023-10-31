@@ -1,0 +1,286 @@
+Задачи на урок:
+Разбор дз
+Цикл For и его синтаксис, параметры
+Break, Continue
+Решение задач
+Цикл for
+
+Цикл for имеет следующее формальное определение:
+
+for ([инициализация счетчика]; [условие]; [изменение счетчика]) {
+
+// действия
+
+}
+
+Рассмотрим стандартный цикл for:
+
+for (int i = 1; i < 9; i++){
+
+System.out.printf("Квадрат числа %d равен %d \n", i, i * i);
+
+}
+
+Первая часть объявления цикла - int i = 1 создает и инициализирует счетчик i. Счетчик необязательно должен представлять тип int. Это может быть и любой другой числовой тип, например, float. Перед выполнением цикла значение счетчика будет равно 1. В данном случае это то же самое, что и объявление переменной.
+
+Вторая часть - условие, при котором будет выполняться цикл. В данном случае цикл будет выполняться, пока i не достигнет 9.
+
+И третья часть - приращение счетчика на единицу. Опять же нам необязательно увеличивать на единицу. Можно уменьшать: i--.
+
+В итоге блок цикла сработает 8 раз, пока значение i не станет равным 9. И каждый раз это значение будет увеличиваться на 1.
+
+Нам необязательно указывать все условия при объявлении цикла. Например, мы можем написать так:
+
+int i = 1;
+
+for (; ;){
+
+System.out.printf("Квадрат числа %d равен %d \n", i, i * i);
+
+}
+
+Определение цикла осталось тем же, только теперь блоки в определении у нас пустые: for (; ;). Теперь нет инициализированной переменной-счетчика, нет условия, поэтому цикл будет работать вечно - бесконечный цикл.
+
+Либо можно опустить ряд блоков:
+
+int i = 1;
+
+for (; i<9;){
+
+System.out.printf("Квадрат числа %d равен %d \n", i, i * i);
+
+i++;
+
+}
+
+Этот пример эквивалентен первому примеру: у нас также есть счетчик, только создан он вне цикла. У нас есть условие выполнения цикла. И есть приращение счетчика уже в самом блоке for.
+
+Цикл for может определять сразу несколько переменных и управлять ими:
+
+int n = 10;
+
+for(int i=0, j = n - 1; i < j; i++, j--){
+
+System.out.println(i * j);
+}
+
+Задача 1 С помощью цикла For написать метод, возвращаюший сумму всех четных целых чисел от 1 до заданного числа n
+
+Задача 2(*) С помощью вложенного цикла For (цикл в цикле) написать метод, выводящий на экран треугольник такого вида:
+
+1
+12
+123
+1234
+12345
+123456
+
+code/for_loop/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+    /*  цикл For
+
+    for ( initialisation ; condition ; increment/decrement )
+    {
+      statement(s)
+      statement
+    }
+    initialisation -  переменная, которой присваивается начальное значение
+    i (обычно переменная обозначается  буквой i).
+    j.   Инициализация происходит один раз в начале работы цикла
+
+    condition (условие). Условие определяет до какого момента повторяется цикл. Цикл выполняется пока
+    условие истинно
+
+    increment/decrement - определяет изменение значения счетчика
+
+    statement(s) -  код в теле цикла, который выполняется при каждом повторении цикла
+
+
+     */
+
+    public static void main(String[] args) {
+
+        //Напечатать числа от 1 до 10 с помощью цикла for.
+        int i ;
+
+        for ( i = 1; i <= 10 ; i++ ){
+
+        //    System.out.println("The value of i is "+i);
+
+        }
+
+
+        // используя цикл for вывести на печать значения квадратного корня от 1 до 99 и ошибку округления
+
+        double number, squareRoot, error;
+
+        for (number =1.0; number <100.0; number++){
+
+            squareRoot = Math.sqrt(number);// вычисляем квадратный корень числа number  number = 4, squareRoot =2
+         //   System.out.println("Square root of "+number + " is "+squareRoot);
+
+            // вычислим ошибку округления
+            error = number - (squareRoot*squareRoot);
+         //   System.out.println("Rounding error is "+error);
+            System.out.println();
+        }
+        int j;
+        for (j = 10; j>=1; j--){
+       //     System.out.println("The value of j is "+j);
+        }
+
+        // Вариации цикла For
+
+        int i1,j1;
+
+        for (i1 = 0, j1 = 10; i1 < j1; i1++,j1--){
+         //   System.out.println("i1 and j1 :"+i1+" "+j1);
+        }
+
+        //цикл for будет продолжаться пока с клавиатуры пользователь не введет  букву S
+        Scanner scanner = new Scanner(System.in);
+      //  System.out.println("enter smth, press S to stop");
+
+        int y;
+     //   for(y = 0; scanner.nextLine().charAt(0) != 'S';y++ ){
+    //        System.out.println("pass #"+y);
+    //    }
+    //    System.out.println("end of for");
+
+        // в цикле for не обязательно писать все три условия. Одно или несколько могут быть пустыми
+
+        int index = 0;
+        for( ; index < 10;){
+
+       //     System.out.println("pass # "+index);
+            index++; // увеличение счетчика непосредственно в теле цикла
+        }
+
+    //    for(;;){ // бесконечный цикл
+
+    //    }
+
+
+        // Тело цикла может быть пустым. Посчитаем сумму цифр от 1 до 5 в цикле for
+
+      //  int i2;
+     //   int sum = 0;
+     //   for(int i2 = 1; i2<=5; sum += i2++);//  в этом цикле отстутствует тело цикла
+
+     //   System.out.println("sum is "+ sum);
+
+
+        // sum += i2++  это сокращенная форма записи следующих выражений:
+        // sum = sum +i2
+        // i2++
+
+
+        // посчитаем сумму чисел от 1 до 5 а также факториал от 1 до 5
+        // 4! = 1*2*3*4
+        // 3! = 1*2*3
+
+
+        int sum = 0;
+        int fact = 1;
+       // int i;
+        for ( int y1 =1; y1<=5; y1++ ){
+           // sum += y1;
+            sum = sum + y1;
+            fact *= y1;
+          //  fact = fact*y1;
+
+        }
+     //   System.out.println("Sum is "+sum);
+     //   System.out.println("Factorial is "+fact);
+
+
+        //  цикл в цикле  (nested). Вывести на экран значения переменной j3
+        for (int i3 = 1; i3<4;i3++){
+            System.out.println("i3= "+i3);
+            for (int j3 = 1; j3<5;j3++){
+                System.out.print((j3+i3)+" ");
+            }
+            System.out.println();
+        }
+
+        //  Используя вложенный цикл for (цикл в цикле), написать метод
+        //  выводящий на экран треугольник такого вида:
+        /*
+        1
+        12
+        123
+        1234
+        12345
+        123456
+         */
+
+
+
+
+
+
+    }
+}
+code/homework15/src/Main.java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+      //  multiplyResults(5);
+        sumOfEvenOdd();
+    }
+
+
+    /*
+    Используя цикл while написать метод, выводящий
+    на экран результат умножения данного числа n на каждое целое число от 0 до n
+     */
+
+    static void multiplyResults (int n){
+        int i = 0;
+
+        while (i <= n){
+            System.out.println(n+"*"+i+" = "+n*i);
+            i++;
+        }
+    }
+
+    /*
+    Используя цикл do while написать метод, принимающий с клавиатуры целое число и
+    выводящий на экран сумму четных и сумму нечетных чисел, введенных пользователем.
+    Пример : пользователь ввел 1,3,2,6 . Сумма четных чисел будет 8, сумма нечетных 4
+     */
+
+    static void sumOfEvenOdd(){
+        Scanner scanner = new Scanner(System.in);
+        int number;
+        int evenSum = 0;
+        int oddSum = 0;
+        char choice;
+
+        do {
+            System.out.println("Enter a number ");
+            number = scanner.nextInt();
+
+            if(number % 2 == 0){
+
+                evenSum += number;
+                // evenSum = evenSum + number;
+            }
+            else {
+
+                oddSum += number;
+            }
+
+            System.out.println("Do you want to continue?  enter 'y' or enter any other letter if not");
+            choice = scanner.next().charAt(0);
+
+        }while (choice == 'y');
+
+        System.out.println("Sum of even numbers is "+evenSum);
+        System.out.println("Sum of odd numbers is "+oddSum);
+
+    }
+}

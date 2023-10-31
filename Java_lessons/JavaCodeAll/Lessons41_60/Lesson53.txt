@@ -1,0 +1,272 @@
+Задачи на урок:
+Лямбда-выражения
+Стандартные функциональные интерфейсы
+Ссылки на метод
+Лямбда выражения
+
+Среди новшеств, которые были привнесены в язык Java с выходом JDK 8, особняком стоят лямбда-выражения. Лямбда представляет набор инструкций, которые можно выделить в отдельную переменную и затем многократно вызвать в различных местах программы.
+
+Основу лямбда-выражения составляет лямбда-оператор, который представляет стрелку ->. Этот оператор разделяет лямбда-выражение на две части: левая часть содержит список параметров выражения, а правая собственно представляет тело лямбда-выражения, где выполняются все действия.
+
+Лямбда-выражение не выполняется само по себе, а образует реализацию метода, определенного в функциональном интерфейсе. При этом важно, что функциональный интерфейс должен содержать только один единственный метод без реализации.
+
+Ссылка на метод
+Начиная с JDK 8 в Java можно в качестве параметра в метод передавать ссылку на другой метод. В принципе данный способ аналогичен передаче в метод лямбда-выражения.
+
+Ссылка на метод передается в виде имя_класса::имя_статического_метода (если метод статический) или объект_класса::имя_метода (если метод нестатический).
+
+Встроенные функциональные интерфейсы
+В JDK 8 вместе с самой функциональностью лямбда-выражений также было добавлено некоторое количество встроенных функциональных интерфейсов, которые мы можем использовать в различных ситуациях и в различные API. В частности, в Stream API - прикладном интерфейсе для работы с данными. основные из этих интерфейсов:
+
+Predicate
+
+Consumer
+
+Function<T,R>
+
+Supplier
+
+UnaryOperator
+
+BinaryOperator
+
+Переписать лямбда выражения из класса Main пакета lambdas (см.код) с использованием стандартных функциональных интерфейсов
+
+code/built_in_interfaces/src/Main.java
+import java.util.function.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // Встроенные йункциональные интерфейсы.
+        //Основные из них:
+        //Predicate - проверяет соблюдение определенного условия. Если оно соблюдается, возвращает true.
+        //  метод в этом интерфейсе называется test
+        //  boolean test(T t)
+        Predicate<Integer>predicate = x -> x > 0;
+        System.out.println(predicate.test(56));
+        System.out.println(predicate.test(-56));
+
+        // BinaryOperator<T>  принимает два обьекта типа Т , что-то с ними делает и возвращает тоже обьект Т
+        // метод  T apply( T o1, T o2)
+        BinaryOperator<Integer> plus = (a,b)->a + b;
+
+        // UnaryOperator<T> - принимает обьект типа Т , что-то с ним делает т возвращает результат в виде
+        // обьекта типа Т   метод  T apply( T o1)
+        UnaryOperator<Integer> power = num -> num*num*num;
+        System.out.println(power.apply(2));
+
+        // Function<T,R> меняет тип обьекта  с T на R
+        // R apply ( T t)
+        Function<Integer,String> transform = num -> String.valueOf(num);
+        System.out.println(transform.apply(345));
+
+        // Consumer<T> -  выролняет какое-то действие над обьектом  ничего не возвращая
+        // метод void accept(T t)
+        Consumer<Integer> print = num -> System.out.println(num);
+        print.accept(1234);
+
+        // Supplier<T> - не принимает параметров, но возвращает обьект типа Т
+        // метод  T get()
+    }
+}
+code/lambdas53/src/Checkable.java
+public interface Checkable {
+    boolean check (String str);
+}
+code/lambdas53/src/Concatable.java
+public interface Concatable {
+
+    String concat( int num1, int num2);
+}
+code/lambdas53/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+
+
+
+    // Написать лямбды, используя наши интерфейсы:
+
+
+
+    /*
+    1. сложить  два числа и получить строку. num1+num2 = num1num2
+    2. если длина строки четная  вернуть true  иначе false
+    3. вернуть строку в нижнем регистре
+    4. если длина строки пять символов вернуть 5 звездочек. Иначе вернуть без изменений
+    строку
+    5. вывести строку на печать в виде *строка*
+    6. напечатать " Hello Java "
+     */
+        // 1. сложить  два числа и получить строку. num1+num2 = num1num2
+        System.out.println("-------1-----------");
+        Concatable concatable = (num1,num2)->Integer.toString(num1)+num2;
+        System.out.println(concatable.concat(1,2));
+
+        //2. если длина строки четная  вернуть true  иначе false
+        System.out.println("--------------2--------------");
+        Checkable checkable = str -> str.length() % 2 == 0;
+        System.out.println(checkable.check("abc"));
+        System.out.println(checkable.check("abcd"));
+        checkable = str -> str.length() == 5;
+
+        //3. вернуть строку в нижнем регистре
+        System.out.println("--------3------------");
+        Transformable transformable = str -> str.toLowerCase();
+        System.out.println(transformable.transform("ABcFd"));
+        transformable = str -> str.toUpperCase();
+        System.out.println(transformable.transform("ABcFd"));
+
+
+        System.out.println("--------4------------");
+        //4. если длина строки пять символов вернуть 5 звездочек.
+        // Иначе вернуть без изменений   строку
+        Transformable transformable1 = str -> str.length() == 5 ? "*****" : str;
+        System.out.println(transformable1.transform("ab"));
+        System.out.println(transformable1.transform("abcde"));
+
+        //5. вывести строку на печать в виде *строка*
+        System.out.println("-----------5---------------");
+        Printable printable = str -> System.out.println("*" + str + "*");
+        printable.print("hello");
+
+        //6. возвращает " Hello Java "
+        System.out.println("----------6------------");
+        Producable producable = () -> "Hello Java";
+        System.out.println(producable.produce());
+
+
+
+
+
+
+
+
+    }
+
+}
+code/lambdas53/src/Printable.java
+public interface Printable {
+    void print ( String str);
+}
+code/lambdas53/src/Producable.java
+public interface Producable {
+
+    String produce();
+}
+code/lambdas53/src/Transformable.java
+public interface Transformable {
+    String transform(String str);
+}
+code/main53/src/Arithmetical.java
+public interface Arithmetical {
+    int add(int a, int b);
+}
+code/main53/src/Flyable.java
+public interface Flyable {
+    public void fly();
+
+
+}
+code/main53/src/Foo.java
+
+public interface Foo {
+
+
+    public Integer toInt( String s);
+    public Integer toInt1( String s);
+
+
+}
+code/main53/src/Main.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Foo foo = new Foo() {
+            @Override
+            public Integer toInt(String s) {
+                return null;
+            }
+
+            @Override
+            public Integer toInt1(String s) {
+                return null;
+            }
+        };
+
+      //  Foo foo1 = f -> f.length();
+
+      //  (argument-list)-> {body}
+
+        //
+
+        int height = 1000;
+    //    ()->{body} -  без параметров
+        Flyable fly = ()->{
+            System.out.println("Flying at "+height);
+        };
+        fly.fly();
+
+
+    //    (p)->{body} -  один параметр
+        Walkable walk = (name)-> {
+            return "Hello, "+name;
+        };
+
+        System.out.println(walk.walk("John"));
+    //    (p1,p2)->{body} - 2  параметра
+
+        Arithmetical ar1 = ( a, b)->(a+b);
+        System.out.println(ar1.add(1,2));
+
+        ar1 = (a,b)-> a-b;
+        System.out.println(ar1.add(1,2));
+
+        List<String> list = new ArrayList<>();
+        list.add("Winter");
+        list.add("Spring");
+        list.add("Summer");
+        list.add("Autumn");
+
+        list.forEach(
+                (n) -> System.out.println(n)
+        );
+
+        List<Product> products = new ArrayList<>();
+        products.add(new Product(1,"Dell Laptop",50000));
+        products.add(new Product(2,"Mouse",50));
+        products.add(new Product(3,"HP Keybord",200));
+
+        System.out.println("Sorting by name");
+
+        products.sort((p1, p2) -> p1.name.compareTo(p2.name));
+
+        for(Product product: products)
+        System.out.println(product.name);
+
+
+
+
+
+
+    }
+
+}
+code/main53/src/Product.java
+public class Product {
+    int id;
+    String name;
+    int price;
+
+    public Product(int id, String name, int price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+}
+code/main53/src/Walkable.java
+public interface Walkable {
+    String walk( String name);
+}

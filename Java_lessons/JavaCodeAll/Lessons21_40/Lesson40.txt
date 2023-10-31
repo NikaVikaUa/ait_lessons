@@ -1,0 +1,270 @@
+Задачи на урок:
+Разбор дз
+Допишем свой ArrayList
+Повторение пройденного
+ArrayList
+Программистам очень не нравилось одно свойство массива – его размер нельзя изменять. Что делать, если нужно сохранить в массиве ещё три элемента, а свободное место только одно?
+
+Единственным решением проблемы нехватки места в массиве было создание массива очень большого размера, чтобы все элементы туда точно поместились. Но это часто приводило к нерациональному расходу памяти. Если чаще всего в массиве хранилось три элемента, но был хотя бы мизерный шанс, что там их будет 100, приходилось создавать массив на 100 элементов.
+
+Поэтому они написали класс ArrayList (списочный массив), который выполнял ту же работу, что и массив, но мог изменять свой размер.
+
+Внутри каждого объекта типа ArrayList хранится обычный массив элементов. Когда ты считываешь элементы из ArrayList, он считывает их из своего внутреннего массива. Когда записываешь – записывает их во внутренний массив.
+
+Преимущества ArrayList
+Во-первых, ArrayList поддерживает несколько дополнительных действий, которые очень часто приходится делать программистам во время работы, и которых нет у массива. Например – вставка и удаление элементов из середины массива, и чтобы не оставалось дырок.
+
+Во-вторых, изменение размера: когда нужно записать во внутренний массив ещё один элемент, а свободного места там нет, то внутри ArrayList делается вот что: создаётся ещё один массив, в полтора раза больше размера внутреннего массива, плюс один элемент. все элементы из старого массива копируются в новый массив. новый массив сохраняется во внутренней переменной объекта ArrayList, старый массив объявляется мусором (мы просто перестаём хранить на него ссылку).
+
+Задача1
+Еще раз посмотреть код класса OurArrayList (см.код занятия) и постараться полностью понять его если что-то осталось не ясным.
+
+Задача 2
+Используя класс OurArrayList, аналогично созданию обычного листа, в методе main класса Main создать:
+
+лист имен
+лист обьектов класса Human.( Для этого понадобиться создать класс Human с полями name и age)
+с помощью метода ourAdd() нашего листа заполнить листы соответствующими элементами
+c помощью метода ourGet() вывести элементы на печать
+Задача 3*
+Протестировать методы листа
+
+code/homework40/src/Main.java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Main m =new Main();
+
+        List<Integer> ints = new ArrayList<>();
+        ints.add(2);
+        ints.add(17);
+        ints.add(5);
+        ints.add(6);
+        ints.add(9);
+
+        System.out.println(m.removeNumbersBiggerThanN(ints,8));
+        System.out.println(m.removeNumbersBiggerThanNWithIterator(ints,8));
+
+
+    }
+
+    /*
+    Написать метод, принимающий лист целых чисел и целое
+    число и возвращающий лист только с элементами меньшими этого числа
+     */
+
+   // решение  через for each
+    public List<Integer> removeNumbersBiggerThanN (List<Integer>input, int n){
+        List<Integer> result = new ArrayList<>();
+
+        for( Integer i : input){
+            if(i<n)
+                result.add(i);
+        }
+        return result;
+    }
+
+    // решение с итератором
+    public List<Integer> removeNumbersBiggerThanNWithIterator (List<Integer>input, int n){
+
+        Iterator<Integer> iterator = input.iterator();
+
+        while( iterator.hasNext() ){
+            if( iterator.next() >= n)
+                iterator.remove();
+        }
+        return input;
+    }
+
+}
+code/homework40/src/MainTest.java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MainTest {
+
+    private Main m;
+
+    @BeforeEach
+    public void init(){
+        m = new Main();
+
+    }
+
+    @Test
+    public void list_empty_test(){
+        List<Integer> expected = Arrays.asList();
+        List<Integer> actual = Arrays.asList();
+        assertEquals(expected,m.removeNumbersBiggerThanNWithIterator(actual,5));
+    }
+
+    @Test
+    public void list_one_elt_test(){
+        List<Integer> expected = new ArrayList<>();
+        expected.add(1);
+        List<Integer> actual = Arrays.asList(1);
+        assertEquals(expected,m.removeNumbersBiggerThanNWithIterator(actual,5));
+    }
+
+    @Test
+    public void list_remove_all_test(){
+        List<Integer> expected = Arrays.asList();
+        List<Integer> actual = new ArrayList<>();
+        actual.add(3);//  метод add добавляет элемент в конец листа
+        actual.add(1);
+        actual.add(2);
+        actual.add(9);
+        assertEquals(expected,m.removeNumbersBiggerThanNWithIterator(actual,0));
+    }
+
+    @Test
+    public void list_remove_less_8(){
+        List<Integer> expected = new ArrayList<>();
+        expected.add(3);//  метод add добавляет элемент в конец листа
+        expected.add(1);
+        expected.add(2);
+
+        List<Integer> actual = new ArrayList<>();
+        actual.add(3);//  метод add добавляет элемент в конец листа
+        actual.add(1);
+        actual.add(2);
+        actual.add(9);
+        assertEquals(expected,m.removeNumbersBiggerThanNWithIterator(actual,8));
+    }
+
+
+
+
+
+
+}
+code/main40/src/Main.java
+import java.util.Arrays;
+
+public class Main {
+
+    //Метод arraycopy()
+    public static void main(String[] args) {
+     //   System.arraycopy() - метод копирует массив начиная с заданного индекса в другой массив начиная с заданного
+     // индекса
+
+     /*
+     arraycopy( src, int srcIndex, dest, int destIndex, int length)
+     src - массив откуда копируется
+     srcIndex - индекс, начиная с которого копируется массив
+     dest - массив, куда копируется
+     destIndex - индекс в массиве dest , начиная с которого копируется
+     length -  количество элементов, которые нужно скопировать
+
+
+      */                           //         2
+     String[] src = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
+     String[] dest = {"John","Bill","Ann","Mary","Jack"};
+
+     int srcIndex = 2;
+   //  int destIndex = 3;
+   //  int length = 2;
+
+     System.arraycopy(src,srcIndex,dest,1,2);
+
+        System.out.println(Arrays.toString(dest));
+    //[John, Bill, Ann, Wednesday, Thursday]
+
+    }
+}
+code/our_collection/src/OurArrayList.java
+public class OurArrayList<E> implements OurList<E>{
+
+    private Object[] source;  // исходный массив
+    private static final int INITIAL_CAPACITY = 16; // начальный размер нашего массива
+
+    private int size; //  размер нашего листа
+
+
+    public OurArrayList(){
+        source = new Object[INITIAL_CAPACITY]; // инициализируем наш массив  в конструкторе при
+                                                // создании нового листа
+    }
+
+
+
+    public void ourAdd( E value){
+        if ( source.length == size){     // если массив полностью заполнен , то создается новый
+            E[] newSource = (E[])new Object[source.length * 2];
+            System.arraycopy(source,0,newSource,0,source.length);
+            source = newSource;
+        }
+        source[size] = value;
+        size++;
+    }
+
+    @Override
+    public E ourGet(int index) {
+        if( index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        return (E) source[index];
+    }
+
+    @Override
+    public void ourSet(E value, int index) {
+        if( index >= size || index < 0)             // проверка находится ли индекс в разрешенных границах
+            throw new IndexOutOfBoundsException();
+        source[index] = value;
+    }
+
+    @Override
+    public int ourSize() {
+        return size;
+    }
+
+    @Override
+    public boolean ourRemove(E value) {
+        for ( int i = 0; i < source.length; i++){
+            if( source[i].equals(value)){
+                ourRemoveById(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public E ourRemoveById(int index) {
+        if( index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        E result =(E) source[index];
+
+        System.arraycopy(source,index +1,source,index,source.length-(index + 1));
+        size--;
+        return result;
+    }
+}
+code/our_collection/src/OurList.java
+public interface OurList<E>{
+
+    void ourAdd(E o); //  добавить значение
+
+    E ourGet( int index); // получить значение ро индексу
+
+    void ourSet(E o, int index ); // заменить значение по индексу
+
+    int ourSize(); // возвращает размер нашего листа
+
+    boolean ourRemove(E o); //  удаляет элемент по значению
+
+    E ourRemoveById( int index);//  удаление по индексу
+
+
+}

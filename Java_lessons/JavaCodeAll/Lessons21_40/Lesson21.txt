@@ -1,0 +1,256 @@
+Задачи на урок:
+Разбор дз
+Наследование
+Модификатор protected
+Конструкторы при наследовании
+Наследование
+
+Одним из ключевых аспектов объектно-ориентированного программирования является наследование. С помощью наследования можно расширить функционал уже имеющихся классов за счет добавления нового функционала или изменения старого.
+Чтобы объявить один класс наследником от другого, надо использовать после имени класса-наследника ключевое слово extends, после которого идет имя базового класса.
+Если в базовом классе определены конструкторы, то в конструкторе производного классы необходимо вызвать один из конструкторов базового класса с помощью ключевого слова super.
+При вызове конструктора после слова super в скобках идет перечисление передаваемых аргументов. При этом вызов конструктора базового класса должен идти в самом начале в конструкторе производного класса.
+Производный класс имеет доступ ко всем методам и полям базового класса (даже если базовый класс находится в другом пакете) кроме тех, которые определены с модификатором private. При этом производный класс также может добавлять свои поля и методы
+
+Задача 1
+Создать класс Cat содержащий следующие поля: name, age, colour, а также конструктор, геттеры и сеттеры для всех полей и метод toString. В том же классе создать метод main и вывести на печать несколько обьектов класса Cat.
+
+Задача 2
+Создать класс Car, содержащий поля
+model
+colour
+productionDate
+а также методы drive и stop.
+Создать дочерние классы PassengerCar и Track. Класс PassengerCar должен также содержать поле numberOfSeats(количество мест) а Класс Track поле loadCapacity (грузоподьемность).
+В методе main класса Main создать несколько обьектов этих классов и вывести в консоль их характеристики и результат работы методов
+
+Задача 3** (не обязательно)
+Использовать классы из предыдущей задачи:
+класс Car, содержащий общие характеристики машин model,manufacturer, year, color, и поведение - drive,stop
+и классы PassengerCar и Truck, расширяющие Car.
+Класс Truck должен иметь свои характеристики и поведение важное для грузовика. А именно: макс грузоподьемность, и обьем топливного бака. Поведение: 1.должен уметь загружаться (load) и при этом сообщать если превышена его грузоподьемнось, а также сообщать сколько еще можно загрузить груза
+2.разгружаться и при этом сообщать в случае если пытаются разгрузить больше чем его имеющийся груз или число отрицательно а также сообщать о весе остающегося на борту груза
+3.в случае отсутствия топлива или отсутствии груза на борту сообщать о невозможности ехать
+4.уметь дозаправляться
+
+code/homework21/src/Calculator.java
+public class Calculator {
+    public static void main(String[] args) {
+        System.out.println(plus(1,2));
+        System.out.println(plus(1,2,3));
+        System.out.println(plus(1.5,2.5));
+        System.out.println(plus(1.6,2.7,4.7));
+       // Math.min
+
+    }
+
+    /*
+    Задача 2
+Создать класс Calculator, способный выполнять два арифметических действия
+- сложение двух чисел, вычитание двух
+чисел а также сложение трех чисел и вычитание трех чисел.
+Калькулятор должен работать как для целых чисел, так и для чисел с запятой.
+(т.е. в классе надо создать соответствующие методы и затем вызывать их в методе main)
+     */
+
+    public static int plus (int a, int b){
+        return a+b;
+    }
+    public static int plus (int a, int b, int c){
+        return a+b+c;
+    }
+
+    public static int minus (int a, int b){
+        return a-b;
+    }
+    public static int minus (int a, int b, int c){
+      // if(a>b) return a-b;
+        return a-b-c;
+    }
+
+
+
+    public static double plus (double a, double b){
+        return a+b;
+    }
+    public static double plus (double a, double b, double c){
+        return a+b+c;
+    }
+
+    public static double minus (double a, double b){
+        return a-b;
+    }
+    public static double minus (double a, double b, double c){
+        return a-b-c;
+    }
+
+
+
+}
+code/homework21/src/Dog.java
+public class Dog {
+    public static void main(String[] args) {
+        System.out.println("The number of dogs before  is "+Dog.counter);
+        Dog willy = new Dog("Willy");
+        Dog billy = new Dog("Billy");
+        System.out.println("The number of dogs after  is "+willy.counter);
+        System.out.println("The number of dogs after  is "+billy.counter);
+
+    }
+    /*
+    Задача 1
+Создать класс Dog c полями name и counter. Cоздать
+несколько обьектов этого класса и вывести на печать количество созданных обьектов.
+     */
+     String name;
+    static int counter;
+
+    public Dog( String name){
+        this.name = name;
+        counter++;
+    }
+}
+code/inheritance/src/JavaTeacher.java
+public class JavaTeacher extends Teacher
+{ // дочерний класс для класса Teacher
+
+    String mainSubject = "Java";
+
+}
+code/inheritance/src/Main.java
+public class Main {
+    // Inheritance ( Наследование)
+    // Наследование - важное свойство ООП , позволяющее классу использовать методы и
+    // переменные другого класса. Таким образом, в классе-наследнике появляется возможность указывать только присущие
+    // ему свойства а общие брать из класса , который он наследует.
+
+    // Если мы хотим указать, что класс А  наследует класс В , то мы запишем так:
+    // сlass A extends B
+
+    // Общепринятые термины:
+   // Parent Class ( Родительский класс) -класс, поля и методы которого могут использоваться классом, наследующим его.
+    // Также может называться Super Class  или Base Class (Базовый класс)
+    // Child Class  - Дочерний класс, наследующий  и расширяющий свойства родительского класса. Он также называется
+    // Sub Class (  подкласс) или класс-наследник
+    public static void main(String[] args) {
+        JavaTeacher javaTeacher = new JavaTeacher();
+        System.out.println("Our Java teacher:");
+        System.out.println(javaTeacher.profession);
+        System.out.println(javaTeacher.schoolName);
+        System.out.println(javaTeacher.mainSubject);
+
+        javaTeacher.teacherWorks();
+    }
+
+    // Типы наследования
+    // 1.Single inheritance ( одиночное наследование)
+    // class B extends A
+
+    //2. Multilevel inheretence ( многоуровневое наследование)
+   // class B extends A
+    // class C extends B
+
+    /*
+    3.Hierarchical inheritance ( иерархическое наследование)
+    - когда несколько классов наследуют один и тот же класс
+
+    4. Hybrid Inheritance (гибридное) - комбинация  нескольких типов насдедования
+
+
+    Класс не может наследовать больше чем одному классу
+
+    Класс наследник  может наследовать только те переменные и методы родительского класса, которые имеют
+    модификаторы доступа public  или protected.
+     Модификатор  protected  означает что переменная/ метод доступны в том же пакете и подклассах родительского класса
+
+
+     */
+
+
+}
+code/inheritance/src/Teacher.java
+public class Teacher { // это родительский класс по отношению к классу JavaTeacher
+    String profession = "Teacher";
+    String schoolName = "AIT TR";
+
+    public void teacherWorks(){ //  метод в классе Teacher
+        System.out.println("Teacher is teaching"); //  выводит на экран надпись
+    }
+}
+code/overriding/src/Animal.java
+public class Animal {
+
+    public void sound(){
+        System.out.println("Animal is making a sound");
+    }
+}
+code/overriding/src/Boy.java
+public class Boy extends Human{
+
+    @Override
+    public void eat(){ // метод с тем же названием но другим содержанием в  дочернем классе
+        System.out.println("Boy is eating");
+    }
+}
+code/overriding/src/Dog.java
+public class Dog extends Animal {
+
+    @Override
+    public void sound(){
+        System.out.println("Dog barks");
+    }
+}
+code/overriding/src/Horse.java
+public class Horse extends Animal{
+
+    public void sound(){
+        System.out.println("Horse neighs");
+    }
+
+    public void run(){
+        System.out.println("Horse  runs fast");
+    }
+}
+code/overriding/src/Human.java
+public class Human {
+
+    public void eat(){ // определяем метод в родительском классе
+        System.out.println("Human is eating");
+    }
+}
+code/overriding/src/Main.java
+public class Main {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        Dog dog = new Dog();
+        Horse horse = new Horse();
+        Puppy puppy = new Puppy();
+     //   animal.sound();
+     //   dog.sound();
+      //  horse.sound();
+      //  puppy.sound();
+
+        // IS - A
+        Animal dog1 = new Dog();
+        Animal puppy1 = new Puppy();
+
+        dog1.sound();
+
+        // методы, определенный только в дочернем классе в родительском классе не видны.
+        Horse horse1 = new Horse();
+        Animal horse2 = new Horse();
+
+        horse1.run();
+    //    Animal horse3 = (Horse) horse2;
+
+
+
+
+
+    }
+}
+code/overriding/src/Puppy.java
+public class Puppy extends Dog{
+    public void sound(){
+        System.out.println("Puppy also barks");
+    }
+}
